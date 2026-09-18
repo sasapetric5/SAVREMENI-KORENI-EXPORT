@@ -241,14 +241,14 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                   className={`px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2.5 transform active:translate-y-0.5 ${
                     isActive
                       ? 'bg-gradient-to-b from-[#B8482E] via-[#9E3E26] to-[#7F2F1C] text-white shadow-md border border-[#C85338] border-b-4 border-b-[#5C1E10] font-bold scale-[1.02]'
-                      : 'bg-gradient-to-b from-white to-[#F8F3ED] text-[#241D19] border border-[#E2D6C5] border-b-3 border-b-[#C9B8A4] hover:border-[#9E3E26]/50 hover:from-[#FAF5EF] hover:to-[#F1E5D8] hover:text-[#9E3E26] shadow-2xs hover:shadow-md hover:scale-[1.02]'
+                      : 'bg-gradient-to-b from-white to-[#F8F3ED] dark:from-[#2A211B] dark:to-[#1E1713] text-[#241D19] dark:text-[#FAF7F2] border border-[#E2D6C5] dark:border-[#3D3027] border-b-3 border-b-[#C9B8A4] dark:border-b-[#2A201A] hover:border-[#9E3E26]/50 hover:from-[#FAF5EF] hover:to-[#F1E5D8] dark:hover:from-[#352B24] dark:hover:to-[#261E18] hover:text-[#9E3E26] dark:hover:text-[#E88C74] shadow-2xs hover:shadow-md hover:scale-[1.02]'
                   }`}
                 >
                   <span className="tracking-tight">{cat.label}</span>
                   <span className={`text-[11px] font-mono px-2 py-0.5 rounded-full font-bold transition-colors ${
                     isActive
                       ? 'bg-white/25 text-white border border-white/30 shadow-inner'
-                      : 'bg-[#EFE5D8] text-[#7F2F1C] border border-[#DFCFC0]'
+                      : 'bg-[#EFE5D8] dark:bg-[#382B22] text-[#7F2F1C] dark:text-[#E88C74] border border-[#DFCFC0] dark:border-[#4D3A2F]'
                   }`}>
                     {cat.count}
                   </span>
@@ -378,12 +378,18 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     {/* Blurred backdrop for a premium look and to cover empty space */}
                     <div className="absolute inset-0 z-0 overflow-hidden bg-[#E8E0D5]/30 animate-pulse">
                       <img
-                        src={product.image}
+                        src={product.image || '/images/etno_unikatna_torba_1789105500674.jpg'}
                         alt=""
                         aria-hidden="true"
                         className="w-full h-full object-cover blur-2xl opacity-40 scale-110"
                         referrerPolicy="no-referrer"
                         loading="lazy"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (target.src !== '/images/etno_unikatna_torba_1789105500674.jpg') {
+                            target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
+                          }
+                        }}
                       />
                       <div className="absolute inset-0 bg-white/30 backdrop-blur-[2px]"></div>
                     </div>
@@ -392,13 +398,19 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                       const imgAttrs = parseProductImageAttributes(product, isEn);
                       return (
                         <img
-                          src={product.image}
+                          src={product.image || '/images/etno_unikatna_torba_1789105500674.jpg'}
                           alt={imgAttrs.alt}
                           title={imgAttrs.title}
                           aria-label={imgAttrs['aria-label']}
                           className="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-[1.03] relative z-10 drop-shadow-sm p-4"
                           referrerPolicy="no-referrer"
                           loading="lazy"
+                          onError={(e) => {
+                            const target = e.currentTarget;
+                            if (target.src !== '/images/etno_unikatna_torba_1789105500674.jpg') {
+                              target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
+                            }
+                          }}
                         />
                       );
                     })()}
