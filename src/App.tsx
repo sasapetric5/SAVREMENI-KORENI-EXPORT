@@ -33,6 +33,9 @@ import { LogoUploadModal } from './components/LogoUploadModal';
 import { WebVitalsMonitor } from './components/WebVitalsMonitor';
 import { AdminPanel } from './components/AdminPanel';
 import { GoogleAdSenseBanner } from './components/GoogleAdSenseBanner';
+import { CookieConsentBanner } from './components/CookieConsentBanner';
+import { LegalModal } from './components/LegalModal';
+import { LegalDocTab } from './data/legalDocumentsData';
 import { initAnalytics, trackProductView, trackBlogPostView, trackConversion } from './utils/analytics';
 import { initWebVitalsTracking } from './utils/webVitals';
 import { useSectionObserver } from './hooks/useSectionObserver';
@@ -97,12 +100,41 @@ function AppContent() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(getProductFromLocation);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   const [isTrackOrderModalOpen, setIsTrackOrderModalOpen] = useState(false);
+  const [isLegalModalOpen, setIsLegalModalOpen] = useState(false);
+  const [legalInitialTab, setLegalInitialTab] = useState<LegalDocTab>('privacy');
   const [orderProductName, setOrderProductName] = useState('');
   const [userPhotosCount, setUserPhotosCount] = useState(0);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(() => {
     return window.location.pathname === '/admin' || window.location.search.includes('admin=true');
   });
+
+  const handleOpenLegal = (tab: LegalDocTab = 'privacy') => {
+    setLegalInitialTab(tab);
+    setIsLegalModalOpen(true);
+  };
+
+  // Hash listener for legal deep-linking (#politika-privatnosti, #uslovi-koriscenja, #politika-kolacica, #reklamacije-i-povracaj, #impresum)
+  useEffect(() => {
+    const handleHashCheck = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'politika-privatnosti' || hash === 'privacy') {
+        handleOpenLegal('privacy');
+      } else if (hash === 'uslovi-koriscenja' || hash === 'terms') {
+        handleOpenLegal('terms');
+      } else if (hash === 'politika-kolacica' || hash === 'cookies') {
+        handleOpenLegal('cookies');
+      } else if (hash === 'reklamacije-i-povracaj' || hash === 'returns') {
+        handleOpenLegal('returns');
+      } else if (hash === 'impresum') {
+        handleOpenLegal('impresum');
+      }
+    };
+
+    handleHashCheck();
+    window.addEventListener('hashchange', handleHashCheck);
+    return () => window.removeEventListener('hashchange', handleHashCheck);
+  }, []);
 
   // Listen to popstate
   useEffect(() => {
@@ -285,6 +317,22 @@ function AppContent() {
         onNavigateLandingPage={handleNavigateLanding}
         onOpenTrackOrder={() => setIsTrackOrderModalOpen(true)}
         onOpenAdmin={() => setIsAdminOpen(true)}
+        onOpenLegal={handleOpenLegal}
+      />
+
+      {/* Cookie Consent Banner (GDPR / EU Compliance) */}
+      <CookieConsentBanner onOpenCookiePolicy={() => handleOpenLegal('cookies')} />
+
+      {/* Legal & Policy Modal (Privacy, Terms, Cookies, Returns, Impresum) */}
+      <LegalModal
+        isOpen={isLegalModalOpen}
+        onClose={() => {
+          setIsLegalModalOpen(false);
+          if (window.location.hash) {
+            window.history.pushState(null, '', window.location.pathname + window.location.search);
+          }
+        }}
+        initialTab={legalInitialTab}
       />
 
       {/* Mobile Sticky Quick Action Bar (Call, WhatsApp, Instagram x2, Order) */}

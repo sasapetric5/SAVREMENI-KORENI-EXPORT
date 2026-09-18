@@ -3,7 +3,7 @@ import path from 'path';
 import { productsData } from '../src/data/companyData';
 import { blogPostsData } from '../src/data/blogData';
 import { seoLandingPages } from '../src/data/seoLandingPagesData';
-import { uploadedGalleryPhotos } from '../src/data/uploadedPhotosData';
+import { uploadedPhotosData } from '../src/data/uploadedPhotosData';
 
 export const BASE_URL = 'https://savremenikoreni.com';
 
@@ -225,7 +225,7 @@ export function generateSitemapXml(options: SitemapOptions = {}): string {
     <priority>0.90</priority>
 `;
 
-  uploadedGalleryPhotos.forEach((photo) => {
+  uploadedPhotosData.forEach((photo) => {
     xml += `    <image:image>
       <image:loc>${BASE_URL}/logo.jpg</image:loc>
       <image:title>${escapeXml(photo.caption || 'Unikatna rukotvorina majstora Tanje Petrić')}</image:title>

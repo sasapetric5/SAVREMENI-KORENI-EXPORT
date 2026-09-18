@@ -1,19 +1,21 @@
 import React from 'react';
-import { Phone, Mail, MapPin, ShieldCheck, Heart, Instagram, Facebook, Sun, Moon, Lock } from 'lucide-react';
+import { Phone, Mail, MapPin, ShieldCheck, Heart, Instagram, Facebook, Sun, Moon, Lock, FileText, Cookie, RotateCcw, Building2, Settings } from 'lucide-react';
 import { companyDetails } from '../data/companyData';
 import { useLogo } from '../context/LogoContext';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { CurrencySelector } from './CurrencySelector';
 import { NewsletterSignup } from './NewsletterSignup';
+import { LegalDocTab } from '../data/legalDocumentsData';
 
 interface FooterProps {
   onNavigateLandingPage?: (slug: string) => void;
   onOpenTrackOrder?: () => void;
   onOpenAdmin?: () => void;
+  onOpenLegal?: (tab?: LegalDocTab) => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigateLandingPage, onOpenTrackOrder, onOpenAdmin }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigateLandingPage, onOpenTrackOrder, onOpenAdmin, onOpenLegal }) => {
   const { logoUrl } = useLogo();
   const { isDark, toggleTheme } = useTheme();
   const { t, isEn } = useLanguage();
@@ -324,6 +326,75 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateLandingPage, onOpenTra
                   {companyDetails.email}
                 </a>
               </p>
+            </div>
+
+            {/* Legal Documents & Consumer Rights */}
+            <div className="pt-3 border-t border-white/10 space-y-2">
+              <h5 className="text-[11px] font-bold uppercase tracking-wider text-[#E8D0A9]">
+                {isEn ? 'Legal & Consumer Rights:' : 'Pravna Zaštita i Uslovi:'}
+              </h5>
+              <ul className="space-y-1.5 text-[11px]">
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => onOpenLegal ? onOpenLegal('privacy') : (window.location.hash = 'politika-privatnosti')}
+                    className="hover:text-[#E8D0A9] transition-colors flex items-center gap-1.5 text-white/80 cursor-pointer text-left"
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#C2872A]" />
+                    <span>{isEn ? 'Privacy Policy' : 'Politika Privatnosti'}</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => onOpenLegal ? onOpenLegal('terms') : (window.location.hash = 'uslovi-koriscenja')}
+                    className="hover:text-[#E8D0A9] transition-colors flex items-center gap-1.5 text-white/80 cursor-pointer text-left"
+                  >
+                    <FileText className="w-3.5 h-3.5 text-[#C2872A]" />
+                    <span>{isEn ? 'Terms of Service' : 'Uslovi Korišćenja'}</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => onOpenLegal ? onOpenLegal('cookies') : (window.location.hash = 'politika-kolacica')}
+                    className="hover:text-[#E8D0A9] transition-colors flex items-center gap-1.5 text-white/80 cursor-pointer text-left"
+                  >
+                    <Cookie className="w-3.5 h-3.5 text-[#C2872A]" />
+                    <span>{isEn ? 'Cookie Policy' : 'Politika Kolačića'}</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => onOpenLegal ? onOpenLegal('returns') : (window.location.hash = 'reklamacije-i-povracaj')}
+                    className="hover:text-[#E8D0A9] transition-colors flex items-center gap-1.5 text-white/80 cursor-pointer text-left"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 text-[#C2872A]" />
+                    <span>{isEn ? 'Returns & Refunds (14 days)' : 'Povraćaj & Reklamacije (14 dana)'}</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => onOpenLegal ? onOpenLegal('impresum') : (window.location.hash = 'impresum')}
+                    className="hover:text-[#E8D0A9] transition-colors flex items-center gap-1.5 text-white/80 cursor-pointer text-left"
+                  >
+                    <Building2 className="w-3.5 h-3.5 text-[#C2872A]" />
+                    <span>{isEn ? 'Impressum / APR RS Info' : 'Impresum / Registarski Podaci'}</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => window.dispatchEvent(new CustomEvent('openCookieSettings'))}
+                    className="hover:text-[#E8D0A9] transition-colors flex items-center gap-1.5 text-[#E8D0A9]/90 cursor-pointer text-left font-medium"
+                  >
+                    <Settings className="w-3.5 h-3.5 text-[#C2872A]" />
+                    <span>{isEn ? 'Cookie Preferences' : 'Podešavanje Kolačića'}</span>
+                  </button>
+                </li>
+              </ul>
             </div>
           </div>
 

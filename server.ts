@@ -776,23 +776,24 @@ VRATI REZULTAT ISKLJUČIVO U VAŽEĆEM JSON FORMATU (bez dodatnog teksta ili mar
 
       console.log(`[GitHub Push] Scanning ${filesToSync.length} total project files against ${existingGitShas.size} GitHub remote SHAs...`);
 
-      const treeItems: { path: string; mode: string; type: string; sha: string }[] = [];
+      const treeItems: { path: string; mode: string; type: string; sha: string | null }[] = [];
       const filesNeedingBlob: { file: { path: string; fullDiskPath: string }; localSha: string }[] = [];
+      const currentDiskPaths = new Set<string>();
 
       for (const file of filesToSync) {
+        currentDiskPaths.add(file.path);
         try {
           const fileBuffer = fs.readFileSync(file.fullDiskPath);
           const header = Buffer.from(`blob ${fileBuffer.length}\0`);
           const localSha = crypto.createHash('sha1').update(Buffer.concat([header, fileBuffer])).digest('hex');
 
-          if (existingGitShas.has(file.path) && existingGitShas.get(file.path) === localSha) {
-            treeItems.push({
-              path: file.path,
-              mode: '100644',
-              type: 'blob',
-              sha: localSha
-            });
+          if (baseTreeSha) {
+            // When base_tree is provided, ONLY include files that are missing or changed on GitHub
+            if (!existingGitShas.has(file.path) || existingGitShas.get(file.path) !== localSha) {
+              filesNeedingBlob.push({ file, localSha });
+            }
           } else {
+            // Initial commit on empty repo (no base_tree): all files need blob
             filesNeedingBlob.push({ file, localSha });
           }
         } catch (fileErr) {
@@ -800,7 +801,30 @@ VRATI REZULTAT ISKLJUČIVO U VAŽEĆEM JSON FORMATU (bez dodatnog teksta ili mar
         }
       }
 
-      console.log(`[GitHub Push] ${treeItems.length} files already match GitHub tree. Creating blobs for ${filesNeedingBlob.length} new or modified files...`);
+      // Check for deleted files relative to remote tree
+      if (baseTreeSha && existingGitShas.size > 0) {
+        for (const remotePath of existingGitShas.keys()) {
+          if (!currentDiskPaths.has(remotePath)) {
+            treeItems.push({
+              path: remotePath,
+              mode: '100644',
+              type: 'blob',
+              sha: null
+            });
+          }
+        }
+      }
+
+      console.log(`[GitHub Push] Delta scan complete: ${filesNeedingBlob.length} new/modified files, ${treeItems.length} deleted files.`);
+
+      if (baseTreeSha && filesNeedingBlob.length === 0 && treeItems.length === 0) {
+        return res.json({
+          success: true,
+          message: `Svi fajlovi na GitHub repozitorijumu '${targetRepo}' su već 100% sinhronizovani! Nema novih izmena za slanje.`,
+          filesSynced: 0,
+          commitSha: latestCommitSha
+        });
+      }
 
       const BATCH_SIZE = 15;
       for (let i = 0; i < filesNeedingBlob.length; i += BATCH_SIZE) {
@@ -842,7 +866,12 @@ VRATI REZULTAT ISKLJUČIVO U VAŽEĆEM JSON FORMATU (bez dodatnog teksta ili mar
         }));
       }
 
-      console.log(`[GitHub Push] Creating Git Tree with ${treeItems.length} total items...`);
+      console.log(`[GitHub Push] Creating Git Tree with ${treeItems.length} delta items...`);
+
+      const treePayload: any = { tree: treeItems };
+      if (baseTreeSha) {
+        treePayload.base_tree = baseTreeSha;
+      }
 
       const createTreeResp = await fetch(`https://api.github.com/repos/${targetRepo}/git/trees`, {
         method: 'POST',
@@ -852,10 +881,7 @@ VRATI REZULTAT ISKLJUČIVO U VAŽEĆEM JSON FORMATU (bez dodatnog teksta ili mar
           "Content-Type": "application/json",
           "Accept": "application/vnd.github.v3+json"
         },
-        body: JSON.stringify({
-          base_tree: baseTreeSha,
-          tree: treeItems
-        })
+        body: JSON.stringify(treePayload)
       });
 
       if (!createTreeResp.ok) {

@@ -194,7 +194,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({
           className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4"
         >
           {/* Category Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
+          <div className="flex flex-wrap items-center gap-2">
             {categories.map((cat) => {
               const isActive = selectedCategory === cat.id;
               return (

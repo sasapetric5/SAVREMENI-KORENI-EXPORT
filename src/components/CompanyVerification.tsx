@@ -225,15 +225,40 @@ Status: ${companyDetails.status}`;
               </div>
             </div>
 
-            {/* Copy All Data CTA */}
-            <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <span className="text-xs text-[#241D19]/60">
-                {isEn ? 'Need official business details for invoice or bank wire payment?' : 'Potrebni su vam podaci za uplatu na račun ili izradu profakture?'}
-              </span>
+            {/* Copy All Data CTA & Legal Documents Quick Links */}
+            <div className="pt-6 border-t border-[#E8E0D5] flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => window.location.hash = 'politika-privatnosti'}
+                  className="px-3 py-1.5 rounded-lg bg-[#FAF7F2] hover:bg-[#E8E0D5] text-xs font-medium text-[#241D19] border border-[#E8E0D5] transition-colors cursor-pointer flex items-center gap-1"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#C2872A]" />
+                  <span>{isEn ? 'Privacy Policy' : 'Politika privatnosti'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => window.location.hash = 'uslovi-koriscenja'}
+                  className="px-3 py-1.5 rounded-lg bg-[#FAF7F2] hover:bg-[#E8E0D5] text-xs font-medium text-[#241D19] border border-[#E8E0D5] transition-colors cursor-pointer flex items-center gap-1"
+                >
+                  <FileText className="w-3.5 h-3.5 text-[#C2872A]" />
+                  <span>{isEn ? 'Terms of Service' : 'Uslovi korišćenja'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => window.location.hash = 'reklamacije-i-povracaj'}
+                  className="px-3 py-1.5 rounded-lg bg-[#FAF7F2] hover:bg-[#E8E0D5] text-xs font-medium text-[#241D19] border border-[#E8E0D5] transition-colors cursor-pointer flex items-center gap-1"
+                >
+                  <Award className="w-3.5 h-3.5 text-[#C2872A]" />
+                  <span>{isEn ? 'Return & Refunds (14 days)' : 'Povraćaj & Reklamacije (14 dana)'}</span>
+                </button>
+              </div>
 
               <button
                 onClick={copyAllDetails}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#241D19] hover:bg-[#3B2F28] text-white text-xs font-semibold transition-colors cursor-pointer shadow-2xs"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#241D19] hover:bg-[#3B2F28] text-white text-xs font-semibold transition-colors cursor-pointer shadow-2xs shrink-0"
               >
                 {copiedField === 'all' ? (
                   <>

@@ -218,32 +218,44 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
           </div>
         </div>
 
-        {/* Category Filters */}
+        {/* Category Filters (3D Pills multiline grid layout) */}
         <motion.div 
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar"
+          className="mb-8 space-y-2.5"
         >
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
-              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition-all cursor-pointer flex items-center gap-2 ${
-                selectedCategory === cat.id
-                  ? 'bg-[#9E3E26] text-white shadow-sm font-semibold'
-                  : 'bg-white text-[#241D19]/80 border border-[#E8E0D5] hover:border-[#9E3E26]/40 hover:text-[#9E3E26]'
-              }`}
-            >
-              <span>{cat.label}</span>
-              <span className={`text-[11px] px-1.5 py-0.5 rounded-md ${
-                selectedCategory === cat.id ? 'bg-white/20 text-white' : 'bg-[#FAF7F2] text-[#241D19]/60'
-              }`}>
-                {cat.count}
-              </span>
-            </button>
-          ))}
+          <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#9E3E26]">
+            <Package className="w-4 h-4 text-[#9E3E26]" />
+            <span>{isEn ? 'Select Collection / Category:' : 'Izaberite kategoriju proizvoda:'}</span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 w-full">
+            {categories.map((cat) => {
+              const isActive = selectedCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2.5 transform active:translate-y-0.5 ${
+                    isActive
+                      ? 'bg-gradient-to-b from-[#B8482E] via-[#9E3E26] to-[#7F2F1C] text-white shadow-md border border-[#C85338] border-b-4 border-b-[#5C1E10] font-bold scale-[1.02]'
+                      : 'bg-gradient-to-b from-white to-[#F8F3ED] text-[#241D19] border border-[#E2D6C5] border-b-3 border-b-[#C9B8A4] hover:border-[#9E3E26]/50 hover:from-[#FAF5EF] hover:to-[#F1E5D8] hover:text-[#9E3E26] shadow-2xs hover:shadow-md hover:scale-[1.02]'
+                  }`}
+                >
+                  <span className="tracking-tight">{cat.label}</span>
+                  <span className={`text-[11px] font-mono px-2 py-0.5 rounded-full font-bold transition-colors ${
+                    isActive
+                      ? 'bg-white/25 text-white border border-white/30 shadow-inner'
+                      : 'bg-[#EFE5D8] text-[#7F2F1C] border border-[#DFCFC0]'
+                  }`}>
+                    {cat.count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </motion.div>
 
         {/* Sub-header info for selected category */}
