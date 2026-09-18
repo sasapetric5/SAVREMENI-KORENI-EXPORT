@@ -1,4 +1,4 @@
-import { GalleryPhoto } from "../types";
+import { GalleryPhoto } from '../types';
 
 /**
  * Permanent gallery photos list synchronized from user database.
@@ -17,78 +17,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789203411768-1",
-    "title": "OREO - Slika 2",
-    "titleEn": "OREO - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789203411768_g0.jpg",
-    "caption": "OREO tašna osvaja pažnju nesvakidašnjim kaišem i drvenim ručkama koje joj daju topao, prirodan šarm. Zlatna bravica unosi dozu sofisticiranosti, dok je pažljivo izrađena od pamučnih trakica u elegantnoj kapućino nijansi. Savršen spoj rustičnog i modernog.",
-    "captionEn": "The OREO bag captures attention with its distinctive strap and wooden handles that give it a warm, natural charm. The gold clasp adds a touch of sophistication, while it is carefully handcrafted from cotton strips in an elegant cappuccino shade. A perfect blend of rustic and modern.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789203411768-2",
-    "title": "OREO - Slika 3",
-    "titleEn": "OREO - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789203411768_g1.jpg",
-    "caption": "OREO tašna osvaja pažnju nesvakidašnjim kaišem i drvenim ručkama koje joj daju topao, prirodan šarm. Zlatna bravica unosi dozu sofisticiranosti, dok je pažljivo izrađena od pamučnih trakica u elegantnoj kapućino nijansi. Savršen spoj rustičnog i modernog.",
-    "captionEn": "The OREO bag captures attention with its distinctive strap and wooden handles that give it a warm, natural charm. The gold clasp adds a touch of sophistication, while it is carefully handcrafted from cotton strips in an elegant cappuccino shade. A perfect blend of rustic and modern.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789203411768-3",
-    "title": "OREO - Slika 4",
-    "titleEn": "OREO - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789203411768_g2.jpg",
-    "caption": "OREO tašna osvaja pažnju nesvakidašnjim kaišem i drvenim ručkama koje joj daju topao, prirodan šarm. Zlatna bravica unosi dozu sofisticiranosti, dok je pažljivo izrađena od pamučnih trakica u elegantnoj kapućino nijansi. Savršen spoj rustičnog i modernog.",
-    "captionEn": "The OREO bag captures attention with its distinctive strap and wooden handles that give it a warm, natural charm. The gold clasp adds a touch of sophistication, while it is carefully handcrafted from cotton strips in an elegant cappuccino shade. A perfect blend of rustic and modern.",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789204073718-0",
     "title": "CANDY",
     "titleEn": "CANDY",
     "category": "Torbice",
     "categoryEn": "Bags & Purses",
     "imageUrl": "/custom_products/prod_custom-prod-1789204073718.jpg",
-    "caption": "CANDY ručno heklana tašna pravi je modni dragulj – duboko crna tekstura sa raskošnom crvenom mašnom i zlatnim lancem koji blista poput nakita. Okrugle ručke i pažljiv detalj daju joj dozu visoke mode. Savršen spoj elegancije, strasti i besprekornog.",
-    "captionEn": "The CANDY handmade crochet bag is a true fashion jewel – deep black texture with a lavish red bow and a gold chain that sparkles like jewelry. The round handles and meticulous detailing give it a touch of haute couture. A perfect blend of elegance, passion, and impeccable style.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789204073718-1",
-    "title": "CANDY - Slika 2",
-    "titleEn": "CANDY - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789204073718_g0.jpg",
-    "caption": "CANDY ručno heklana tašna pravi je modni dragulj – duboko crna tekstura sa raskošnom crvenom mašnom i zlatnim lancem koji blista poput nakita. Okrugle ručke i pažljiv detalj daju joj dozu visoke mode. Savršen spoj elegancije, strasti i besprekornog.",
-    "captionEn": "The CANDY handmade crochet bag is a true fashion jewel – deep black texture with a lavish red bow and a gold chain that sparkles like jewelry. The round handles and meticulous detailing give it a touch of haute couture. A perfect blend of elegance, passion, and impeccable style.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789204073718-2",
-    "title": "CANDY - Slika 3",
-    "titleEn": "CANDY - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789204073718_g1.jpg",
-    "caption": "CANDY ručno heklana tašna pravi je modni dragulj – duboko crna tekstura sa raskošnom crvenom mašnom i zlatnim lancem koji blista poput nakita. Okrugle ručke i pažljiv detalj daju joj dozu visoke mode. Savršen spoj elegancije, strasti i besprekornog.",
-    "captionEn": "The CANDY handmade crochet bag is a true fashion jewel – deep black texture with a lavish red bow and a gold chain that sparkles like jewelry. The round handles and meticulous detailing give it a touch of haute couture. A perfect blend of elegance, passion, and impeccable style.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789204073718-3",
-    "title": "CANDY - Slika 4",
-    "titleEn": "CANDY - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789204073718_g2.jpg",
     "caption": "CANDY ručno heklana tašna pravi je modni dragulj – duboko crna tekstura sa raskošnom crvenom mašnom i zlatnim lancem koji blista poput nakita. Okrugle ručke i pažljiv detalj daju joj dozu visoke mode. Savršen spoj elegancije, strasti i besprekornog.",
     "captionEn": "The CANDY handmade crochet bag is a true fashion jewel – deep black texture with a lavish red bow and a gold chain that sparkles like jewelry. The round handles and meticulous detailing give it a touch of haute couture. A perfect blend of elegance, passion, and impeccable style.",
     "isCustomUploaded": true
@@ -105,78 +39,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789204258030-1",
-    "title": "PINK BLOSSOM - Slika 2",
-    "titleEn": "PINK BLOSSOM - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789204258030_g0.jpg",
-    "caption": "Pink Blossom ručno heklana tašna „Pink Blossom“ pravi je dragulj – nežno roze nijanse sa elegantnim crnim i belim prugama koje joj daju prefinjen kontrast. Ukrasni lanac i mašne unose romantičnu notu, dok svaki detalj odiše ljubavlju prema ručnom radu. Savršen spoj elegancije i šarma.",
-    "captionEn": "The handmade crochet bag \"Pink Blossom\" is a true jewel – in soft pink shades with elegant black and white stripes that create a refined contrast. The decorative chain and bows add a romantic touch, while every detail radiates a love for handmade craftsmanship. A perfect blend of elegance and charm.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789204258030-2",
-    "title": "PINK BLOSSOM - Slika 3",
-    "titleEn": "PINK BLOSSOM - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789204258030_g1.jpg",
-    "caption": "Pink Blossom ručno heklana tašna „Pink Blossom“ pravi je dragulj – nežno roze nijanse sa elegantnim crnim i belim prugama koje joj daju prefinjen kontrast. Ukrasni lanac i mašne unose romantičnu notu, dok svaki detalj odiše ljubavlju prema ručnom radu. Savršen spoj elegancije i šarma.",
-    "captionEn": "The handmade crochet bag \"Pink Blossom\" is a true jewel – in soft pink shades with elegant black and white stripes that create a refined contrast. The decorative chain and bows add a romantic touch, while every detail radiates a love for handmade craftsmanship. A perfect blend of elegance and charm.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789204258030-3",
-    "title": "PINK BLOSSOM - Slika 4",
-    "titleEn": "PINK BLOSSOM - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789204258030_g2.jpg",
-    "caption": "Pink Blossom ručno heklana tašna „Pink Blossom“ pravi je dragulj – nežno roze nijanse sa elegantnim crnim i belim prugama koje joj daju prefinjen kontrast. Ukrasni lanac i mašne unose romantičnu notu, dok svaki detalj odiše ljubavlju prema ručnom radu. Savršen spoj elegancije i šarma.",
-    "captionEn": "The handmade crochet bag \"Pink Blossom\" is a true jewel – in soft pink shades with elegant black and white stripes that create a refined contrast. The decorative chain and bows add a romantic touch, while every detail radiates a love for handmade craftsmanship. A perfect blend of elegance and charm.",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789205898869-0",
     "title": "AZZURO",
     "titleEn": "AZZURO",
     "category": "Torbice",
     "categoryEn": "Bags & Purses",
     "imageUrl": "/custom_products/prod_custom-prod-1789205898869.jpg",
-    "caption": "AZURRO Ručno heklana tašna „Azurro“ je sinonim za luksuz i svežinu. Intenzivna kobalt plava boja u bogatom pletenica radu privlači poglede, dok zlatni lanac i zlatna bravica unose dozu glamura. Svaki deo je kristalno čist, bez trunke nesavršenosti - kao da je tek sišla sa radnog stola. Mala, ali moćna - idealna za dnevne i večernje kombinacije. Ručni rad koji izgleda kao dizajnerski komad.",
-    "captionEn": "The handmade crochet bag \"Azurro\" is synonymous with luxury and freshness. Its intense cobalt blue color in a rich braid stitch is eye-catching, while the gold chain and gold clasp add a touch of glamour. Every part is crystal clear, without a trace of imperfection – as if it just came off the workbench. Small but powerful – ideal for both day and evening looks. Handmade work that looks like a designer piece.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789205898869-1",
-    "title": "AZZURO - Slika 2",
-    "titleEn": "AZZURO - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789205898869_g0.jpg",
-    "caption": "AZURRO Ručno heklana tašna „Azurro“ je sinonim za luksuz i svežinu. Intenzivna kobalt plava boja u bogatom pletenica radu privlači poglede, dok zlatni lanac i zlatna bravica unose dozu glamura. Svaki deo je kristalno čist, bez trunke nesavršenosti - kao da je tek sišla sa radnog stola. Mala, ali moćna - idealna za dnevne i večernje kombinacije. Ručni rad koji izgleda kao dizajnerski komad.",
-    "captionEn": "The handmade crochet bag \"Azurro\" is synonymous with luxury and freshness. Its intense cobalt blue color in a rich braid stitch is eye-catching, while the gold chain and gold clasp add a touch of glamour. Every part is crystal clear, without a trace of imperfection – as if it just came off the workbench. Small but powerful – ideal for both day and evening looks. Handmade work that looks like a designer piece.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789205898869-2",
-    "title": "AZZURO - Slika 3",
-    "titleEn": "AZZURO - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789205898869_g1.jpg",
-    "caption": "AZURRO Ručno heklana tašna „Azurro“ je sinonim za luksuz i svežinu. Intenzivna kobalt plava boja u bogatom pletenica radu privlači poglede, dok zlatni lanac i zlatna bravica unose dozu glamura. Svaki deo je kristalno čist, bez trunke nesavršenosti - kao da je tek sišla sa radnog stola. Mala, ali moćna - idealna za dnevne i večernje kombinacije. Ručni rad koji izgleda kao dizajnerski komad.",
-    "captionEn": "The handmade crochet bag \"Azurro\" is synonymous with luxury and freshness. Its intense cobalt blue color in a rich braid stitch is eye-catching, while the gold chain and gold clasp add a touch of glamour. Every part is crystal clear, without a trace of imperfection – as if it just came off the workbench. Small but powerful – ideal for both day and evening looks. Handmade work that looks like a designer piece.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789205898869-3",
-    "title": "AZZURO - Slika 4",
-    "titleEn": "AZZURO - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789205898869_g2.jpg",
     "caption": "AZURRO Ručno heklana tašna „Azurro“ je sinonim za luksuz i svežinu. Intenzivna kobalt plava boja u bogatom pletenica radu privlači poglede, dok zlatni lanac i zlatna bravica unose dozu glamura. Svaki deo je kristalno čist, bez trunke nesavršenosti - kao da je tek sišla sa radnog stola. Mala, ali moćna - idealna za dnevne i večernje kombinacije. Ručni rad koji izgleda kao dizajnerski komad.",
     "captionEn": "The handmade crochet bag \"Azurro\" is synonymous with luxury and freshness. Its intense cobalt blue color in a rich braid stitch is eye-catching, while the gold chain and gold clasp add a touch of glamour. Every part is crystal clear, without a trace of imperfection – as if it just came off the workbench. Small but powerful – ideal for both day and evening looks. Handmade work that looks like a designer piece.",
     "isCustomUploaded": true
@@ -193,78 +61,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789206703824-1",
-    "title": "LAVANDA DREAM - Slika 2",
-    "titleEn": "LAVANDA DREAM - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789206703824_g0.jpg",
-    "caption": "LAVANDA DREAM Ručno heklana tašna Lavanda Dream – bela baza sa lila okvirom i raskošnim 3D ružama. Ametist perle, nežna, romantična, luksuzna. Dominira uz belu kombinaciju, idealna za venčanja i letnje večeri. Unikat koji privlači poglede.",
-    "captionEn": "LAVANDA DREAM The handmade crochet bag Lavanda Dream – white base with lilac frame and lavish 3D roses. Amethyst beads, delicate, romantic, luxurious. It stands out with a white outfit, ideal for weddings and summer evenings. A unique piece that turns heads. Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789206703824-2",
-    "title": "LAVANDA DREAM - Slika 3",
-    "titleEn": "LAVANDA DREAM - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789206703824_g1.jpg",
-    "caption": "LAVANDA DREAM Ručno heklana tašna Lavanda Dream – bela baza sa lila okvirom i raskošnim 3D ružama. Ametist perle, nežna, romantična, luksuzna. Dominira uz belu kombinaciju, idealna za venčanja i letnje večeri. Unikat koji privlači poglede.",
-    "captionEn": "LAVANDA DREAM The handmade crochet bag Lavanda Dream – white base with lilac frame and lavish 3D roses. Amethyst beads, delicate, romantic, luxurious. It stands out with a white outfit, ideal for weddings and summer evenings. A unique piece that turns heads. Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789206703824-3",
-    "title": "LAVANDA DREAM - Slika 4",
-    "titleEn": "LAVANDA DREAM - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789206703824_g2.jpg",
-    "caption": "LAVANDA DREAM Ručno heklana tašna Lavanda Dream – bela baza sa lila okvirom i raskošnim 3D ružama. Ametist perle, nežna, romantična, luksuzna. Dominira uz belu kombinaciju, idealna za venčanja i letnje večeri. Unikat koji privlači poglede.",
-    "captionEn": "LAVANDA DREAM The handmade crochet bag Lavanda Dream – white base with lilac frame and lavish 3D roses. Amethyst beads, delicate, romantic, luxurious. It stands out with a white outfit, ideal for weddings and summer evenings. A unique piece that turns heads. Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789207252514-0",
     "title": "NOIR GOLD",
     "titleEn": "NOIR GOLD",
     "category": "Torbice",
     "categoryEn": "Bags & Purses",
     "imageUrl": "/custom_products/prod_custom-prod-1789207252514.jpg",
-    "caption": "NOIR GOLD Ručno heklana tašna Noir Gold – bezvremenska crna u luksuznom pletenica radu. Zlatni lanac i bravica daju glamur, debela ručka udobnost. Elegantna, moćna, za svaku priliku – od posla do večeri. Ručni rad koji izgleda kao dizajnerski klasik. Jedinstvena crna torba koju morate imati.",
-    "captionEn": "NOIR GOLD The handmade crochet bag Noir Gold – timeless black in a luxurious braid stitch. The gold chain and clasp add glamour, the thick handle adds comfort. Elegant, powerful, for every occasion – from work to evening. Handmade work that looks like a designer classic. The unique black bag you must have.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789207252514-1",
-    "title": "NOIR GOLD - Slika 2",
-    "titleEn": "NOIR GOLD - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789207252514_g0.jpg",
-    "caption": "NOIR GOLD Ručno heklana tašna Noir Gold – bezvremenska crna u luksuznom pletenica radu. Zlatni lanac i bravica daju glamur, debela ručka udobnost. Elegantna, moćna, za svaku priliku – od posla do večeri. Ručni rad koji izgleda kao dizajnerski klasik. Jedinstvena crna torba koju morate imati.",
-    "captionEn": "NOIR GOLD The handmade crochet bag Noir Gold – timeless black in a luxurious braid stitch. The gold chain and clasp add glamour, the thick handle adds comfort. Elegant, powerful, for every occasion – from work to evening. Handmade work that looks like a designer classic. The unique black bag you must have.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789207252514-2",
-    "title": "NOIR GOLD - Slika 3",
-    "titleEn": "NOIR GOLD - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789207252514_g1.jpg",
-    "caption": "NOIR GOLD Ručno heklana tašna Noir Gold – bezvremenska crna u luksuznom pletenica radu. Zlatni lanac i bravica daju glamur, debela ručka udobnost. Elegantna, moćna, za svaku priliku – od posla do večeri. Ručni rad koji izgleda kao dizajnerski klasik. Jedinstvena crna torba koju morate imati.",
-    "captionEn": "NOIR GOLD The handmade crochet bag Noir Gold – timeless black in a luxurious braid stitch. The gold chain and clasp add glamour, the thick handle adds comfort. Elegant, powerful, for every occasion – from work to evening. Handmade work that looks like a designer classic. The unique black bag you must have.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789207252514-3",
-    "title": "NOIR GOLD - Slika 4",
-    "titleEn": "NOIR GOLD - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789207252514_g2.jpg",
     "caption": "NOIR GOLD Ručno heklana tašna Noir Gold – bezvremenska crna u luksuznom pletenica radu. Zlatni lanac i bravica daju glamur, debela ručka udobnost. Elegantna, moćna, za svaku priliku – od posla do večeri. Ručni rad koji izgleda kao dizajnerski klasik. Jedinstvena crna torba koju morate imati.",
     "captionEn": "NOIR GOLD The handmade crochet bag Noir Gold – timeless black in a luxurious braid stitch. The gold chain and clasp add glamour, the thick handle adds comfort. Elegant, powerful, for every occasion – from work to evening. Handmade work that looks like a designer classic. The unique black bag you must have.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
     "isCustomUploaded": true
@@ -281,78 +83,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789207820042-1",
-    "title": "URBAN SAND - Slika 2",
-    "titleEn": "URBAN SAND - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789207820042_g0.jpg",
-    "caption": "URBAN SAND Ručno heklana tašna Urban Sand – savremena bež torba sa XXL lanac kaišem od istog konca. Mekana, lagana, moderna, savršena za gradske šetnje danju i noću. Minimalistički dizajn sa preklopom, dovoljno prostrana za sve sto vam je neophodno. Usklađena sa casual chic kombinacijama, bomber jaknom i trenerkom, daje sportsku eleganciju i luksuz. Ručni rad koji prati ritam grada.",
-    "captionEn": "URBAN SAND The handmade crochet bag Urban Sand – contemporary beige bag with an XXL chain strap made from the same yarn. Soft, lightweight, modern, perfect for city walks day and night. Minimalist design with a flap, spacious enough for all your essentials. Matched with casual chic combos, bomber jacket and tracksuit, it gives sporty elegance and luxury. Handmade work that follows the rhythm of the city.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789207820042-2",
-    "title": "URBAN SAND - Slika 3",
-    "titleEn": "URBAN SAND - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789207820042_g1.jpg",
-    "caption": "URBAN SAND Ručno heklana tašna Urban Sand – savremena bež torba sa XXL lanac kaišem od istog konca. Mekana, lagana, moderna, savršena za gradske šetnje danju i noću. Minimalistički dizajn sa preklopom, dovoljno prostrana za sve sto vam je neophodno. Usklađena sa casual chic kombinacijama, bomber jaknom i trenerkom, daje sportsku eleganciju i luksuz. Ručni rad koji prati ritam grada.",
-    "captionEn": "URBAN SAND The handmade crochet bag Urban Sand – contemporary beige bag with an XXL chain strap made from the same yarn. Soft, lightweight, modern, perfect for city walks day and night. Minimalist design with a flap, spacious enough for all your essentials. Matched with casual chic combos, bomber jacket and tracksuit, it gives sporty elegance and luxury. Handmade work that follows the rhythm of the city.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789207820042-3",
-    "title": "URBAN SAND - Slika 4",
-    "titleEn": "URBAN SAND - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789207820042_g2.jpg",
-    "caption": "URBAN SAND Ručno heklana tašna Urban Sand – savremena bež torba sa XXL lanac kaišem od istog konca. Mekana, lagana, moderna, savršena za gradske šetnje danju i noću. Minimalistički dizajn sa preklopom, dovoljno prostrana za sve sto vam je neophodno. Usklađena sa casual chic kombinacijama, bomber jaknom i trenerkom, daje sportsku eleganciju i luksuz. Ručni rad koji prati ritam grada.",
-    "captionEn": "URBAN SAND The handmade crochet bag Urban Sand – contemporary beige bag with an XXL chain strap made from the same yarn. Soft, lightweight, modern, perfect for city walks day and night. Minimalist design with a flap, spacious enough for all your essentials. Matched with casual chic combos, bomber jacket and tracksuit, it gives sporty elegance and luxury. Handmade work that follows the rhythm of the city.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789208559853-0",
     "title": "BOHO ETNO",
     "titleEn": "BOHO ETNO",
     "category": "Torbice",
     "categoryEn": "Bags & Purses",
     "imageUrl": "/custom_products/prod_custom-prod-1789208559853.jpg",
-    "caption": "BOHO ETNO Ručno rađena makrame tašna Boho Etno – krem konac, drvene okrugle ručke, rese i tradicionalna vezena traka sa crvenim i plavim cvetovima. Spoj boho šika i etno nasleđa, lagana, prostrana, sa dugim kaišem. Idealna za leto, plažu, festivale i svaki dan. Unikat koji čuva tradiciju, a izgleda moderno i svetski.",
-    "captionEn": "BOHO ETNO The handmade macramé bag Boho Etno – cream yarn, round wooden handles, tassels and a traditional embroidered strap with red and blue flowers. A fusion of boho chic and ethno heritage, lightweight, spacious, with a long strap. Ideal for summer, beach, festivals and everyday. A unique piece that preserves tradition yet looks modern and global.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789208559853-1",
-    "title": "BOHO ETNO - Slika 2",
-    "titleEn": "BOHO ETNO - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789208559853_g0.jpg",
-    "caption": "BOHO ETNO Ručno rađena makrame tašna Boho Etno – krem konac, drvene okrugle ručke, rese i tradicionalna vezena traka sa crvenim i plavim cvetovima. Spoj boho šika i etno nasleđa, lagana, prostrana, sa dugim kaišem. Idealna za leto, plažu, festivale i svaki dan. Unikat koji čuva tradiciju, a izgleda moderno i svetski.",
-    "captionEn": "BOHO ETNO The handmade macramé bag Boho Etno – cream yarn, round wooden handles, tassels and a traditional embroidered strap with red and blue flowers. A fusion of boho chic and ethno heritage, lightweight, spacious, with a long strap. Ideal for summer, beach, festivals and everyday. A unique piece that preserves tradition yet looks modern and global.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789208559853-2",
-    "title": "BOHO ETNO - Slika 3",
-    "titleEn": "BOHO ETNO - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789208559853_g1.jpg",
-    "caption": "BOHO ETNO Ručno rađena makrame tašna Boho Etno – krem konac, drvene okrugle ručke, rese i tradicionalna vezena traka sa crvenim i plavim cvetovima. Spoj boho šika i etno nasleđa, lagana, prostrana, sa dugim kaišem. Idealna za leto, plažu, festivale i svaki dan. Unikat koji čuva tradiciju, a izgleda moderno i svetski.",
-    "captionEn": "BOHO ETNO The handmade macramé bag Boho Etno – cream yarn, round wooden handles, tassels and a traditional embroidered strap with red and blue flowers. A fusion of boho chic and ethno heritage, lightweight, spacious, with a long strap. Ideal for summer, beach, festivals and everyday. A unique piece that preserves tradition yet looks modern and global.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789208559853-3",
-    "title": "BOHO ETNO - Slika 4",
-    "titleEn": "BOHO ETNO - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789208559853_g2.jpg",
     "caption": "BOHO ETNO Ručno rađena makrame tašna Boho Etno – krem konac, drvene okrugle ručke, rese i tradicionalna vezena traka sa crvenim i plavim cvetovima. Spoj boho šika i etno nasleđa, lagana, prostrana, sa dugim kaišem. Idealna za leto, plažu, festivale i svaki dan. Unikat koji čuva tradiciju, a izgleda moderno i svetski.",
     "captionEn": "BOHO ETNO The handmade macramé bag Boho Etno – cream yarn, round wooden handles, tassels and a traditional embroidered strap with red and blue flowers. A fusion of boho chic and ethno heritage, lightweight, spacious, with a long strap. Ideal for summer, beach, festivals and everyday. A unique piece that preserves tradition yet looks modern and global.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
     "isCustomUploaded": true
@@ -369,78 +105,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789209800143-1",
-    "title": "MIDNIGHT GLAM - Slika 2",
-    "titleEn": "MIDNIGHT GLAM - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789209800143_g0.jpg",
-    "caption": "MIDNIGHT GLAM Ručno pletena tašna Midnight Glam – elegantna crna u modernom dijagonalnom bodu sa otvorima, srebrnom bravicom i dugim srebrnim lancem. Mala, sofisticirana, večernja i dnevna, savršena za telefon, ključeve i karmin. Minimalistički luksuz, sjajna za izlaske, posao i posebne prilike. Unikatni ručni rad koji izgleda kao mali dizajnerski novčanik na lanac.",
-    "captionEn": "MIDNIGHT GLAM The handmade knitted bag Midnight Glam – elegant black in a modern diagonal openwork stitch with a silver clasp and long silver chain. Small, sophisticated, for evening and day, perfect for phone, keys and lipstick. Minimalist luxury, great for nights out, work and special occasions. Unique handmade work that looks like a small designer wallet on chain.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789209800143-2",
-    "title": "MIDNIGHT GLAM - Slika 3",
-    "titleEn": "MIDNIGHT GLAM - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789209800143_g1.jpg",
-    "caption": "MIDNIGHT GLAM Ručno pletena tašna Midnight Glam – elegantna crna u modernom dijagonalnom bodu sa otvorima, srebrnom bravicom i dugim srebrnim lancem. Mala, sofisticirana, večernja i dnevna, savršena za telefon, ključeve i karmin. Minimalistički luksuz, sjajna za izlaske, posao i posebne prilike. Unikatni ručni rad koji izgleda kao mali dizajnerski novčanik na lanac.",
-    "captionEn": "MIDNIGHT GLAM The handmade knitted bag Midnight Glam – elegant black in a modern diagonal openwork stitch with a silver clasp and long silver chain. Small, sophisticated, for evening and day, perfect for phone, keys and lipstick. Minimalist luxury, great for nights out, work and special occasions. Unique handmade work that looks like a small designer wallet on chain.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789209800143-3",
-    "title": "MIDNIGHT GLAM - Slika 4",
-    "titleEn": "MIDNIGHT GLAM - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789209800143_g2.jpg",
-    "caption": "MIDNIGHT GLAM Ručno pletena tašna Midnight Glam – elegantna crna u modernom dijagonalnom bodu sa otvorima, srebrnom bravicom i dugim srebrnim lancem. Mala, sofisticirana, večernja i dnevna, savršena za telefon, ključeve i karmin. Minimalistički luksuz, sjajna za izlaske, posao i posebne prilike. Unikatni ručni rad koji izgleda kao mali dizajnerski novčanik na lanac.",
-    "captionEn": "MIDNIGHT GLAM The handmade knitted bag Midnight Glam – elegant black in a modern diagonal openwork stitch with a silver clasp and long silver chain. Small, sophisticated, for evening and day, perfect for phone, keys and lipstick. Minimalist luxury, great for nights out, work and special occasions. Unique handmade work that looks like a small designer wallet on chain.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789210279779-0",
     "title": "LILA ROSE",
     "titleEn": "LILA ROSE",
     "category": "Torbice",
     "categoryEn": "Bags & Purses",
     "imageUrl": "/custom_products/prod_custom-prod-1789210279779.jpg",
-    "caption": "LILA ROSE Ručno heklana mini torbica Lila Rose – nežna belo-lila granny baza sa 3D ljubičastom ružom i zelenim listićima. Slatka, lagana, dečija i teen, idealna za telefon i sitnice. Savršena za devojčice, tinejdžerke, šetnje, školu i poklon. Unikat koji osvaja nežnošću.",
-    "captionEn": "LILA ROSE The handmade crochet mini bag Lila Rose – delicate white-lilac granny base with 3D purple rose and green leaves. Sweet, lightweight, for kids and teens, ideal for phone and small essentials. Perfect for little girls, teenagers, walks, school and as a gift. A unique piece that wins you over with its tenderness.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789210279779-1",
-    "title": "LILA ROSE - Slika 2",
-    "titleEn": "LILA ROSE - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789210279779_g0.jpg",
-    "caption": "LILA ROSE Ručno heklana mini torbica Lila Rose – nežna belo-lila granny baza sa 3D ljubičastom ružom i zelenim listićima. Slatka, lagana, dečija i teen, idealna za telefon i sitnice. Savršena za devojčice, tinejdžerke, šetnje, školu i poklon. Unikat koji osvaja nežnošću.",
-    "captionEn": "LILA ROSE The handmade crochet mini bag Lila Rose – delicate white-lilac granny base with 3D purple rose and green leaves. Sweet, lightweight, for kids and teens, ideal for phone and small essentials. Perfect for little girls, teenagers, walks, school and as a gift. A unique piece that wins you over with its tenderness.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789210279779-2",
-    "title": "LILA ROSE - Slika 3",
-    "titleEn": "LILA ROSE - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789210279779_g1.jpg",
-    "caption": "LILA ROSE Ručno heklana mini torbica Lila Rose – nežna belo-lila granny baza sa 3D ljubičastom ružom i zelenim listićima. Slatka, lagana, dečija i teen, idealna za telefon i sitnice. Savršena za devojčice, tinejdžerke, šetnje, školu i poklon. Unikat koji osvaja nežnošću.",
-    "captionEn": "LILA ROSE The handmade crochet mini bag Lila Rose – delicate white-lilac granny base with 3D purple rose and green leaves. Sweet, lightweight, for kids and teens, ideal for phone and small essentials. Perfect for little girls, teenagers, walks, school and as a gift. A unique piece that wins you over with its tenderness.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789210279779-3",
-    "title": "LILA ROSE - Slika 4",
-    "titleEn": "LILA ROSE - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789210279779_g2.jpg",
     "caption": "LILA ROSE Ručno heklana mini torbica Lila Rose – nežna belo-lila granny baza sa 3D ljubičastom ružom i zelenim listićima. Slatka, lagana, dečija i teen, idealna za telefon i sitnice. Savršena za devojčice, tinejdžerke, šetnje, školu i poklon. Unikat koji osvaja nežnošću.",
     "captionEn": "LILA ROSE The handmade crochet mini bag Lila Rose – delicate white-lilac granny base with 3D purple rose and green leaves. Sweet, lightweight, for kids and teens, ideal for phone and small essentials. Perfect for little girls, teenagers, walks, school and as a gift. A unique piece that wins you over with its tenderness.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
     "isCustomUploaded": true
@@ -457,78 +127,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789210578864-1",
-    "title": "NOIR CHIC - Slika 2",
-    "titleEn": "NOIR CHIC - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789210578864_g0.jpg",
-    "caption": "NOIR CHIC Ručno heklana tašna Noir Chic – bezvremenska crna od traka pamuka u gustoj, mekanoj teksturi. Zlatni lanac provučen kroz konac daje joj luksuz Chanel stila, a preklop diskretnu eleganciju. Srednje veličine, lagana, udobna preko ramena. Za posao, večeru i grad – mala crna torba koja ide uz sve. Ručni rad koji izgleda dizajnerski i moćno.",
-    "captionEn": "NOIR CHIC The handmade crochet bag Noir Chic – timeless black made from cotton strips in a dense, soft texture. The gold chain threaded through the yarn gives it a Chanel-style luxury, while the flap adds discreet elegance. Medium-sized, lightweight, comfortable over the shoulder. For work, dinner and the city – the little black bag that goes with everything. Handmade work that looks designer and powerful.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789210578864-2",
-    "title": "NOIR CHIC - Slika 3",
-    "titleEn": "NOIR CHIC - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789210578864_g1.jpg",
-    "caption": "NOIR CHIC Ručno heklana tašna Noir Chic – bezvremenska crna od traka pamuka u gustoj, mekanoj teksturi. Zlatni lanac provučen kroz konac daje joj luksuz Chanel stila, a preklop diskretnu eleganciju. Srednje veličine, lagana, udobna preko ramena. Za posao, večeru i grad – mala crna torba koja ide uz sve. Ručni rad koji izgleda dizajnerski i moćno.",
-    "captionEn": "NOIR CHIC The handmade crochet bag Noir Chic – timeless black made from cotton strips in a dense, soft texture. The gold chain threaded through the yarn gives it a Chanel-style luxury, while the flap adds discreet elegance. Medium-sized, lightweight, comfortable over the shoulder. For work, dinner and the city – the little black bag that goes with everything. Handmade work that looks designer and powerful.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789210578864-3",
-    "title": "NOIR CHIC - Slika 4",
-    "titleEn": "NOIR CHIC - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789210578864_g2.jpg",
-    "caption": "NOIR CHIC Ručno heklana tašna Noir Chic – bezvremenska crna od traka pamuka u gustoj, mekanoj teksturi. Zlatni lanac provučen kroz konac daje joj luksuz Chanel stila, a preklop diskretnu eleganciju. Srednje veličine, lagana, udobna preko ramena. Za posao, večeru i grad – mala crna torba koja ide uz sve. Ručni rad koji izgleda dizajnerski i moćno.",
-    "captionEn": "NOIR CHIC The handmade crochet bag Noir Chic – timeless black made from cotton strips in a dense, soft texture. The gold chain threaded through the yarn gives it a Chanel-style luxury, while the flap adds discreet elegance. Medium-sized, lightweight, comfortable over the shoulder. For work, dinner and the city – the little black bag that goes with everything. Handmade work that looks designer and powerful.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789211182859-0",
     "title": "BURGUNDY ROSE",
     "titleEn": "BURGUNDY ROSE",
     "category": "Torbice",
     "categoryEn": "Bags & Purses",
     "imageUrl": "/custom_products/prod_custom-prod-1789211182859.jpg",
-    "caption": "BURGUNDY ROSE Ručno heklana tašna Burgundy Rose – skulpturalna 3D ruža u bordo i mlečno beloj boji, sa kožnim belim kaišem. Umetnički, romantični statement komad koji izgleda kao cvet. Mala, lagana, za telefon i karmin, savršena za venčanja, svečanosti, proleće i leto. Unikatni ručni rad koji privlači sve poglede i daje luksuznoj haljini finalni pečat.",
-    "captionEn": "BURGUNDY ROSE The handmade crochet bag Burgundy Rose – sculptural 3D rose in burgundy and milky white with a white leather strap. An artistic, romantic statement piece that looks like a flower. Small, lightweight, for phone and lipstick, perfect for weddings, festivities, spring and summer. Unique handmade work that catches every eye and gives a luxury dress its final touch.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789211182859-1",
-    "title": "BURGUNDY ROSE - Slika 2",
-    "titleEn": "BURGUNDY ROSE - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789211182859_g0.jpg",
-    "caption": "BURGUNDY ROSE Ručno heklana tašna Burgundy Rose – skulpturalna 3D ruža u bordo i mlečno beloj boji, sa kožnim belim kaišem. Umetnički, romantični statement komad koji izgleda kao cvet. Mala, lagana, za telefon i karmin, savršena za venčanja, svečanosti, proleće i leto. Unikatni ručni rad koji privlači sve poglede i daje luksuznoj haljini finalni pečat.",
-    "captionEn": "BURGUNDY ROSE The handmade crochet bag Burgundy Rose – sculptural 3D rose in burgundy and milky white with a white leather strap. An artistic, romantic statement piece that looks like a flower. Small, lightweight, for phone and lipstick, perfect for weddings, festivities, spring and summer. Unique handmade work that catches every eye and gives a luxury dress its final touch.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789211182859-2",
-    "title": "BURGUNDY ROSE - Slika 3",
-    "titleEn": "BURGUNDY ROSE - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789211182859_g1.jpg",
-    "caption": "BURGUNDY ROSE Ručno heklana tašna Burgundy Rose – skulpturalna 3D ruža u bordo i mlečno beloj boji, sa kožnim belim kaišem. Umetnički, romantični statement komad koji izgleda kao cvet. Mala, lagana, za telefon i karmin, savršena za venčanja, svečanosti, proleće i leto. Unikatni ručni rad koji privlači sve poglede i daje luksuznoj haljini finalni pečat.",
-    "captionEn": "BURGUNDY ROSE The handmade crochet bag Burgundy Rose – sculptural 3D rose in burgundy and milky white with a white leather strap. An artistic, romantic statement piece that looks like a flower. Small, lightweight, for phone and lipstick, perfect for weddings, festivities, spring and summer. Unique handmade work that catches every eye and gives a luxury dress its final touch.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789211182859-3",
-    "title": "BURGUNDY ROSE - Slika 4",
-    "titleEn": "BURGUNDY ROSE - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789211182859_g2.jpg",
     "caption": "BURGUNDY ROSE Ručno heklana tašna Burgundy Rose – skulpturalna 3D ruža u bordo i mlečno beloj boji, sa kožnim belim kaišem. Umetnički, romantični statement komad koji izgleda kao cvet. Mala, lagana, za telefon i karmin, savršena za venčanja, svečanosti, proleće i leto. Unikatni ručni rad koji privlači sve poglede i daje luksuznoj haljini finalni pečat.",
     "captionEn": "BURGUNDY ROSE The handmade crochet bag Burgundy Rose – sculptural 3D rose in burgundy and milky white with a white leather strap. An artistic, romantic statement piece that looks like a flower. Small, lightweight, for phone and lipstick, perfect for weddings, festivities, spring and summer. Unique handmade work that catches every eye and gives a luxury dress its final touch.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
     "isCustomUploaded": true
@@ -545,78 +149,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789211608744-1",
-    "title": "IVORY GLAM - Slika 2",
-    "titleEn": "IVORY GLAM - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789211608744_g0.jpg",
-    "caption": "IVORY GLAM Ručno heklana tašna Ivory Glam – biserno bela elegancija u luksuznom  bodu sa zlatnim lancem i zlatnom bravicom. Mala clutch na preklop koja sija, idealna za venčanja, mature, krštenja i svečane prilike. Lagana, čvrsta, stane telefon i najpotrebnije. Unikatni ručni rad koji izgleda skupoceno i daje svakoj haljini glamurozni završni dodir.",
-    "captionEn": "IVORY GLAM The handmade crochet bag Ivory Glam – pearl white elegance in a luxurious stitch with a gold chain and gold clasp. A small flap clutch that shines, ideal for weddings, proms, christenings and formal occasions. Lightweight, sturdy, fits a phone and essentials. Unique handmade work that looks expensive and gives every dress a glamorous finishing touch.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789211608744-2",
-    "title": "IVORY GLAM - Slika 3",
-    "titleEn": "IVORY GLAM - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789211608744_g1.jpg",
-    "caption": "IVORY GLAM Ručno heklana tašna Ivory Glam – biserno bela elegancija u luksuznom  bodu sa zlatnim lancem i zlatnom bravicom. Mala clutch na preklop koja sija, idealna za venčanja, mature, krštenja i svečane prilike. Lagana, čvrsta, stane telefon i najpotrebnije. Unikatni ručni rad koji izgleda skupoceno i daje svakoj haljini glamurozni završni dodir.",
-    "captionEn": "IVORY GLAM The handmade crochet bag Ivory Glam – pearl white elegance in a luxurious stitch with a gold chain and gold clasp. A small flap clutch that shines, ideal for weddings, proms, christenings and formal occasions. Lightweight, sturdy, fits a phone and essentials. Unique handmade work that looks expensive and gives every dress a glamorous finishing touch.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789211608744-3",
-    "title": "IVORY GLAM - Slika 4",
-    "titleEn": "IVORY GLAM - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789211608744_g2.jpg",
-    "caption": "IVORY GLAM Ručno heklana tašna Ivory Glam – biserno bela elegancija u luksuznom  bodu sa zlatnim lancem i zlatnom bravicom. Mala clutch na preklop koja sija, idealna za venčanja, mature, krštenja i svečane prilike. Lagana, čvrsta, stane telefon i najpotrebnije. Unikatni ručni rad koji izgleda skupoceno i daje svakoj haljini glamurozni završni dodir.",
-    "captionEn": "IVORY GLAM The handmade crochet bag Ivory Glam – pearl white elegance in a luxurious stitch with a gold chain and gold clasp. A small flap clutch that shines, ideal for weddings, proms, christenings and formal occasions. Lightweight, sturdy, fits a phone and essentials. Unique handmade work that looks expensive and gives every dress a glamorous finishing touch.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789211834535-0",
     "title": "RUBY PEARL",
     "titleEn": "RUBY PEARL",
     "category": "Torbice",
     "categoryEn": "Bags & Purses",
     "imageUrl": "/custom_products/prod_custom-prod-1789211834535.jpg",
-    "caption": "RUBY PEARL Ručno heklana tašna Ruby Pearl – jarko crvena školjka forma sa heklanom drškom ukrašenom belim biserima i dugim kaišem. Dramatična, elegantna, lagana, za preko ramena i u ruci. Savršena za leto, večernje izlaske, venčanja i poklon. Unikat koji spaja boho i glamur, privlači poglede kao mali crveni dragulj sa biserima.",
-    "captionEn": "RUBY PEARL The handmade crochet bag Ruby Pearl – bright red shell form with a crochet handle decorated with white pearls and a long strap. Dramatic, elegant, lightweight, to wear over the shoulder and in hand. Perfect for summer, evening outings, weddings and as a gift. A unique piece that combines boho and glamour, eye-catching like a little red jewel with pearls.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789211834535-1",
-    "title": "RUBY PEARL - Slika 2",
-    "titleEn": "RUBY PEARL - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789211834535_g0.jpg",
-    "caption": "RUBY PEARL Ručno heklana tašna Ruby Pearl – jarko crvena školjka forma sa heklanom drškom ukrašenom belim biserima i dugim kaišem. Dramatična, elegantna, lagana, za preko ramena i u ruci. Savršena za leto, večernje izlaske, venčanja i poklon. Unikat koji spaja boho i glamur, privlači poglede kao mali crveni dragulj sa biserima.",
-    "captionEn": "RUBY PEARL The handmade crochet bag Ruby Pearl – bright red shell form with a crochet handle decorated with white pearls and a long strap. Dramatic, elegant, lightweight, to wear over the shoulder and in hand. Perfect for summer, evening outings, weddings and as a gift. A unique piece that combines boho and glamour, eye-catching like a little red jewel with pearls.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789211834535-2",
-    "title": "RUBY PEARL - Slika 3",
-    "titleEn": "RUBY PEARL - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789211834535_g1.jpg",
-    "caption": "RUBY PEARL Ručno heklana tašna Ruby Pearl – jarko crvena školjka forma sa heklanom drškom ukrašenom belim biserima i dugim kaišem. Dramatična, elegantna, lagana, za preko ramena i u ruci. Savršena za leto, večernje izlaske, venčanja i poklon. Unikat koji spaja boho i glamur, privlači poglede kao mali crveni dragulj sa biserima.",
-    "captionEn": "RUBY PEARL The handmade crochet bag Ruby Pearl – bright red shell form with a crochet handle decorated with white pearls and a long strap. Dramatic, elegant, lightweight, to wear over the shoulder and in hand. Perfect for summer, evening outings, weddings and as a gift. A unique piece that combines boho and glamour, eye-catching like a little red jewel with pearls.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789211834535-3",
-    "title": "RUBY PEARL - Slika 4",
-    "titleEn": "RUBY PEARL - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789211834535_g2.jpg",
     "caption": "RUBY PEARL Ručno heklana tašna Ruby Pearl – jarko crvena školjka forma sa heklanom drškom ukrašenom belim biserima i dugim kaišem. Dramatična, elegantna, lagana, za preko ramena i u ruci. Savršena za leto, večernje izlaske, venčanja i poklon. Unikat koji spaja boho i glamur, privlači poglede kao mali crveni dragulj sa biserima.",
     "captionEn": "RUBY PEARL The handmade crochet bag Ruby Pearl – bright red shell form with a crochet handle decorated with white pearls and a long strap. Dramatic, elegant, lightweight, to wear over the shoulder and in hand. Perfect for summer, evening outings, weddings and as a gift. A unique piece that combines boho and glamour, eye-catching like a little red jewel with pearls.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
     "isCustomUploaded": true
@@ -633,78 +171,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789212070909-1",
-    "title": "NOIR BOHO - Slika 2",
-    "titleEn": "NOIR BOHO - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789212070909_g0.jpg",
-    "caption": "NOIR BOHO Ručno heklana tašna Noir Boho – duboka crna od debelog pamuka sa luksuznom drškom od drvenih i crno-belih akrilnih perli. Zlatni lanac i kožni umetak za udobno nošenje preko ramena. Boho šik i glam, mala ali efektnа, savršena za leto, izlaske i festivale. Unikat koji spaja etno i moderno, za žene koje vole da se izdvoje.",
-    "captionEn": "NOIR BOHO The handmade crochet bag Noir Boho – deep black made from thick cotton with a luxurious handle made of wooden and black-and-white acrylic beads. Gold chain and leather insert for comfortable shoulder wear. Boho chic and glam, small but striking, perfect for summer, nights out and festivals. A unique piece that fuses ethno and modern, for women who like to stand out.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789212070909-2",
-    "title": "NOIR BOHO - Slika 3",
-    "titleEn": "NOIR BOHO - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789212070909_g1.jpg",
-    "caption": "NOIR BOHO Ručno heklana tašna Noir Boho – duboka crna od debelog pamuka sa luksuznom drškom od drvenih i crno-belih akrilnih perli. Zlatni lanac i kožni umetak za udobno nošenje preko ramena. Boho šik i glam, mala ali efektnа, savršena za leto, izlaske i festivale. Unikat koji spaja etno i moderno, za žene koje vole da se izdvoje.",
-    "captionEn": "NOIR BOHO The handmade crochet bag Noir Boho – deep black made from thick cotton with a luxurious handle made of wooden and black-and-white acrylic beads. Gold chain and leather insert for comfortable shoulder wear. Boho chic and glam, small but striking, perfect for summer, nights out and festivals. A unique piece that fuses ethno and modern, for women who like to stand out.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789212070909-3",
-    "title": "NOIR BOHO - Slika 4",
-    "titleEn": "NOIR BOHO - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789212070909_g2.jpg",
-    "caption": "NOIR BOHO Ručno heklana tašna Noir Boho – duboka crna od debelog pamuka sa luksuznom drškom od drvenih i crno-belih akrilnih perli. Zlatni lanac i kožni umetak za udobno nošenje preko ramena. Boho šik i glam, mala ali efektnа, savršena za leto, izlaske i festivale. Unikat koji spaja etno i moderno, za žene koje vole da se izdvoje.",
-    "captionEn": "NOIR BOHO The handmade crochet bag Noir Boho – deep black made from thick cotton with a luxurious handle made of wooden and black-and-white acrylic beads. Gold chain and leather insert for comfortable shoulder wear. Boho chic and glam, small but striking, perfect for summer, nights out and festivals. A unique piece that fuses ethno and modern, for women who like to stand out.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789212465315-0",
     "title": "CREMA MOKA",
     "titleEn": "CREMA MOKA",
     "category": "Torbice",
     "categoryEn": "Bags & Purses",
     "imageUrl": "/custom_products/prod_custom-prod-1789212465315.jpg",
-    "caption": "CREMA MOKA Ručno heklana tašna Crema Moka – krem biserna u luksuznom radu, braon heklanom kopčom, duplim ručkama i dugim braon kaišem. Topla, elegantna, dnevna, mala ali prostrana. Savršena za jesen, kafu u gradu i poklon. Kombinacija vanile i čokolade koja osvaja nežnošću. Unikatni ručni rad koji izgleda skupoceno i nosi toplinu domaćeg.",
-    "captionEn": "CREMA MOKA The handmade crochet bag Crema Moka – pearly cream in a luxurious stitch, brown crochet clasp, double handles and long brown strap. Warm, elegant, for everyday, small but spacious. Perfect for autumn, coffee in the city and as a gift. A combination of vanilla and chocolate that wins you over with its tenderness. Unique handmade work that looks expensive and carries the warmth of home.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789212465315-1",
-    "title": "CREMA MOKA - Slika 2",
-    "titleEn": "CREMA MOKA - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789212465315_g0.jpg",
-    "caption": "CREMA MOKA Ručno heklana tašna Crema Moka – krem biserna u luksuznom radu, braon heklanom kopčom, duplim ručkama i dugim braon kaišem. Topla, elegantna, dnevna, mala ali prostrana. Savršena za jesen, kafu u gradu i poklon. Kombinacija vanile i čokolade koja osvaja nežnošću. Unikatni ručni rad koji izgleda skupoceno i nosi toplinu domaćeg.",
-    "captionEn": "CREMA MOKA The handmade crochet bag Crema Moka – pearly cream in a luxurious stitch, brown crochet clasp, double handles and long brown strap. Warm, elegant, for everyday, small but spacious. Perfect for autumn, coffee in the city and as a gift. A combination of vanilla and chocolate that wins you over with its tenderness. Unique handmade work that looks expensive and carries the warmth of home.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789212465315-2",
-    "title": "CREMA MOKA - Slika 3",
-    "titleEn": "CREMA MOKA - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789212465315_g1.jpg",
-    "caption": "CREMA MOKA Ručno heklana tašna Crema Moka – krem biserna u luksuznom radu, braon heklanom kopčom, duplim ručkama i dugim braon kaišem. Topla, elegantna, dnevna, mala ali prostrana. Savršena za jesen, kafu u gradu i poklon. Kombinacija vanile i čokolade koja osvaja nežnošću. Unikatni ručni rad koji izgleda skupoceno i nosi toplinu domaćeg.",
-    "captionEn": "CREMA MOKA The handmade crochet bag Crema Moka – pearly cream in a luxurious stitch, brown crochet clasp, double handles and long brown strap. Warm, elegant, for everyday, small but spacious. Perfect for autumn, coffee in the city and as a gift. A combination of vanilla and chocolate that wins you over with its tenderness. Unique handmade work that looks expensive and carries the warmth of home.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789212465315-3",
-    "title": "CREMA MOKA - Slika 4",
-    "titleEn": "CREMA MOKA - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789212465315_g2.jpg",
     "caption": "CREMA MOKA Ručno heklana tašna Crema Moka – krem biserna u luksuznom radu, braon heklanom kopčom, duplim ručkama i dugim braon kaišem. Topla, elegantna, dnevna, mala ali prostrana. Savršena za jesen, kafu u gradu i poklon. Kombinacija vanile i čokolade koja osvaja nežnošću. Unikatni ručni rad koji izgleda skupoceno i nosi toplinu domaćeg.",
     "captionEn": "CREMA MOKA The handmade crochet bag Crema Moka – pearly cream in a luxurious stitch, brown crochet clasp, double handles and long brown strap. Warm, elegant, for everyday, small but spacious. Perfect for autumn, coffee in the city and as a gift. A combination of vanilla and chocolate that wins you over with its tenderness. Unique handmade work that looks expensive and carries the warmth of home.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
     "isCustomUploaded": true
@@ -721,78 +193,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789212797315-1",
-    "title": "ETNO SOUL - Slika 2",
-    "titleEn": "ETNO SOUL - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789212797315_g0.jpg",
-    "caption": "ETNO SOUL Ručno vezena tašna Etno Soul – laneno platno sa bogatim etno vezom u crveno-plavim tonovima i drvenim okruglim ručkama. Folk luksuz koji izgleda kao umetničko delo. Prostrana, lagana, idealna za leto, pijacu, grad i poklon. Unikatni ručni rad koji spaja tradiciju i moderni boho šik, za žene koje vole autentičnost i boje.",
-    "captionEn": "ETNO SOUL The handmade embroidered bag Etno Soul – linen canvas with rich ethno embroidery in red and blue tones and round wooden handles. Folk luxury that looks like a work of art. Spacious, lightweight, ideal for summer, market, city and as a gift. Unique handmade work that merges tradition and modern boho chic, for women who love authenticity and colors.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789212797315-2",
-    "title": "ETNO SOUL - Slika 3",
-    "titleEn": "ETNO SOUL - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789212797315_g1.jpg",
-    "caption": "ETNO SOUL Ručno vezena tašna Etno Soul – laneno platno sa bogatim etno vezom u crveno-plavim tonovima i drvenim okruglim ručkama. Folk luksuz koji izgleda kao umetničko delo. Prostrana, lagana, idealna za leto, pijacu, grad i poklon. Unikatni ručni rad koji spaja tradiciju i moderni boho šik, za žene koje vole autentičnost i boje.",
-    "captionEn": "ETNO SOUL The handmade embroidered bag Etno Soul – linen canvas with rich ethno embroidery in red and blue tones and round wooden handles. Folk luxury that looks like a work of art. Spacious, lightweight, ideal for summer, market, city and as a gift. Unique handmade work that merges tradition and modern boho chic, for women who love authenticity and colors.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789212797315-3",
-    "title": "ETNO SOUL - Slika 4",
-    "titleEn": "ETNO SOUL - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789212797315_g2.jpg",
-    "caption": "ETNO SOUL Ručno vezena tašna Etno Soul – laneno platno sa bogatim etno vezom u crveno-plavim tonovima i drvenim okruglim ručkama. Folk luksuz koji izgleda kao umetničko delo. Prostrana, lagana, idealna za leto, pijacu, grad i poklon. Unikatni ručni rad koji spaja tradiciju i moderni boho šik, za žene koje vole autentičnost i boje.",
-    "captionEn": "ETNO SOUL The handmade embroidered bag Etno Soul – linen canvas with rich ethno embroidery in red and blue tones and round wooden handles. Folk luxury that looks like a work of art. Spacious, lightweight, ideal for summer, market, city and as a gift. Unique handmade work that merges tradition and modern boho chic, for women who love authenticity and colors.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789213210387-0",
     "title": "NOIR BUBBLE",
     "titleEn": "NOIR BUBBLE",
     "category": "Torbice",
     "categoryEn": "Bags & Purses",
     "imageUrl": "/custom_products/prod_custom-prod-1789213210387.jpg",
-    "caption": "NOIR BUBBLE Ručno heklana tašna Noir Bubble – luksuzna crna od debelog t-shirt konca u 3D pletenici, sa zlatnom kopčom i heklanom ručkom. Mala, čvrsta, dizajnerska, kao Chanel mini. Za veče, grad, večeru i poklon. Lagana a efektnа, staje telefon i karmin. Unikatni ručni rad koji izgleda skupoceno i daje svakoj kombinaciji moćni završni pečat.",
-    "captionEn": "NOIR BUBBLE The handmade crochet bag Noir Bubble – luxurious black made from thick t-shirt yarn in 3D braid, with a gold clasp and crochet handle. Small, sturdy, designer-like, like a Chanel mini. For evening, city, dinner and as a gift. Lightweight yet striking, fits a phone and lipstick. Unique handmade work that looks expensive and gives every outfit a powerful finishing touch.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789213210387-1",
-    "title": "NOIR BUBBLE - Slika 2",
-    "titleEn": "NOIR BUBBLE - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789213210387_g0.jpg",
-    "caption": "NOIR BUBBLE Ručno heklana tašna Noir Bubble – luksuzna crna od debelog t-shirt konca u 3D pletenici, sa zlatnom kopčom i heklanom ručkom. Mala, čvrsta, dizajnerska, kao Chanel mini. Za veče, grad, večeru i poklon. Lagana a efektnа, staje telefon i karmin. Unikatni ručni rad koji izgleda skupoceno i daje svakoj kombinaciji moćni završni pečat.",
-    "captionEn": "NOIR BUBBLE The handmade crochet bag Noir Bubble – luxurious black made from thick t-shirt yarn in 3D braid, with a gold clasp and crochet handle. Small, sturdy, designer-like, like a Chanel mini. For evening, city, dinner and as a gift. Lightweight yet striking, fits a phone and lipstick. Unique handmade work that looks expensive and gives every outfit a powerful finishing touch.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789213210387-2",
-    "title": "NOIR BUBBLE - Slika 3",
-    "titleEn": "NOIR BUBBLE - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789213210387_g1.jpg",
-    "caption": "NOIR BUBBLE Ručno heklana tašna Noir Bubble – luksuzna crna od debelog t-shirt konca u 3D pletenici, sa zlatnom kopčom i heklanom ručkom. Mala, čvrsta, dizajnerska, kao Chanel mini. Za veče, grad, večeru i poklon. Lagana a efektnа, staje telefon i karmin. Unikatni ručni rad koji izgleda skupoceno i daje svakoj kombinaciji moćni završni pečat.",
-    "captionEn": "NOIR BUBBLE The handmade crochet bag Noir Bubble – luxurious black made from thick t-shirt yarn in 3D braid, with a gold clasp and crochet handle. Small, sturdy, designer-like, like a Chanel mini. For evening, city, dinner and as a gift. Lightweight yet striking, fits a phone and lipstick. Unique handmade work that looks expensive and gives every outfit a powerful finishing touch.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789213210387-3",
-    "title": "NOIR BUBBLE - Slika 4",
-    "titleEn": "NOIR BUBBLE - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789213210387_g2.jpg",
     "caption": "NOIR BUBBLE Ručno heklana tašna Noir Bubble – luksuzna crna od debelog t-shirt konca u 3D pletenici, sa zlatnom kopčom i heklanom ručkom. Mala, čvrsta, dizajnerska, kao Chanel mini. Za veče, grad, večeru i poklon. Lagana a efektnа, staje telefon i karmin. Unikatni ručni rad koji izgleda skupoceno i daje svakoj kombinaciji moćni završni pečat.",
     "captionEn": "NOIR BUBBLE The handmade crochet bag Noir Bubble – luxurious black made from thick t-shirt yarn in 3D braid, with a gold clasp and crochet handle. Small, sturdy, designer-like, like a Chanel mini. For evening, city, dinner and as a gift. Lightweight yet striking, fits a phone and lipstick. Unique handmade work that looks expensive and gives every outfit a powerful finishing touch.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
     "isCustomUploaded": true
@@ -809,78 +215,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789213437909-1",
-    "title": "MOCHA TWIST - Slika 2",
-    "titleEn": "MOCHA TWIST - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789213437909_g0.jpg",
-    "caption": "MOCHA TWIST Ručno heklana tašna Mocha Twist – krem, bež i moka braon kombinacija sa uvrnutom pletenom ručkom, resama i drvenim perlama. Boho luksuz, mekana, prostrana, sa bočnim vezivanjem. Idealna za leto, more, grad i poklon. Topla latte paleta koja ide uz sve. Unikatni ručni rad koji izgleda dizajnerski i nosi letnju eleganciju.",
-    "captionEn": "MOCHA TWIST The handmade crochet bag Mocha Twist – cream, beige and mocha brown combination with a twisted braided handle, tassels and wooden beads. Boho luxury, soft, spacious, with side ties. Ideal for summer, sea, city and as a gift. A warm latte palette that goes with everything. Unique handmade work that looks designer and carries summer elegance.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789213437909-2",
-    "title": "MOCHA TWIST - Slika 3",
-    "titleEn": "MOCHA TWIST - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789213437909_g1.jpg",
-    "caption": "MOCHA TWIST Ručno heklana tašna Mocha Twist – krem, bež i moka braon kombinacija sa uvrnutom pletenom ručkom, resama i drvenim perlama. Boho luksuz, mekana, prostrana, sa bočnim vezivanjem. Idealna za leto, more, grad i poklon. Topla latte paleta koja ide uz sve. Unikatni ručni rad koji izgleda dizajnerski i nosi letnju eleganciju.",
-    "captionEn": "MOCHA TWIST The handmade crochet bag Mocha Twist – cream, beige and mocha brown combination with a twisted braided handle, tassels and wooden beads. Boho luxury, soft, spacious, with side ties. Ideal for summer, sea, city and as a gift. A warm latte palette that goes with everything. Unique handmade work that looks designer and carries summer elegance.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789213437909-3",
-    "title": "MOCHA TWIST - Slika 4",
-    "titleEn": "MOCHA TWIST - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789213437909_g2.jpg",
-    "caption": "MOCHA TWIST Ručno heklana tašna Mocha Twist – krem, bež i moka braon kombinacija sa uvrnutom pletenom ručkom, resama i drvenim perlama. Boho luksuz, mekana, prostrana, sa bočnim vezivanjem. Idealna za leto, more, grad i poklon. Topla latte paleta koja ide uz sve. Unikatni ručni rad koji izgleda dizajnerski i nosi letnju eleganciju.",
-    "captionEn": "MOCHA TWIST The handmade crochet bag Mocha Twist – cream, beige and mocha brown combination with a twisted braided handle, tassels and wooden beads. Boho luxury, soft, spacious, with side ties. Ideal for summer, sea, city and as a gift. A warm latte palette that goes with everything. Unique handmade work that looks designer and carries summer elegance.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789215182204-0",
     "title": "BLOOM QUEEN",
     "titleEn": "BLOOM QUEEN",
     "category": "Torbice",
     "categoryEn": "Bags & Purses",
     "imageUrl": "/custom_products/prod_custom-prod-1789215182204.jpg",
-    "caption": "BLOOM QUEEN Ručno vezena tašna Bloom Queen – luksuzna lanena bež osnova sa kraljevskim vezom crvenih ruža, plavih različka i belih rada, oivičena drvenim okruglim ručkama i kožom. Kraljica etno stila, prostrana, lagana, za grad, leto i poklon. Unikatni ručni rad koji izgleda kao haute couture bašta. Za ženu koja nosi tradiciju sa stilom i ne treba joj objašnjenje.",
-    "captionEn": "BLOOM QUEEN The handmade embroidered bag Bloom Queen – luxurious beige linen base with royal embroidery of red roses, blue cornflowers and white daisies, framed by round wooden handles and leather. The queen of ethno style, spacious, lightweight, for city, summer and as a gift. Unique handmade work that looks like a haute couture garden. For the woman who wears tradition with style and needs no explanation.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789215182204-1",
-    "title": "BLOOM QUEEN - Slika 2",
-    "titleEn": "BLOOM QUEEN - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789215182204_g0.jpg",
-    "caption": "BLOOM QUEEN Ručno vezena tašna Bloom Queen – luksuzna lanena bež osnova sa kraljevskim vezom crvenih ruža, plavih različka i belih rada, oivičena drvenim okruglim ručkama i kožom. Kraljica etno stila, prostrana, lagana, za grad, leto i poklon. Unikatni ručni rad koji izgleda kao haute couture bašta. Za ženu koja nosi tradiciju sa stilom i ne treba joj objašnjenje.",
-    "captionEn": "BLOOM QUEEN The handmade embroidered bag Bloom Queen – luxurious beige linen base with royal embroidery of red roses, blue cornflowers and white daisies, framed by round wooden handles and leather. The queen of ethno style, spacious, lightweight, for city, summer and as a gift. Unique handmade work that looks like a haute couture garden. For the woman who wears tradition with style and needs no explanation.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789215182204-2",
-    "title": "BLOOM QUEEN - Slika 3",
-    "titleEn": "BLOOM QUEEN - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789215182204_g1.jpg",
-    "caption": "BLOOM QUEEN Ručno vezena tašna Bloom Queen – luksuzna lanena bež osnova sa kraljevskim vezom crvenih ruža, plavih različka i belih rada, oivičena drvenim okruglim ručkama i kožom. Kraljica etno stila, prostrana, lagana, za grad, leto i poklon. Unikatni ručni rad koji izgleda kao haute couture bašta. Za ženu koja nosi tradiciju sa stilom i ne treba joj objašnjenje.",
-    "captionEn": "BLOOM QUEEN The handmade embroidered bag Bloom Queen – luxurious beige linen base with royal embroidery of red roses, blue cornflowers and white daisies, framed by round wooden handles and leather. The queen of ethno style, spacious, lightweight, for city, summer and as a gift. Unique handmade work that looks like a haute couture garden. For the woman who wears tradition with style and needs no explanation.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789215182204-3",
-    "title": "BLOOM QUEEN - Slika 4",
-    "titleEn": "BLOOM QUEEN - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789215182204_g2.jpg",
     "caption": "BLOOM QUEEN Ručno vezena tašna Bloom Queen – luksuzna lanena bež osnova sa kraljevskim vezom crvenih ruža, plavih različka i belih rada, oivičena drvenim okruglim ručkama i kožom. Kraljica etno stila, prostrana, lagana, za grad, leto i poklon. Unikatni ručni rad koji izgleda kao haute couture bašta. Za ženu koja nosi tradiciju sa stilom i ne treba joj objašnjenje.",
     "captionEn": "BLOOM QUEEN The handmade embroidered bag Bloom Queen – luxurious beige linen base with royal embroidery of red roses, blue cornflowers and white daisies, framed by round wooden handles and leather. The queen of ethno style, spacious, lightweight, for city, summer and as a gift. Unique handmade work that looks like a haute couture garden. For the woman who wears tradition with style and needs no explanation.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
     "isCustomUploaded": true
@@ -897,78 +237,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789215608263-1",
-    "title": "MONO SHELL - Slika 2",
-    "titleEn": "MONO SHELL - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789215608263_g0.jpg",
-    "caption": "MONO SHELL Ručno heklana tašna Mono Shell – crno-bela školjka forma od t-shirt konca sa pletenom ručkom i srebrnom bravicom. Dramatična, čvrsta, dizajnerska, kao mali Chanel. Lagana a efektnа, idealna za grad, kafu i veče. Svaka se radi ručno, unikat koji spaja minimalizam i luksuz. Crno-beli kontrast koji pristaje uz sve i privlači sve poglede na sebe. ",
-    "captionEn": "MONO SHELL The handmade crochet bag Mono Shell – black-and-white shell form made from t-shirt yarn with a braided handle and silver clasp. Dramatic, sturdy, designer-like, like a small Chanel. Lightweight yet striking, ideal for city, coffee and evening. Each one is handmade, a unique piece that combines minimalism and luxury. The black-and-white contrast that goes with everything and draws all eyes to itself.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789215608263-2",
-    "title": "MONO SHELL - Slika 3",
-    "titleEn": "MONO SHELL - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789215608263_g1.jpg",
-    "caption": "MONO SHELL Ručno heklana tašna Mono Shell – crno-bela školjka forma od t-shirt konca sa pletenom ručkom i srebrnom bravicom. Dramatična, čvrsta, dizajnerska, kao mali Chanel. Lagana a efektnа, idealna za grad, kafu i veče. Svaka se radi ručno, unikat koji spaja minimalizam i luksuz. Crno-beli kontrast koji pristaje uz sve i privlači sve poglede na sebe. ",
-    "captionEn": "MONO SHELL The handmade crochet bag Mono Shell – black-and-white shell form made from t-shirt yarn with a braided handle and silver clasp. Dramatic, sturdy, designer-like, like a small Chanel. Lightweight yet striking, ideal for city, coffee and evening. Each one is handmade, a unique piece that combines minimalism and luxury. The black-and-white contrast that goes with everything and draws all eyes to itself.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789215608263-3",
-    "title": "MONO SHELL - Slika 4",
-    "titleEn": "MONO SHELL - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789215608263_g2.jpg",
-    "caption": "MONO SHELL Ručno heklana tašna Mono Shell – crno-bela školjka forma od t-shirt konca sa pletenom ručkom i srebrnom bravicom. Dramatična, čvrsta, dizajnerska, kao mali Chanel. Lagana a efektnа, idealna za grad, kafu i veče. Svaka se radi ručno, unikat koji spaja minimalizam i luksuz. Crno-beli kontrast koji pristaje uz sve i privlači sve poglede na sebe. ",
-    "captionEn": "MONO SHELL The handmade crochet bag Mono Shell – black-and-white shell form made from t-shirt yarn with a braided handle and silver clasp. Dramatic, sturdy, designer-like, like a small Chanel. Lightweight yet striking, ideal for city, coffee and evening. Each one is handmade, a unique piece that combines minimalism and luxury. The black-and-white contrast that goes with everything and draws all eyes to itself.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789218686318-0",
     "title": "MOCCA BRAID",
     "titleEn": "MOCCA BRAID",
     "category": "Torbice",
     "categoryEn": "Bags & Purses",
     "imageUrl": "/custom_products/prod_custom-prod-1789218686318.jpg",
-    "caption": "MOCCA BRAID Ručno heklana tašna Mocca Braid – topla čokoladno braon nijansa u luksuznom pletenica radu, koji daje dubinu i volumen. Zlatni detalji i pletena ručka spajaju ručnu izradu i gradski šik. Kompaktna, čvrsta, sa crnom postavom, savršena za jesen, svaki dan i elegantne izlaske. Unikatna, topla i vanvremenska – torba koja ide uz sve.",
-    "captionEn": "MOCCA BRAID The handmade crochet bag Mocca Braid – warm chocolate brown shade in a luxurious braid stitch that gives depth and volume. Gold details and a braided handle combine handmade craftsmanship and urban chic. Compact, sturdy, with a black lining, perfect for autumn, everyday use and elegant outings. Unique, warm and timeless – a bag that goes with everything.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789218686318-1",
-    "title": "MOCCA BRAID - Slika 2",
-    "titleEn": "MOCCA BRAID - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789218686318_g0.jpg",
-    "caption": "MOCCA BRAID Ručno heklana tašna Mocca Braid – topla čokoladno braon nijansa u luksuznom pletenica radu, koji daje dubinu i volumen. Zlatni detalji i pletena ručka spajaju ručnu izradu i gradski šik. Kompaktna, čvrsta, sa crnom postavom, savršena za jesen, svaki dan i elegantne izlaske. Unikatna, topla i vanvremenska – torba koja ide uz sve.",
-    "captionEn": "MOCCA BRAID The handmade crochet bag Mocca Braid – warm chocolate brown shade in a luxurious braid stitch that gives depth and volume. Gold details and a braided handle combine handmade craftsmanship and urban chic. Compact, sturdy, with a black lining, perfect for autumn, everyday use and elegant outings. Unique, warm and timeless – a bag that goes with everything.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789218686318-2",
-    "title": "MOCCA BRAID - Slika 3",
-    "titleEn": "MOCCA BRAID - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789218686318_g1.jpg",
-    "caption": "MOCCA BRAID Ručno heklana tašna Mocca Braid – topla čokoladno braon nijansa u luksuznom pletenica radu, koji daje dubinu i volumen. Zlatni detalji i pletena ručka spajaju ručnu izradu i gradski šik. Kompaktna, čvrsta, sa crnom postavom, savršena za jesen, svaki dan i elegantne izlaske. Unikatna, topla i vanvremenska – torba koja ide uz sve.",
-    "captionEn": "MOCCA BRAID The handmade crochet bag Mocca Braid – warm chocolate brown shade in a luxurious braid stitch that gives depth and volume. Gold details and a braided handle combine handmade craftsmanship and urban chic. Compact, sturdy, with a black lining, perfect for autumn, everyday use and elegant outings. Unique, warm and timeless – a bag that goes with everything.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789218686318-3",
-    "title": "MOCCA BRAID - Slika 4",
-    "titleEn": "MOCCA BRAID - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789218686318_g2.jpg",
     "caption": "MOCCA BRAID Ručno heklana tašna Mocca Braid – topla čokoladno braon nijansa u luksuznom pletenica radu, koji daje dubinu i volumen. Zlatni detalji i pletena ručka spajaju ručnu izradu i gradski šik. Kompaktna, čvrsta, sa crnom postavom, savršena za jesen, svaki dan i elegantne izlaske. Unikatna, topla i vanvremenska – torba koja ide uz sve.",
     "captionEn": "MOCCA BRAID The handmade crochet bag Mocca Braid – warm chocolate brown shade in a luxurious braid stitch that gives depth and volume. Gold details and a braided handle combine handmade craftsmanship and urban chic. Compact, sturdy, with a black lining, perfect for autumn, everyday use and elegant outings. Unique, warm and timeless – a bag that goes with everything.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
     "isCustomUploaded": true
@@ -985,78 +259,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789235265047-1",
-    "title": "GRAY STARLET - Slika 2",
-    "titleEn": "GRAY STARLET - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789235265047_g0.jpg",
-    "caption": "GRAY STARLET Ručno heklana tašna Gray Starlet – svetlo siva zvezdasta forma od t-shirt konca sa integrisanim ručkama i crno-zlatnim lancem. Nežna, čvrsta, preslatka, kao mali Chanel za devojčice. Lagana a efektnа, idealna za rođendan, šetnju i prve modne korake. Svaka se radi ručno, unikat koji spaja dečju radost i luksuz. Sivi minimalizam koji pristaje uz sve i mami osmehe gde god se pojavi.",
-    "captionEn": "GRAY STARLET The handmade crochet bag Gray Starlet – light gray star-shaped form made from t-shirt yarn with integrated handles and a black-and-gold chain. Delicate, sturdy, adorable, like a little Chanel for little girls. Lightweight yet striking, ideal for birthdays, walks and first fashion steps. Each one is handmade, a unique piece that combines childlike joy and luxury. Gray minimalism that goes with everything and brings smiles wherever it appears.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789235265047-2",
-    "title": "GRAY STARLET - Slika 3",
-    "titleEn": "GRAY STARLET - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789235265047_g1.jpg",
-    "caption": "GRAY STARLET Ručno heklana tašna Gray Starlet – svetlo siva zvezdasta forma od t-shirt konca sa integrisanim ručkama i crno-zlatnim lancem. Nežna, čvrsta, preslatka, kao mali Chanel za devojčice. Lagana a efektnа, idealna za rođendan, šetnju i prve modne korake. Svaka se radi ručno, unikat koji spaja dečju radost i luksuz. Sivi minimalizam koji pristaje uz sve i mami osmehe gde god se pojavi.",
-    "captionEn": "GRAY STARLET The handmade crochet bag Gray Starlet – light gray star-shaped form made from t-shirt yarn with integrated handles and a black-and-gold chain. Delicate, sturdy, adorable, like a little Chanel for little girls. Lightweight yet striking, ideal for birthdays, walks and first fashion steps. Each one is handmade, a unique piece that combines childlike joy and luxury. Gray minimalism that goes with everything and brings smiles wherever it appears.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789235265047-3",
-    "title": "GRAY STARLET - Slika 4",
-    "titleEn": "GRAY STARLET - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789235265047_g2.jpg",
-    "caption": "GRAY STARLET Ručno heklana tašna Gray Starlet – svetlo siva zvezdasta forma od t-shirt konca sa integrisanim ručkama i crno-zlatnim lancem. Nežna, čvrsta, preslatka, kao mali Chanel za devojčice. Lagana a efektnа, idealna za rođendan, šetnju i prve modne korake. Svaka se radi ručno, unikat koji spaja dečju radost i luksuz. Sivi minimalizam koji pristaje uz sve i mami osmehe gde god se pojavi.",
-    "captionEn": "GRAY STARLET The handmade crochet bag Gray Starlet – light gray star-shaped form made from t-shirt yarn with integrated handles and a black-and-gold chain. Delicate, sturdy, adorable, like a little Chanel for little girls. Lightweight yet striking, ideal for birthdays, walks and first fashion steps. Each one is handmade, a unique piece that combines childlike joy and luxury. Gray minimalism that goes with everything and brings smiles wherever it appears.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789280827861-0",
     "title": "NOIR BLOOM",
     "titleEn": "NOIR BLOOM",
     "category": "Torbice",
     "categoryEn": "Bags & Purses",
     "imageUrl": "/custom_products/prod_custom-prod-1789280827861.jpg",
-    "caption": "NOIR BLOOM Ručno heklana tašna NOIR BLOOM pravi je modni dragulj – duboko crna bubble tekstura sa nežnim srebrnim lancem koji blista poput nakita. Mekane ručke i čuveni Jasmine cvetni bod daju joj dozu visoke mode. Savršen spoj moći, elegancije i besprekornog stila za ženu koja osvaja pogledom.",
-    "captionEn": "NOIR BLOOM The handmade crochet bag NOIR BLOOM is a true fashion jewel – deep black bubble texture with a delicate silver chain that sparkles like jewelry. The soft handles and famous Jasmine floral stitch give it a touch of haute couture. A perfect blend of power, elegance and impeccable style for the woman who captivates with a glance.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789280827861-1",
-    "title": "NOIR BLOOM - Slika 2",
-    "titleEn": "NOIR BLOOM - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789280827861_g0.jpg",
-    "caption": "NOIR BLOOM Ručno heklana tašna NOIR BLOOM pravi je modni dragulj – duboko crna bubble tekstura sa nežnim srebrnim lancem koji blista poput nakita. Mekane ručke i čuveni Jasmine cvetni bod daju joj dozu visoke mode. Savršen spoj moći, elegancije i besprekornog stila za ženu koja osvaja pogledom.",
-    "captionEn": "NOIR BLOOM The handmade crochet bag NOIR BLOOM is a true fashion jewel – deep black bubble texture with a delicate silver chain that sparkles like jewelry. The soft handles and famous Jasmine floral stitch give it a touch of haute couture. A perfect blend of power, elegance and impeccable style for the woman who captivates with a glance.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789280827861-2",
-    "title": "NOIR BLOOM - Slika 3",
-    "titleEn": "NOIR BLOOM - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789280827861_g1.jpg",
-    "caption": "NOIR BLOOM Ručno heklana tašna NOIR BLOOM pravi je modni dragulj – duboko crna bubble tekstura sa nežnim srebrnim lancem koji blista poput nakita. Mekane ručke i čuveni Jasmine cvetni bod daju joj dozu visoke mode. Savršen spoj moći, elegancije i besprekornog stila za ženu koja osvaja pogledom.",
-    "captionEn": "NOIR BLOOM The handmade crochet bag NOIR BLOOM is a true fashion jewel – deep black bubble texture with a delicate silver chain that sparkles like jewelry. The soft handles and famous Jasmine floral stitch give it a touch of haute couture. A perfect blend of power, elegance and impeccable style for the woman who captivates with a glance.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789280827861-3",
-    "title": "NOIR BLOOM - Slika 4",
-    "titleEn": "NOIR BLOOM - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789280827861_g2.jpg",
     "caption": "NOIR BLOOM Ručno heklana tašna NOIR BLOOM pravi je modni dragulj – duboko crna bubble tekstura sa nežnim srebrnim lancem koji blista poput nakita. Mekane ručke i čuveni Jasmine cvetni bod daju joj dozu visoke mode. Savršen spoj moći, elegancije i besprekornog stila za ženu koja osvaja pogledom.",
     "captionEn": "NOIR BLOOM The handmade crochet bag NOIR BLOOM is a true fashion jewel – deep black bubble texture with a delicate silver chain that sparkles like jewelry. The soft handles and famous Jasmine floral stitch give it a touch of haute couture. A perfect blend of power, elegance and impeccable style for the woman who captivates with a glance.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
     "isCustomUploaded": true
@@ -1073,78 +281,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789282255011-1",
-    "title": "AZURE KNOT - Slika 2",
-    "titleEn": "AZURE KNOT - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789282255011_g0.jpg",
-    "caption": "AZURE KNOT ručno heklana tašna AZURE KNOT pravi je modni dragulj – kraljevski plavi saten u zagrljaju raskošne bež makrame mreže sa pletenim ručkama. Kontrast nežnog i snažnog daje joj dozu mediteranskog luksuza. Savršen spoj letnje slobode, elegancije i besprekornog zanata koji osvaja leto.",
-    "captionEn": "AZURE KNOT The handmade crochet bag AZURE KNOT is a true fashion jewel – royal blue satin embraced by a lavish beige macramé net with braided handles. The contrast of delicate and strong gives it a touch of Mediterranean luxury. A perfect blend of summer freedom, elegance and impeccable craftsmanship that wins over the summer.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789282255011-2",
-    "title": "AZURE KNOT - Slika 3",
-    "titleEn": "AZURE KNOT - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789282255011_g1.jpg",
-    "caption": "AZURE KNOT ručno heklana tašna AZURE KNOT pravi je modni dragulj – kraljevski plavi saten u zagrljaju raskošne bež makrame mreže sa pletenim ručkama. Kontrast nežnog i snažnog daje joj dozu mediteranskog luksuza. Savršen spoj letnje slobode, elegancije i besprekornog zanata koji osvaja leto.",
-    "captionEn": "AZURE KNOT The handmade crochet bag AZURE KNOT is a true fashion jewel – royal blue satin embraced by a lavish beige macramé net with braided handles. The contrast of delicate and strong gives it a touch of Mediterranean luxury. A perfect blend of summer freedom, elegance and impeccable craftsmanship that wins over the summer.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789282255011-3",
-    "title": "AZURE KNOT - Slika 4",
-    "titleEn": "AZURE KNOT - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789282255011_g2.jpg",
-    "caption": "AZURE KNOT ručno heklana tašna AZURE KNOT pravi je modni dragulj – kraljevski plavi saten u zagrljaju raskošne bež makrame mreže sa pletenim ručkama. Kontrast nežnog i snažnog daje joj dozu mediteranskog luksuza. Savršen spoj letnje slobode, elegancije i besprekornog zanata koji osvaja leto.",
-    "captionEn": "AZURE KNOT The handmade crochet bag AZURE KNOT is a true fashion jewel – royal blue satin embraced by a lavish beige macramé net with braided handles. The contrast of delicate and strong gives it a touch of Mediterranean luxury. A perfect blend of summer freedom, elegance and impeccable craftsmanship that wins over the summer.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789282453042-0",
     "title": "CANDY HEART",
     "titleEn": "CANDY HEART",
     "category": "Torbice",
     "categoryEn": "Bags & Purses",
     "imageUrl": "/custom_products/prod_custom-prod-1789282453042.jpg",
-    "caption": "CANDY HEART ručno heklana tašna CANDY HEART pravi je modni dragulj – vibrantna fuksija sa razigranim resama u obliku srca i zlatnim detaljima. Razigrane ručke i ljubav utkana u svaki čvor daju joj dozu visoke mode. Savršen spoj radosti, strasti i besprekornog šarma za nezaboravan utisak.",
-    "captionEn": "CANDY HEART The handmade crochet bag CANDY HEART is a true fashion jewel – vibrant fuchsia with playful heart-shaped tassels and gold details. The playful handles and love woven into every knot give it a touch of haute couture. A perfect blend of joy, passion and impeccable charm for an unforgettable impression.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789282453042-1",
-    "title": "CANDY HEART - Slika 2",
-    "titleEn": "CANDY HEART - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789282453042_g0.jpg",
-    "caption": "CANDY HEART ručno heklana tašna CANDY HEART pravi je modni dragulj – vibrantna fuksija sa razigranim resama u obliku srca i zlatnim detaljima. Razigrane ručke i ljubav utkana u svaki čvor daju joj dozu visoke mode. Savršen spoj radosti, strasti i besprekornog šarma za nezaboravan utisak.",
-    "captionEn": "CANDY HEART The handmade crochet bag CANDY HEART is a true fashion jewel – vibrant fuchsia with playful heart-shaped tassels and gold details. The playful handles and love woven into every knot give it a touch of haute couture. A perfect blend of joy, passion and impeccable charm for an unforgettable impression.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789282453042-2",
-    "title": "CANDY HEART - Slika 3",
-    "titleEn": "CANDY HEART - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789282453042_g1.jpg",
-    "caption": "CANDY HEART ručno heklana tašna CANDY HEART pravi je modni dragulj – vibrantna fuksija sa razigranim resama u obliku srca i zlatnim detaljima. Razigrane ručke i ljubav utkana u svaki čvor daju joj dozu visoke mode. Savršen spoj radosti, strasti i besprekornog šarma za nezaboravan utisak.",
-    "captionEn": "CANDY HEART The handmade crochet bag CANDY HEART is a true fashion jewel – vibrant fuchsia with playful heart-shaped tassels and gold details. The playful handles and love woven into every knot give it a touch of haute couture. A perfect blend of joy, passion and impeccable charm for an unforgettable impression.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789282453042-3",
-    "title": "CANDY HEART - Slika 4",
-    "titleEn": "CANDY HEART - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789282453042_g2.jpg",
     "caption": "CANDY HEART ručno heklana tašna CANDY HEART pravi je modni dragulj – vibrantna fuksija sa razigranim resama u obliku srca i zlatnim detaljima. Razigrane ručke i ljubav utkana u svaki čvor daju joj dozu visoke mode. Savršen spoj radosti, strasti i besprekornog šarma za nezaboravan utisak.",
     "captionEn": "CANDY HEART The handmade crochet bag CANDY HEART is a true fashion jewel – vibrant fuchsia with playful heart-shaped tassels and gold details. The playful handles and love woven into every knot give it a touch of haute couture. A perfect blend of joy, passion and impeccable charm for an unforgettable impression.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
     "isCustomUploaded": true
@@ -1161,78 +303,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789285964143-1",
-    "title": "LULU POP - Slika 2",
-    "titleEn": "LULU POP - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789285964143_g0.jpg",
-    "caption": "LULU POP Ručno heklana tašna LULU POP pravi je modni dragulj – razigrani granny kvadrati u bojama crne, ljubičaste, roze i mente sa prugastom ručkom koja blista poput nakita. Meki 3D bod i pažljivo birane nijanse daju joj dozu visoke mode i boho šika. Savršen spoj nostalgije, radosti i besprekornog zanata za ženu koja unosi boju gde god da se pojavi.",
-    "captionEn": "LULU POP The handmade crochet bag LULU POP is a true fashion jewel – playful granny squares in black, purple, pink and mint with a striped handle that sparkles like jewelry. The soft 3D stitch and carefully chosen shades give it a touch of high fashion and boho chic. A perfect blend of nostalgia, joy and impeccable craftsmanship for the woman who brings color wherever she appears.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789285964143-2",
-    "title": "LULU POP - Slika 3",
-    "titleEn": "LULU POP - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789285964143_g1.jpg",
-    "caption": "LULU POP Ručno heklana tašna LULU POP pravi je modni dragulj – razigrani granny kvadrati u bojama crne, ljubičaste, roze i mente sa prugastom ručkom koja blista poput nakita. Meki 3D bod i pažljivo birane nijanse daju joj dozu visoke mode i boho šika. Savršen spoj nostalgije, radosti i besprekornog zanata za ženu koja unosi boju gde god da se pojavi.",
-    "captionEn": "LULU POP The handmade crochet bag LULU POP is a true fashion jewel – playful granny squares in black, purple, pink and mint with a striped handle that sparkles like jewelry. The soft 3D stitch and carefully chosen shades give it a touch of high fashion and boho chic. A perfect blend of nostalgia, joy and impeccable craftsmanship for the woman who brings color wherever she appears.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789285964143-3",
-    "title": "LULU POP - Slika 4",
-    "titleEn": "LULU POP - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789285964143_g2.jpg",
-    "caption": "LULU POP Ručno heklana tašna LULU POP pravi je modni dragulj – razigrani granny kvadrati u bojama crne, ljubičaste, roze i mente sa prugastom ručkom koja blista poput nakita. Meki 3D bod i pažljivo birane nijanse daju joj dozu visoke mode i boho šika. Savršen spoj nostalgije, radosti i besprekornog zanata za ženu koja unosi boju gde god da se pojavi.",
-    "captionEn": "LULU POP The handmade crochet bag LULU POP is a true fashion jewel – playful granny squares in black, purple, pink and mint with a striped handle that sparkles like jewelry. The soft 3D stitch and carefully chosen shades give it a touch of high fashion and boho chic. A perfect blend of nostalgia, joy and impeccable craftsmanship for the woman who brings color wherever she appears.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789286171903-0",
     "title": "IVORY BLOOM",
     "titleEn": "IVORY BLOOM",
     "category": "Torbice",
     "categoryEn": "Bags & Purses",
     "imageUrl": "/custom_products/prod_custom-prod-1789286171903.jpg",
-    "caption": "IVORY BLOOM ručno heklana tašna IVORY BLOOM pravi je modni dragulj – nežna ivory tekstura sa raskošnim cvetnim Jasmine bodom i zlatnim lancem koji blista poput nakita. Integrisane ručke i pažljiv detalj daju joj dozu visoke mode. Savršen spoj elegancije, nežnosti i besprekornog zanata za svaki dan.",
-    "captionEn": "IVORY BLOOM The handmade crochet bag IVORY BLOOM is a true fashion jewel – delicate ivory texture with lavish Jasmine floral stitch and a gold chain that sparkles like jewelry. Integrated handles and careful detailing give it a touch of haute couture. A perfect blend of elegance, tenderness and impeccable craftsmanship for everyday.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789286171903-1",
-    "title": "IVORY BLOOM - Slika 2",
-    "titleEn": "IVORY BLOOM - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789286171903_g0.jpg",
-    "caption": "IVORY BLOOM ručno heklana tašna IVORY BLOOM pravi je modni dragulj – nežna ivory tekstura sa raskošnim cvetnim Jasmine bodom i zlatnim lancem koji blista poput nakita. Integrisane ručke i pažljiv detalj daju joj dozu visoke mode. Savršen spoj elegancije, nežnosti i besprekornog zanata za svaki dan.",
-    "captionEn": "IVORY BLOOM The handmade crochet bag IVORY BLOOM is a true fashion jewel – delicate ivory texture with lavish Jasmine floral stitch and a gold chain that sparkles like jewelry. Integrated handles and careful detailing give it a touch of haute couture. A perfect blend of elegance, tenderness and impeccable craftsmanship for everyday.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789286171903-2",
-    "title": "IVORY BLOOM - Slika 3",
-    "titleEn": "IVORY BLOOM - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789286171903_g1.jpg",
-    "caption": "IVORY BLOOM ručno heklana tašna IVORY BLOOM pravi je modni dragulj – nežna ivory tekstura sa raskošnim cvetnim Jasmine bodom i zlatnim lancem koji blista poput nakita. Integrisane ručke i pažljiv detalj daju joj dozu visoke mode. Savršen spoj elegancije, nežnosti i besprekornog zanata za svaki dan.",
-    "captionEn": "IVORY BLOOM The handmade crochet bag IVORY BLOOM is a true fashion jewel – delicate ivory texture with lavish Jasmine floral stitch and a gold chain that sparkles like jewelry. Integrated handles and careful detailing give it a touch of haute couture. A perfect blend of elegance, tenderness and impeccable craftsmanship for everyday.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789286171903-3",
-    "title": "IVORY BLOOM - Slika 4",
-    "titleEn": "IVORY BLOOM - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789286171903_g2.jpg",
     "caption": "IVORY BLOOM ručno heklana tašna IVORY BLOOM pravi je modni dragulj – nežna ivory tekstura sa raskošnim cvetnim Jasmine bodom i zlatnim lancem koji blista poput nakita. Integrisane ručke i pažljiv detalj daju joj dozu visoke mode. Savršen spoj elegancije, nežnosti i besprekornog zanata za svaki dan.",
     "captionEn": "IVORY BLOOM The handmade crochet bag IVORY BLOOM is a true fashion jewel – delicate ivory texture with lavish Jasmine floral stitch and a gold chain that sparkles like jewelry. Integrated handles and careful detailing give it a touch of haute couture. A perfect blend of elegance, tenderness and impeccable craftsmanship for everyday.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
     "isCustomUploaded": true
@@ -1249,78 +325,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789286570316-1",
-    "title": "LITTLE FAIRY - Slika 2",
-    "titleEn": "LITTLE FAIRY - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789286570316_g0.jpg",
-    "caption": "LITTLE FAIRY ručno heklana dečija torbica LITTLE FAIRY pravi je modni dragulj za male princeze – nežne mint i plave nijanse sa preslatkom belom lutkicom i šarenim cvetićima. Dugačak kaiš i mekani pamučni konac čine je udobnom za nošenje. Savršen spoj mašte, nežnosti i besprekornog ručnog rada koji svaka devojčica obožava.",
-    "captionEn": "LITTLE FAIRY The handmade crochet children's bag LITTLE FAIRY is a true fashion jewel for little princesses – delicate mint and blue shades with an adorable white doll and colorful little flowers. The long strap and soft cotton yarn make it comfortable to wear. A perfect blend of imagination, tenderness and impeccable handmade work that every little girl adores.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789286570316-2",
-    "title": "LITTLE FAIRY - Slika 3",
-    "titleEn": "LITTLE FAIRY - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789286570316_g1.jpg",
-    "caption": "LITTLE FAIRY ručno heklana dečija torbica LITTLE FAIRY pravi je modni dragulj za male princeze – nežne mint i plave nijanse sa preslatkom belom lutkicom i šarenim cvetićima. Dugačak kaiš i mekani pamučni konac čine je udobnom za nošenje. Savršen spoj mašte, nežnosti i besprekornog ručnog rada koji svaka devojčica obožava.",
-    "captionEn": "LITTLE FAIRY The handmade crochet children's bag LITTLE FAIRY is a true fashion jewel for little princesses – delicate mint and blue shades with an adorable white doll and colorful little flowers. The long strap and soft cotton yarn make it comfortable to wear. A perfect blend of imagination, tenderness and impeccable handmade work that every little girl adores.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789286570316-3",
-    "title": "LITTLE FAIRY - Slika 4",
-    "titleEn": "LITTLE FAIRY - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789286570316_g2.jpg",
-    "caption": "LITTLE FAIRY ručno heklana dečija torbica LITTLE FAIRY pravi je modni dragulj za male princeze – nežne mint i plave nijanse sa preslatkom belom lutkicom i šarenim cvetićima. Dugačak kaiš i mekani pamučni konac čine je udobnom za nošenje. Savršen spoj mašte, nežnosti i besprekornog ručnog rada koji svaka devojčica obožava.",
-    "captionEn": "LITTLE FAIRY The handmade crochet children's bag LITTLE FAIRY is a true fashion jewel for little princesses – delicate mint and blue shades with an adorable white doll and colorful little flowers. The long strap and soft cotton yarn make it comfortable to wear. A perfect blend of imagination, tenderness and impeccable handmade work that every little girl adores.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789286897279-0",
     "title": "BOW CHIC",
     "titleEn": "BOW CHIC",
     "category": "Torbice",
     "categoryEn": "Bags & Purses",
     "imageUrl": "/custom_products/prod_custom-prod-1789286897279.jpg",
-    "caption": "BOW CHIC ručno heklana tašna BOW CHIC pravi je modni dragulj – nežna krem mašna sa raskošnom braon mrežicom i zlatnim detaljima koji blistaju poput nakita. Pletena ručka i mašna sa perlicom daju joj dozu visoke mode. Savršen spoj elegancije, nežnosti i besprekornog zanata za svaki dan i veče.",
-    "captionEn": "BOW CHIC The handmade crochet bag BOW CHIC is a true fashion jewel – delicate cream bow with lavish brown netting and gold details that sparkle like jewelry. The braided handle and bow with a bead give it a touch of high fashion. A perfect blend of elegance, tenderness and impeccable craftsmanship for day and night.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789286897279-1",
-    "title": "BOW CHIC - Slika 2",
-    "titleEn": "BOW CHIC - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789286897279_g0.jpg",
-    "caption": "BOW CHIC ručno heklana tašna BOW CHIC pravi je modni dragulj – nežna krem mašna sa raskošnom braon mrežicom i zlatnim detaljima koji blistaju poput nakita. Pletena ručka i mašna sa perlicom daju joj dozu visoke mode. Savršen spoj elegancije, nežnosti i besprekornog zanata za svaki dan i veče.",
-    "captionEn": "BOW CHIC The handmade crochet bag BOW CHIC is a true fashion jewel – delicate cream bow with lavish brown netting and gold details that sparkle like jewelry. The braided handle and bow with a bead give it a touch of high fashion. A perfect blend of elegance, tenderness and impeccable craftsmanship for day and night.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789286897279-2",
-    "title": "BOW CHIC - Slika 3",
-    "titleEn": "BOW CHIC - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789286897279_g1.jpg",
-    "caption": "BOW CHIC ručno heklana tašna BOW CHIC pravi je modni dragulj – nežna krem mašna sa raskošnom braon mrežicom i zlatnim detaljima koji blistaju poput nakita. Pletena ručka i mašna sa perlicom daju joj dozu visoke mode. Savršen spoj elegancije, nežnosti i besprekornog zanata za svaki dan i veče.",
-    "captionEn": "BOW CHIC The handmade crochet bag BOW CHIC is a true fashion jewel – delicate cream bow with lavish brown netting and gold details that sparkle like jewelry. The braided handle and bow with a bead give it a touch of high fashion. A perfect blend of elegance, tenderness and impeccable craftsmanship for day and night.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789286897279-3",
-    "title": "BOW CHIC - Slika 4",
-    "titleEn": "BOW CHIC - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789286897279_g2.jpg",
     "caption": "BOW CHIC ručno heklana tašna BOW CHIC pravi je modni dragulj – nežna krem mašna sa raskošnom braon mrežicom i zlatnim detaljima koji blistaju poput nakita. Pletena ručka i mašna sa perlicom daju joj dozu visoke mode. Savršen spoj elegancije, nežnosti i besprekornog zanata za svaki dan i veče.",
     "captionEn": "BOW CHIC The handmade crochet bag BOW CHIC is a true fashion jewel – delicate cream bow with lavish brown netting and gold details that sparkle like jewelry. The braided handle and bow with a bead give it a touch of high fashion. A perfect blend of elegance, tenderness and impeccable craftsmanship for day and night.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
     "isCustomUploaded": true
@@ -1337,78 +347,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789287135814-1",
-    "title": "PINK BOW - Slika 2",
-    "titleEn": "PINK BOW - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789287135814_g0.jpg",
-    "caption": "PINK BOW ručno heklana tašna PINK BOW pravi je modni dragulj – vibrantna fuksija roze tekstura sa raskošnom mašnom i zlatnim lancem koji blista poput nakita. Mekani deblji konac i pažljiv detalj daju joj dozu visoke mode. Savršen spoj strasti, elegancije i besprekornog stila koji osvaja na prvi pogled.",
-    "captionEn": "PINK BOW The handmade crochet bag PINK BOW is a true fashion jewel – vibrant fuchsia pink texture with a lavish bow and gold chain that sparkles like jewelry. The soft, thicker yarn and careful detailing give it a touch of high fashion. A perfect blend of passion, elegance and impeccable style that wins you over at first sight.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789287135814-2",
-    "title": "PINK BOW - Slika 3",
-    "titleEn": "PINK BOW - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789287135814_g1.jpg",
-    "caption": "PINK BOW ručno heklana tašna PINK BOW pravi je modni dragulj – vibrantna fuksija roze tekstura sa raskošnom mašnom i zlatnim lancem koji blista poput nakita. Mekani deblji konac i pažljiv detalj daju joj dozu visoke mode. Savršen spoj strasti, elegancije i besprekornog stila koji osvaja na prvi pogled.",
-    "captionEn": "PINK BOW The handmade crochet bag PINK BOW is a true fashion jewel – vibrant fuchsia pink texture with a lavish bow and gold chain that sparkles like jewelry. The soft, thicker yarn and careful detailing give it a touch of high fashion. A perfect blend of passion, elegance and impeccable style that wins you over at first sight.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789287135814-3",
-    "title": "PINK BOW - Slika 4",
-    "titleEn": "PINK BOW - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789287135814_g2.jpg",
-    "caption": "PINK BOW ručno heklana tašna PINK BOW pravi je modni dragulj – vibrantna fuksija roze tekstura sa raskošnom mašnom i zlatnim lancem koji blista poput nakita. Mekani deblji konac i pažljiv detalj daju joj dozu visoke mode. Savršen spoj strasti, elegancije i besprekornog stila koji osvaja na prvi pogled.",
-    "captionEn": "PINK BOW The handmade crochet bag PINK BOW is a true fashion jewel – vibrant fuchsia pink texture with a lavish bow and gold chain that sparkles like jewelry. The soft, thicker yarn and careful detailing give it a touch of high fashion. A perfect blend of passion, elegance and impeccable style that wins you over at first sight.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789287464927-0",
     "title": "LAVANDA ROSE",
     "titleEn": "LAVANDA ROSE",
     "category": "Torbice",
     "categoryEn": "Bags & Purses",
     "imageUrl": "/custom_products/prod_custom-prod-1789287464927.jpg",
-    "caption": "LAVANDA ROSE ručno heklana tašna LAVANDA ROSE pravi je modni dragulj – nežna krem osnova sa raskošnim ljubičastim 3D ružama i zelenim listićima koji blistaju poput bašte. Granny kvadrati sa ljubičastim okvirom daju joj dozu visoke mode. Savršen spoj proleća, elegancije i besprekornog zanata za romantične duše.",
-    "captionEn": "LAVANDA ROSE The handmade crochet bag LAVANDA ROSE is a true fashion jewel – delicate cream base with lavish purple 3D roses and green leaves that sparkle like a garden. Granny squares with a purple frame give it a touch of high fashion. A perfect blend of spring, elegance and impeccable craftsmanship for romantic souls.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789287464927-1",
-    "title": "LAVANDA ROSE - Slika 2",
-    "titleEn": "LAVANDA ROSE - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789287464927_g0.jpg",
-    "caption": "LAVANDA ROSE ručno heklana tašna LAVANDA ROSE pravi je modni dragulj – nežna krem osnova sa raskošnim ljubičastim 3D ružama i zelenim listićima koji blistaju poput bašte. Granny kvadrati sa ljubičastim okvirom daju joj dozu visoke mode. Savršen spoj proleća, elegancije i besprekornog zanata za romantične duše.",
-    "captionEn": "LAVANDA ROSE The handmade crochet bag LAVANDA ROSE is a true fashion jewel – delicate cream base with lavish purple 3D roses and green leaves that sparkle like a garden. Granny squares with a purple frame give it a touch of high fashion. A perfect blend of spring, elegance and impeccable craftsmanship for romantic souls.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789287464927-2",
-    "title": "LAVANDA ROSE - Slika 3",
-    "titleEn": "LAVANDA ROSE - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789287464927_g1.jpg",
-    "caption": "LAVANDA ROSE ručno heklana tašna LAVANDA ROSE pravi je modni dragulj – nežna krem osnova sa raskošnim ljubičastim 3D ružama i zelenim listićima koji blistaju poput bašte. Granny kvadrati sa ljubičastim okvirom daju joj dozu visoke mode. Savršen spoj proleća, elegancije i besprekornog zanata za romantične duše.",
-    "captionEn": "LAVANDA ROSE The handmade crochet bag LAVANDA ROSE is a true fashion jewel – delicate cream base with lavish purple 3D roses and green leaves that sparkle like a garden. Granny squares with a purple frame give it a touch of high fashion. A perfect blend of spring, elegance and impeccable craftsmanship for romantic souls.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789287464927-3",
-    "title": "LAVANDA ROSE - Slika 4",
-    "titleEn": "LAVANDA ROSE - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789287464927_g2.jpg",
     "caption": "LAVANDA ROSE ručno heklana tašna LAVANDA ROSE pravi je modni dragulj – nežna krem osnova sa raskošnim ljubičastim 3D ružama i zelenim listićima koji blistaju poput bašte. Granny kvadrati sa ljubičastim okvirom daju joj dozu visoke mode. Savršen spoj proleća, elegancije i besprekornog zanata za romantične duše.",
     "captionEn": "LAVANDA ROSE The handmade crochet bag LAVANDA ROSE is a true fashion jewel – delicate cream base with lavish purple 3D roses and green leaves that sparkle like a garden. Granny squares with a purple frame give it a touch of high fashion. A perfect blend of spring, elegance and impeccable craftsmanship for romantic souls.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
     "isCustomUploaded": true
@@ -1425,78 +369,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789287726315-1",
-    "title": "BLOOM POUCH - Slika 2",
-    "titleEn": "BLOOM POUCH - Photo 2",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789287726315_g0.jpg",
-    "caption": "BLOOM POUCH ručno heklana tašna BLOOM POUCH pravi je modni dragulj – siva bucket forma sa raskošnim buketom heklanih ruža u crvenoj, žutoj i ljubičastoj boji koje blistaju poput bašte. Zelene stabljike i listići daju joj dozu visoke mode. Savršen spoj proleća, radosti i besprekornog ručnog rada za ženu koja nosi cveće gde god pođe.",
-    "captionEn": "BLOOM POUCH The handmade crochet bag BLOOM POUCH is a true fashion jewel – gray bucket form with a lavish bouquet of crochet roses in red, yellow and purple that sparkle like a garden. Green stems and leaves give it a touch of high fashion. A perfect blend of spring, joy and impeccable handmade work for the woman who carries flowers wherever she goes.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789287726315-2",
-    "title": "BLOOM POUCH - Slika 3",
-    "titleEn": "BLOOM POUCH - Photo 3",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789287726315_g1.jpg",
-    "caption": "BLOOM POUCH ručno heklana tašna BLOOM POUCH pravi je modni dragulj – siva bucket forma sa raskošnim buketom heklanih ruža u crvenoj, žutoj i ljubičastoj boji koje blistaju poput bašte. Zelene stabljike i listići daju joj dozu visoke mode. Savršen spoj proleća, radosti i besprekornog ručnog rada za ženu koja nosi cveće gde god pođe.",
-    "captionEn": "BLOOM POUCH The handmade crochet bag BLOOM POUCH is a true fashion jewel – gray bucket form with a lavish bouquet of crochet roses in red, yellow and purple that sparkle like a garden. Green stems and leaves give it a touch of high fashion. A perfect blend of spring, joy and impeccable handmade work for the woman who carries flowers wherever she goes.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789287726315-3",
-    "title": "BLOOM POUCH - Slika 4",
-    "titleEn": "BLOOM POUCH - Photo 4",
-    "category": "Torbice",
-    "categoryEn": "Bags & Purses",
-    "imageUrl": "/custom_products/prod_custom-prod-1789287726315_g2.jpg",
-    "caption": "BLOOM POUCH ručno heklana tašna BLOOM POUCH pravi je modni dragulj – siva bucket forma sa raskošnim buketom heklanih ruža u crvenoj, žutoj i ljubičastoj boji koje blistaju poput bašte. Zelene stabljike i listići daju joj dozu visoke mode. Savršen spoj proleća, radosti i besprekornog ručnog rada za ženu koja nosi cveće gde god pođe.",
-    "captionEn": "BLOOM POUCH The handmade crochet bag BLOOM POUCH is a true fashion jewel – gray bucket form with a lavish bouquet of crochet roses in red, yellow and purple that sparkle like a garden. Green stems and leaves give it a touch of high fashion. A perfect blend of spring, joy and impeccable handmade work for the woman who carries flowers wherever she goes.Authentic work in the Handbags category - Savremeni Koreni - (Modern Roots)",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789290912081-0",
     "title": "VLAŠKA BELA ŠUBARA",
     "titleEn": "The VLASKA BELA šubara",
     "category": "Šubare",
     "categoryEn": "Folk Hats",
     "imageUrl": "/custom_products/prod_custom-prod-1789290912081.jpg",
-    "caption": "VLAŠKA BELA ŠUBARA nije samo kapa, to je kruna Homolja. Ručno pletena od najfinije bele vune, gusta i čupava kao snežni oblaci sa Beljanice, čuva toplinu ognjišta i ponos predaka. U Vlaškom kraju, bela šubara je simbol čistote, mladosti i domaćinskog porekla - nosili su je najugledniji momci iz Žagubice na saborima, svadbama i na Božić.",
-    "captionEn": "The VLAŠKA BELA šubara is not just a cap, it is the crown of Homolje. Hand-knitted from the finest white wool, dense and fluffy like snow clouds from Beljanica mountain, it preserves the warmth of the hearth and the pride of our ancestors. In the Vlach region, the white šubara is a symbol of purity, youth and noble household origin - worn by the most respected young men from Žagubica at folk gatherings, weddings and on Christmas.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789290912081-1",
-    "title": "VLAŠKA BELA ŠUBARA - Slika 2",
-    "titleEn": "The VLASKA BELA šubara - Photo 2",
-    "category": "Šubare",
-    "categoryEn": "Folk Hats",
-    "imageUrl": "/custom_products/prod_custom-prod-1789290912081_g0.jpg",
-    "caption": "VLAŠKA BELA ŠUBARA nije samo kapa, to je kruna Homolja. Ručno pletena od najfinije bele vune, gusta i čupava kao snežni oblaci sa Beljanice, čuva toplinu ognjišta i ponos predaka. U Vlaškom kraju, bela šubara je simbol čistote, mladosti i domaćinskog porekla - nosili su je najugledniji momci iz Žagubice na saborima, svadbama i na Božić.",
-    "captionEn": "The VLAŠKA BELA šubara is not just a cap, it is the crown of Homolje. Hand-knitted from the finest white wool, dense and fluffy like snow clouds from Beljanica mountain, it preserves the warmth of the hearth and the pride of our ancestors. In the Vlach region, the white šubara is a symbol of purity, youth and noble household origin - worn by the most respected young men from Žagubica at folk gatherings, weddings and on Christmas.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789290912081-2",
-    "title": "VLAŠKA BELA ŠUBARA - Slika 3",
-    "titleEn": "The VLASKA BELA šubara - Photo 3",
-    "category": "Šubare",
-    "categoryEn": "Folk Hats",
-    "imageUrl": "/custom_products/prod_custom-prod-1789290912081_g1.jpg",
-    "caption": "VLAŠKA BELA ŠUBARA nije samo kapa, to je kruna Homolja. Ručno pletena od najfinije bele vune, gusta i čupava kao snežni oblaci sa Beljanice, čuva toplinu ognjišta i ponos predaka. U Vlaškom kraju, bela šubara je simbol čistote, mladosti i domaćinskog porekla - nosili su je najugledniji momci iz Žagubice na saborima, svadbama i na Božić.",
-    "captionEn": "The VLAŠKA BELA šubara is not just a cap, it is the crown of Homolje. Hand-knitted from the finest white wool, dense and fluffy like snow clouds from Beljanica mountain, it preserves the warmth of the hearth and the pride of our ancestors. In the Vlach region, the white šubara is a symbol of purity, youth and noble household origin - worn by the most respected young men from Žagubica at folk gatherings, weddings and on Christmas.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789290912081-3",
-    "title": "VLAŠKA BELA ŠUBARA - Slika 4",
-    "titleEn": "The VLASKA BELA šubara - Photo 4",
-    "category": "Šubare",
-    "categoryEn": "Folk Hats",
-    "imageUrl": "/custom_products/prod_custom-prod-1789290912081_g2.jpg",
     "caption": "VLAŠKA BELA ŠUBARA nije samo kapa, to je kruna Homolja. Ručno pletena od najfinije bele vune, gusta i čupava kao snežni oblaci sa Beljanice, čuva toplinu ognjišta i ponos predaka. U Vlaškom kraju, bela šubara je simbol čistote, mladosti i domaćinskog porekla - nosili su je najugledniji momci iz Žagubice na saborima, svadbama i na Božić.",
     "captionEn": "The VLAŠKA BELA šubara is not just a cap, it is the crown of Homolje. Hand-knitted from the finest white wool, dense and fluffy like snow clouds from Beljanica mountain, it preserves the warmth of the hearth and the pride of our ancestors. In the Vlach region, the white šubara is a symbol of purity, youth and noble household origin - worn by the most respected young men from Žagubica at folk gatherings, weddings and on Christmas.",
     "isCustomUploaded": true
@@ -1513,78 +391,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789291435587-1",
-    "title": "SRPSKA CRNA ŠUBARA - Slika 2",
-    "titleEn": "The SERBIAN BLCK šubara - Photo 2",
-    "category": "Šubare",
-    "categoryEn": "Folk Hats",
-    "imageUrl": "/custom_products/prod_custom-prod-1789291435587_g0.jpg",
-    "caption": "SRPSKA CRNA ŠUBARA - kraljica Homolja, čuvarka obraza i časti. Gusta, crna kao planinska noć iznad Žagubice, ispletena od najtvrđe vune koja ne da vetru i mrazu da prođe. Nisu je nosili obični ljudi. Nosili su je domaćini, knezovi, gazde i momci za ženidbu - ko stavi crnu šubaru, zna se ko je glavni u kući.",
-    "captionEn": "The SRPSKA CRNA šubara - the queen of Homolje, guardian of honor and dignity. Dense, black as a mountain night above Žagubica, woven from the toughest wool that lets neither wind nor frost pass through. It was not worn by ordinary people. It was worn by heads of households, knezes, landlords and young men ready for marriage - whoever puts on the black šubara, it is known who is the head of the house.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789291435587-2",
-    "title": "SRPSKA CRNA ŠUBARA - Slika 3",
-    "titleEn": "The SERBIAN BLCK šubara - Photo 3",
-    "category": "Šubare",
-    "categoryEn": "Folk Hats",
-    "imageUrl": "/custom_products/prod_custom-prod-1789291435587_g1.jpg",
-    "caption": "SRPSKA CRNA ŠUBARA - kraljica Homolja, čuvarka obraza i časti. Gusta, crna kao planinska noć iznad Žagubice, ispletena od najtvrđe vune koja ne da vetru i mrazu da prođe. Nisu je nosili obični ljudi. Nosili su je domaćini, knezovi, gazde i momci za ženidbu - ko stavi crnu šubaru, zna se ko je glavni u kući.",
-    "captionEn": "The SRPSKA CRNA šubara - the queen of Homolje, guardian of honor and dignity. Dense, black as a mountain night above Žagubica, woven from the toughest wool that lets neither wind nor frost pass through. It was not worn by ordinary people. It was worn by heads of households, knezes, landlords and young men ready for marriage - whoever puts on the black šubara, it is known who is the head of the house.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789291435587-3",
-    "title": "SRPSKA CRNA ŠUBARA - Slika 4",
-    "titleEn": "The SERBIAN BLCK šubara - Photo 4",
-    "category": "Šubare",
-    "categoryEn": "Folk Hats",
-    "imageUrl": "/custom_products/prod_custom-prod-1789291435587_g2.jpg",
-    "caption": "SRPSKA CRNA ŠUBARA - kraljica Homolja, čuvarka obraza i časti. Gusta, crna kao planinska noć iznad Žagubice, ispletena od najtvrđe vune koja ne da vetru i mrazu da prođe. Nisu je nosili obični ljudi. Nosili su je domaćini, knezovi, gazde i momci za ženidbu - ko stavi crnu šubaru, zna se ko je glavni u kući.",
-    "captionEn": "The SRPSKA CRNA šubara - the queen of Homolje, guardian of honor and dignity. Dense, black as a mountain night above Žagubica, woven from the toughest wool that lets neither wind nor frost pass through. It was not worn by ordinary people. It was worn by heads of households, knezes, landlords and young men ready for marriage - whoever puts on the black šubara, it is known who is the head of the house.",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789291724457-0",
     "title": "DEČIJA ŠARENA ŠUBARA",
     "titleEn": "The KIDS ŠARENA ŠUBARA",
     "category": "Šubare",
     "categoryEn": "Folk Hats",
     "imageUrl": "/custom_products/prod_custom-prod-1789291724457.jpg",
-    "caption": "DEČIJA ŠARENA ŠUBARA - prva prava kapa svakog malog Homoljca. Crno-bela, kao ovce na ispaši oko Žagubice, mekana kao mamin zagrljaj, topla kao dedina priča pored šporeta. Naši stari su govorili - čim dete prohoda, stavlja mu se šubara da ga vuk ne prepozna, da ga babe ne ureknu i da odmah zna odakle je.",
-    "captionEn": "The KIDS ŠARENA ŠUBARA - the first real cap of every little Homoljac. Black-and-white, like sheep grazing around Žagubica, soft as a mother's hug, warm as grandpa's story by the stove. Our elders used to say - as soon as a child starts walking, a šubara is put on him so the wolf doesn't recognize him, so that the evil eye doesn't catch him, and so he knows right away where he is from.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789291724457-1",
-    "title": "DEČIJA ŠARENA ŠUBARA - Slika 2",
-    "titleEn": "The KIDS ŠARENA ŠUBARA - Photo 2",
-    "category": "Šubare",
-    "categoryEn": "Folk Hats",
-    "imageUrl": "/custom_products/prod_custom-prod-1789291724457_g0.jpg",
-    "caption": "DEČIJA ŠARENA ŠUBARA - prva prava kapa svakog malog Homoljca. Crno-bela, kao ovce na ispaši oko Žagubice, mekana kao mamin zagrljaj, topla kao dedina priča pored šporeta. Naši stari su govorili - čim dete prohoda, stavlja mu se šubara da ga vuk ne prepozna, da ga babe ne ureknu i da odmah zna odakle je.",
-    "captionEn": "The KIDS ŠARENA ŠUBARA - the first real cap of every little Homoljac. Black-and-white, like sheep grazing around Žagubica, soft as a mother's hug, warm as grandpa's story by the stove. Our elders used to say - as soon as a child starts walking, a šubara is put on him so the wolf doesn't recognize him, so that the evil eye doesn't catch him, and so he knows right away where he is from.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789291724457-2",
-    "title": "DEČIJA ŠARENA ŠUBARA - Slika 3",
-    "titleEn": "The KIDS ŠARENA ŠUBARA - Photo 3",
-    "category": "Šubare",
-    "categoryEn": "Folk Hats",
-    "imageUrl": "/custom_products/prod_custom-prod-1789291724457_g1.jpg",
-    "caption": "DEČIJA ŠARENA ŠUBARA - prva prava kapa svakog malog Homoljca. Crno-bela, kao ovce na ispaši oko Žagubice, mekana kao mamin zagrljaj, topla kao dedina priča pored šporeta. Naši stari su govorili - čim dete prohoda, stavlja mu se šubara da ga vuk ne prepozna, da ga babe ne ureknu i da odmah zna odakle je.",
-    "captionEn": "The KIDS ŠARENA ŠUBARA - the first real cap of every little Homoljac. Black-and-white, like sheep grazing around Žagubica, soft as a mother's hug, warm as grandpa's story by the stove. Our elders used to say - as soon as a child starts walking, a šubara is put on him so the wolf doesn't recognize him, so that the evil eye doesn't catch him, and so he knows right away where he is from.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789291724457-3",
-    "title": "DEČIJA ŠARENA ŠUBARA - Slika 4",
-    "titleEn": "The KIDS ŠARENA ŠUBARA - Photo 4",
-    "category": "Šubare",
-    "categoryEn": "Folk Hats",
-    "imageUrl": "/custom_products/prod_custom-prod-1789291724457_g2.jpg",
     "caption": "DEČIJA ŠARENA ŠUBARA - prva prava kapa svakog malog Homoljca. Crno-bela, kao ovce na ispaši oko Žagubice, mekana kao mamin zagrljaj, topla kao dedina priča pored šporeta. Naši stari su govorili - čim dete prohoda, stavlja mu se šubara da ga vuk ne prepozna, da ga babe ne ureknu i da odmah zna odakle je.",
     "captionEn": "The KIDS ŠARENA ŠUBARA - the first real cap of every little Homoljac. Black-and-white, like sheep grazing around Žagubica, soft as a mother's hug, warm as grandpa's story by the stove. Our elders used to say - as soon as a child starts walking, a šubara is put on him so the wolf doesn't recognize him, so that the evil eye doesn't catch him, and so he knows right away where he is from.",
     "isCustomUploaded": true
@@ -1601,78 +413,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789300552461-1",
-    "title": "MUŠKE ČARAPE  FOLKLOR - Slika 2",
-    "titleEn": "MEN'S FOLKLORE SOCKS - Photo 2",
-    "category": "Čarape",
-    "categoryEn": "Wool Socks",
-    "imageUrl": "/custom_products/prod_custom-prod-1789300552461_g0.jpg",
-    "caption": "MUŠKE ČARAPE FOLKLOR su nadahnute tradicijom Homolja, naše muške čarape spajaju toplinu domaće vune i dušu starog zanata. Svaki par je ručno pleten od debelog crnog vunenog prediva, a zatim ukrašen bogatim cvetnim vezom – crvenim, plavim i zlatnim koncem, motivima prenošenim sa kolena na koleno.",
-    "captionEn": "MEN'S FOLKLORE SOCKS - inspired by the tradition of Homolje, our men's socks combine the warmth of domestic wool and the soul of the old craft. Each pair is hand-knitted from thick black woolen yarn, and then decorated with rich floral embroidery – red, blue and gold thread, with motifs passed down from generation to generation.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789300552461-2",
-    "title": "MUŠKE ČARAPE  FOLKLOR - Slika 3",
-    "titleEn": "MEN'S FOLKLORE SOCKS - Photo 3",
-    "category": "Čarape",
-    "categoryEn": "Wool Socks",
-    "imageUrl": "/custom_products/prod_custom-prod-1789300552461_g1.jpg",
-    "caption": "MUŠKE ČARAPE FOLKLOR su nadahnute tradicijom Homolja, naše muške čarape spajaju toplinu domaće vune i dušu starog zanata. Svaki par je ručno pleten od debelog crnog vunenog prediva, a zatim ukrašen bogatim cvetnim vezom – crvenim, plavim i zlatnim koncem, motivima prenošenim sa kolena na koleno.",
-    "captionEn": "MEN'S FOLKLORE SOCKS - inspired by the tradition of Homolje, our men's socks combine the warmth of domestic wool and the soul of the old craft. Each pair is hand-knitted from thick black woolen yarn, and then decorated with rich floral embroidery – red, blue and gold thread, with motifs passed down from generation to generation.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789300552461-3",
-    "title": "MUŠKE ČARAPE  FOLKLOR - Slika 4",
-    "titleEn": "MEN'S FOLKLORE SOCKS - Photo 4",
-    "category": "Čarape",
-    "categoryEn": "Wool Socks",
-    "imageUrl": "/custom_products/prod_custom-prod-1789300552461_g2.jpg",
-    "caption": "MUŠKE ČARAPE FOLKLOR su nadahnute tradicijom Homolja, naše muške čarape spajaju toplinu domaće vune i dušu starog zanata. Svaki par je ručno pleten od debelog crnog vunenog prediva, a zatim ukrašen bogatim cvetnim vezom – crvenim, plavim i zlatnim koncem, motivima prenošenim sa kolena na koleno.",
-    "captionEn": "MEN'S FOLKLORE SOCKS - inspired by the tradition of Homolje, our men's socks combine the warmth of domestic wool and the soul of the old craft. Each pair is hand-knitted from thick black woolen yarn, and then decorated with rich floral embroidery – red, blue and gold thread, with motifs passed down from generation to generation.",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789301322219-0",
     "title": "ČARAPE FOLKLOR DEČACI",
     "titleEn": "FOLKLORE SOCKS FOR BOYS",
     "category": "Čarape",
     "categoryEn": "Wool Socks",
     "imageUrl": "/custom_products/prod_custom-prod-1789301322219.jpg",
-    "caption": "ČARAPE FOLKLOR DEČACI Male čarape za veliku tradiciju! Nadahnute Homoljem i igrom u kolu, naše dečačke vunene čarape su pravi mali amulet.",
-    "captionEn": "FOLKLORE SOCKS FOR BOYS - Small socks for a great tradition! Inspired by Homolje and dancing in the kolo, our boys' woolen socks are a real little amulet.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789301322219-1",
-    "title": "ČARAPE FOLKLOR DEČACI - Slika 2",
-    "titleEn": "FOLKLORE SOCKS FOR BOYS - Photo 2",
-    "category": "Čarape",
-    "categoryEn": "Wool Socks",
-    "imageUrl": "/custom_products/prod_custom-prod-1789301322219_g0.jpg",
-    "caption": "ČARAPE FOLKLOR DEČACI Male čarape za veliku tradiciju! Nadahnute Homoljem i igrom u kolu, naše dečačke vunene čarape su pravi mali amulet.",
-    "captionEn": "FOLKLORE SOCKS FOR BOYS - Small socks for a great tradition! Inspired by Homolje and dancing in the kolo, our boys' woolen socks are a real little amulet.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789301322219-2",
-    "title": "ČARAPE FOLKLOR DEČACI - Slika 3",
-    "titleEn": "FOLKLORE SOCKS FOR BOYS - Photo 3",
-    "category": "Čarape",
-    "categoryEn": "Wool Socks",
-    "imageUrl": "/custom_products/prod_custom-prod-1789301322219_g1.jpg",
-    "caption": "ČARAPE FOLKLOR DEČACI Male čarape za veliku tradiciju! Nadahnute Homoljem i igrom u kolu, naše dečačke vunene čarape su pravi mali amulet.",
-    "captionEn": "FOLKLORE SOCKS FOR BOYS - Small socks for a great tradition! Inspired by Homolje and dancing in the kolo, our boys' woolen socks are a real little amulet.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789301322219-3",
-    "title": "ČARAPE FOLKLOR DEČACI - Slika 4",
-    "titleEn": "FOLKLORE SOCKS FOR BOYS - Photo 4",
-    "category": "Čarape",
-    "categoryEn": "Wool Socks",
-    "imageUrl": "/custom_products/prod_custom-prod-1789301322219_g2.jpg",
     "caption": "ČARAPE FOLKLOR DEČACI Male čarape za veliku tradiciju! Nadahnute Homoljem i igrom u kolu, naše dečačke vunene čarape su pravi mali amulet.",
     "captionEn": "FOLKLORE SOCKS FOR BOYS - Small socks for a great tradition! Inspired by Homolje and dancing in the kolo, our boys' woolen socks are a real little amulet.",
     "isCustomUploaded": true
@@ -1689,78 +435,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789301789294-1",
-    "title": "MUŠKE  ČARAPE FOLKLOR - Slika 2",
-    "titleEn": "MEN'S FOLKLORE SOCKS - Photo 2",
-    "category": "Čarape",
-    "categoryEn": "Wool Socks",
-    "imageUrl": "/custom_products/prod_custom-prod-1789301789294_g0.jpg",
-    "caption": "MUŠKE  ČARAPE FOLKLOR su nadahnute tradicijom Homolja, naše muške čarape spajaju toplinu domaće vune i dušu starog zanata. Svaki par je ručno pleten od debelog crnog vunenog prediva, a zatim ukrašen bogatim cvetnim vezom – crvenim, plavim i zlatnim koncem, motivima prenošenim sa kolena na koleno.",
-    "captionEn": "MEN'S FOLKLORE SOCKS - inspired by the tradition of Homolje, our men's socks combine the warmth of domestic wool and the soul of the old craft. Each pair is hand-knitted from thick black woolen yarn, and then decorated with rich floral embroidery – red, blue and gold thread, with motifs passed down from generation to generation.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789301789294-2",
-    "title": "MUŠKE  ČARAPE FOLKLOR - Slika 3",
-    "titleEn": "MEN'S FOLKLORE SOCKS - Photo 3",
-    "category": "Čarape",
-    "categoryEn": "Wool Socks",
-    "imageUrl": "/custom_products/prod_custom-prod-1789301789294_g1.jpg",
-    "caption": "MUŠKE  ČARAPE FOLKLOR su nadahnute tradicijom Homolja, naše muške čarape spajaju toplinu domaće vune i dušu starog zanata. Svaki par je ručno pleten od debelog crnog vunenog prediva, a zatim ukrašen bogatim cvetnim vezom – crvenim, plavim i zlatnim koncem, motivima prenošenim sa kolena na koleno.",
-    "captionEn": "MEN'S FOLKLORE SOCKS - inspired by the tradition of Homolje, our men's socks combine the warmth of domestic wool and the soul of the old craft. Each pair is hand-knitted from thick black woolen yarn, and then decorated with rich floral embroidery – red, blue and gold thread, with motifs passed down from generation to generation.",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789301789294-3",
-    "title": "MUŠKE  ČARAPE FOLKLOR - Slika 4",
-    "titleEn": "MEN'S FOLKLORE SOCKS - Photo 4",
-    "category": "Čarape",
-    "categoryEn": "Wool Socks",
-    "imageUrl": "/custom_products/prod_custom-prod-1789301789294_g2.jpg",
-    "caption": "MUŠKE  ČARAPE FOLKLOR su nadahnute tradicijom Homolja, naše muške čarape spajaju toplinu domaće vune i dušu starog zanata. Svaki par je ručno pleten od debelog crnog vunenog prediva, a zatim ukrašen bogatim cvetnim vezom – crvenim, plavim i zlatnim koncem, motivima prenošenim sa kolena na koleno.",
-    "captionEn": "MEN'S FOLKLORE SOCKS - inspired by the tradition of Homolje, our men's socks combine the warmth of domestic wool and the soul of the old craft. Each pair is hand-knitted from thick black woolen yarn, and then decorated with rich floral embroidery – red, blue and gold thread, with motifs passed down from generation to generation.",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789306811877-0",
     "title": "RUČNO HEKLANE NARUKVICE",
     "titleEn": "HAND CROCHETED BRACELETS",
     "category": "Nakit",
     "categoryEn": "Jewelry",
     "imageUrl": "/custom_products/prod_custom-prod-1789306811877.jpg",
-    "caption": "RUČNO HEKLANE NARUKVICE - BOHO KOLEKCIJA",
-    "captionEn": "HAND CROCHETED BRACELETS - BOHO COLLECTION",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789306811877-1",
-    "title": "RUČNO HEKLANE NARUKVICE - Slika 2",
-    "titleEn": "HAND CROCHETED BRACELETS - Photo 2",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789306811877_g0.jpg",
-    "caption": "RUČNO HEKLANE NARUKVICE - BOHO KOLEKCIJA",
-    "captionEn": "HAND CROCHETED BRACELETS - BOHO COLLECTION",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789306811877-2",
-    "title": "RUČNO HEKLANE NARUKVICE - Slika 3",
-    "titleEn": "HAND CROCHETED BRACELETS - Photo 3",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789306811877_g1.jpg",
-    "caption": "RUČNO HEKLANE NARUKVICE - BOHO KOLEKCIJA",
-    "captionEn": "HAND CROCHETED BRACELETS - BOHO COLLECTION",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789306811877-3",
-    "title": "RUČNO HEKLANE NARUKVICE - Slika 4",
-    "titleEn": "HAND CROCHETED BRACELETS - Photo 4",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789306811877_g2.jpg",
     "caption": "RUČNO HEKLANE NARUKVICE - BOHO KOLEKCIJA",
     "captionEn": "HAND CROCHETED BRACELETS - BOHO COLLECTION",
     "isCustomUploaded": true
@@ -1777,78 +457,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789306914973-1",
-    "title": "RUČNO HEKLANE NARUKVICE - Slika 2",
-    "titleEn": "HAND CROCHETED BRACELETS - Photo 2",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789306914973_g0.jpg",
-    "caption": "RUČNO HEKLANE NARUKVICE - BOHO KOLEKCIJA",
-    "captionEn": "HAND CROCHETED BRACELETS - BOHO COLLECTION",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789306914973-2",
-    "title": "RUČNO HEKLANE NARUKVICE - Slika 3",
-    "titleEn": "HAND CROCHETED BRACELETS - Photo 3",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789306914973_g1.jpg",
-    "caption": "RUČNO HEKLANE NARUKVICE - BOHO KOLEKCIJA",
-    "captionEn": "HAND CROCHETED BRACELETS - BOHO COLLECTION",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789306914973-3",
-    "title": "RUČNO HEKLANE NARUKVICE - Slika 4",
-    "titleEn": "HAND CROCHETED BRACELETS - Photo 4",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789306914973_g2.jpg",
-    "caption": "RUČNO HEKLANE NARUKVICE - BOHO KOLEKCIJA",
-    "captionEn": "HAND CROCHETED BRACELETS - BOHO COLLECTION",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789307017430-0",
     "title": "RUČNO HEKLANE NARUKVICE",
     "titleEn": "HAND CROCHETED BRACELETS",
     "category": "Nakit",
     "categoryEn": "Jewelry",
     "imageUrl": "/custom_products/prod_custom-prod-1789307017430.jpg",
-    "caption": "RUČNO HEKLANE NARUKVICE - BOHO KOLEKCIJA",
-    "captionEn": "HAND CROCHETED BRACELETS - BOHO COLLECTION",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789307017430-1",
-    "title": "RUČNO HEKLANE NARUKVICE - Slika 2",
-    "titleEn": "HAND CROCHETED BRACELETS - Photo 2",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307017430_g0.jpg",
-    "caption": "RUČNO HEKLANE NARUKVICE - BOHO KOLEKCIJA",
-    "captionEn": "HAND CROCHETED BRACELETS - BOHO COLLECTION",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789307017430-2",
-    "title": "RUČNO HEKLANE NARUKVICE - Slika 3",
-    "titleEn": "HAND CROCHETED BRACELETS - Photo 3",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307017430_g1.jpg",
-    "caption": "RUČNO HEKLANE NARUKVICE - BOHO KOLEKCIJA",
-    "captionEn": "HAND CROCHETED BRACELETS - BOHO COLLECTION",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789307017430-3",
-    "title": "RUČNO HEKLANE NARUKVICE - Slika 4",
-    "titleEn": "HAND CROCHETED BRACELETS - Photo 4",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307017430_g2.jpg",
     "caption": "RUČNO HEKLANE NARUKVICE - BOHO KOLEKCIJA",
     "captionEn": "HAND CROCHETED BRACELETS - BOHO COLLECTION",
     "isCustomUploaded": true
@@ -1865,78 +479,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789307088691-1",
-    "title": "RUČNO HEKLANE NARUKVICE - Slika 2",
-    "titleEn": "HAND CROCHETED BRACELETS - Photo 2",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307088691_g0.jpg",
-    "caption": "RUČNO HEKLANE NARUKVICE - BOHO KOLEKCIJA",
-    "captionEn": "HAND CROCHETED BRACELETS - BOHO COLLECTION",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789307088691-2",
-    "title": "RUČNO HEKLANE NARUKVICE - Slika 3",
-    "titleEn": "HAND CROCHETED BRACELETS - Photo 3",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307088691_g1.jpg",
-    "caption": "RUČNO HEKLANE NARUKVICE - BOHO KOLEKCIJA",
-    "captionEn": "HAND CROCHETED BRACELETS - BOHO COLLECTION",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789307088691-3",
-    "title": "RUČNO HEKLANE NARUKVICE - Slika 4",
-    "titleEn": "HAND CROCHETED BRACELETS - Photo 4",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307088691_g2.jpg",
-    "caption": "RUČNO HEKLANE NARUKVICE - BOHO KOLEKCIJA",
-    "captionEn": "HAND CROCHETED BRACELETS - BOHO COLLECTION",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789307337462-0",
     "title": "RUČNO HEKLANE SPIRALNE MINĐUŠE",
     "titleEn": "HAND CROCHETED SPIRAL EARRINGS",
     "category": "Nakit",
     "categoryEn": "Jewelry",
     "imageUrl": "/custom_products/prod_custom-prod-1789307337462.jpg",
-    "caption": "RUČNO HEKLANE SPIRALNE MINĐUŠE - boho kolekcija",
-    "captionEn": "HAND CROCHETED SPIRAL EARRINGS - boho collection",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789307337462-1",
-    "title": "RUČNO HEKLANE SPIRALNE MINĐUŠE - Slika 2",
-    "titleEn": "HAND CROCHETED SPIRAL EARRINGS - Photo 2",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307337462_g0.jpg",
-    "caption": "RUČNO HEKLANE SPIRALNE MINĐUŠE - boho kolekcija",
-    "captionEn": "HAND CROCHETED SPIRAL EARRINGS - boho collection",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789307337462-2",
-    "title": "RUČNO HEKLANE SPIRALNE MINĐUŠE - Slika 3",
-    "titleEn": "HAND CROCHETED SPIRAL EARRINGS - Photo 3",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307337462_g1.jpg",
-    "caption": "RUČNO HEKLANE SPIRALNE MINĐUŠE - boho kolekcija",
-    "captionEn": "HAND CROCHETED SPIRAL EARRINGS - boho collection",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789307337462-3",
-    "title": "RUČNO HEKLANE SPIRALNE MINĐUŠE - Slika 4",
-    "titleEn": "HAND CROCHETED SPIRAL EARRINGS - Photo 4",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307337462_g2.jpg",
     "caption": "RUČNO HEKLANE SPIRALNE MINĐUŠE - boho kolekcija",
     "captionEn": "HAND CROCHETED SPIRAL EARRINGS - boho collection",
     "isCustomUploaded": true
@@ -1953,39 +501,6 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789307502983-1",
-    "title": "RUČNO HEKLANE SPIRALNE MINĐUŠE - Slika 2",
-    "titleEn": "HAND CROCHETED SPIRAL EARRINGS - Photo 2",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307502983_g0.jpg",
-    "caption": "RUČNO HEKLANE SPIRALNE MINĐUŠE - boho kolekcija",
-    "captionEn": "HAND CROCHETED SPIRAL EARRINGS - boho collection",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789307502983-2",
-    "title": "RUČNO HEKLANE SPIRALNE MINĐUŠE - Slika 3",
-    "titleEn": "HAND CROCHETED SPIRAL EARRINGS - Photo 3",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307502983_g1.jpg",
-    "caption": "RUČNO HEKLANE SPIRALNE MINĐUŠE - boho kolekcija",
-    "captionEn": "HAND CROCHETED SPIRAL EARRINGS - boho collection",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789307502983-3",
-    "title": "RUČNO HEKLANE SPIRALNE MINĐUŠE - Slika 4",
-    "titleEn": "HAND CROCHETED SPIRAL EARRINGS - Photo 4",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307502983_g2.jpg",
-    "caption": "RUČNO HEKLANE SPIRALNE MINĐUŠE - boho kolekcija",
-    "captionEn": "HAND CROCHETED SPIRAL EARRINGS - boho collection",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789307585814-0",
     "title": "RUČNO HEKLANE SPIRALNE MINĐUŠE",
     "titleEn": "HAND CROCHETED SPIRAL EARRINGS",
@@ -1997,78 +512,12 @@ export const uploadedPhotosData: GalleryPhoto[] = [
     "isCustomUploaded": true
   },
   {
-    "id": "perm-gal-custom-prod-1789307585814-1",
-    "title": "RUČNO HEKLANE SPIRALNE MINĐUŠE - Slika 2",
-    "titleEn": "HAND CROCHETED SPIRAL EARRINGS - Photo 2",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307585814_g0.jpg",
-    "caption": "RUČNO HEKLANE SPIRALNE MINĐUŠE - boho kolekcija",
-    "captionEn": "HAND CROCHETED SPIRAL EARRINGS - boho collection",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789307585814-2",
-    "title": "RUČNO HEKLANE SPIRALNE MINĐUŠE - Slika 3",
-    "titleEn": "HAND CROCHETED SPIRAL EARRINGS - Photo 3",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307585814_g1.jpg",
-    "caption": "RUČNO HEKLANE SPIRALNE MINĐUŠE - boho kolekcija",
-    "captionEn": "HAND CROCHETED SPIRAL EARRINGS - boho collection",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789307585814-3",
-    "title": "RUČNO HEKLANE SPIRALNE MINĐUŠE - Slika 4",
-    "titleEn": "HAND CROCHETED SPIRAL EARRINGS - Photo 4",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307585814_g2.jpg",
-    "caption": "RUČNO HEKLANE SPIRALNE MINĐUŠE - boho kolekcija",
-    "captionEn": "HAND CROCHETED SPIRAL EARRINGS - boho collection",
-    "isCustomUploaded": true
-  },
-  {
     "id": "perm-gal-custom-prod-1789307658216-0",
     "title": "RUČNO HEKLANE SPIRALNE MINĐUŠE",
     "titleEn": "HAND CROCHETED SPIRAL EARRINGS",
     "category": "Nakit",
     "categoryEn": "Jewelry",
     "imageUrl": "/custom_products/prod_custom-prod-1789307658216.jpg",
-    "caption": "RUČNO HEKLANE SPIRALNE MINĐUŠE - boho kolekcija",
-    "captionEn": "HAND CROCHETED SPIRAL EARRINGS - boho collection",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789307658216-1",
-    "title": "RUČNO HEKLANE SPIRALNE MINĐUŠE - Slika 2",
-    "titleEn": "HAND CROCHETED SPIRAL EARRINGS - Photo 2",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307658216_g0.jpg",
-    "caption": "RUČNO HEKLANE SPIRALNE MINĐUŠE - boho kolekcija",
-    "captionEn": "HAND CROCHETED SPIRAL EARRINGS - boho collection",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789307658216-2",
-    "title": "RUČNO HEKLANE SPIRALNE MINĐUŠE - Slika 3",
-    "titleEn": "HAND CROCHETED SPIRAL EARRINGS - Photo 3",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307658216_g1.jpg",
-    "caption": "RUČNO HEKLANE SPIRALNE MINĐUŠE - boho kolekcija",
-    "captionEn": "HAND CROCHETED SPIRAL EARRINGS - boho collection",
-    "isCustomUploaded": true
-  },
-  {
-    "id": "perm-gal-custom-prod-1789307658216-3",
-    "title": "RUČNO HEKLANE SPIRALNE MINĐUŠE - Slika 4",
-    "titleEn": "HAND CROCHETED SPIRAL EARRINGS - Photo 4",
-    "category": "Nakit",
-    "categoryEn": "Jewelry",
-    "imageUrl": "/custom_products/prod_custom-prod-1789307658216_g2.jpg",
     "caption": "RUČNO HEKLANE SPIRALNE MINĐUŠE - boho kolekcija",
     "captionEn": "HAND CROCHETED SPIRAL EARRINGS - boho collection",
     "isCustomUploaded": true

@@ -32,12 +32,79 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
   const [copiedShare, setCopiedShare] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [brokenImages, setBrokenImages] = useState<Set<string>>(new Set());
   
   // Magnifying Glass Lens effect state
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const [showMagnifier, setShowMagnifier] = useState(false);
   const [magnifierPos, setMagnifierPos] = useState({ x: 0, y: 0, relX: 0, relY: 0 });
   const [magnifierEnabled, setMagnifierEnabled] = useState(false);
+
+  // Compute candidate images list for the product (supporting all 4 product views)
+  const candidateImages: string[] = React.useMemo(() => {
+    if (!product) return ['/logo.jpg'];
+    const list: string[] = [];
+    const addIfValid = (url?: string) => {
+      if (
+        url &&
+        typeof url === 'string' &&
+        url.trim().length > 0 &&
+        !list.includes(url.trim())
+      ) {
+        list.push(url.trim());
+      }
+    };
+
+    // 1. Primary product image
+    addIfValid(product.image);
+
+    // 2. Secondary gallery images (all additional views)
+    if (Array.isArray(product.images)) {
+      product.images.forEach(addIfValid);
+    }
+
+    // 3. Fallback from permanentProductsData if empty
+    if (list.length === 0) {
+      const perm = permanentProductsData.find((p) => p.id === product.id);
+      if (perm) {
+        addIfValid(perm.image);
+        if (Array.isArray(perm.images)) {
+          perm.images.forEach(addIfValid);
+        }
+      }
+    }
+
+    if (list.length === 0) {
+      list.push('/logo.jpg');
+    }
+    return list;
+  }, [product]);
+
+  // Active valid images that haven't failed loading
+  const allImages: string[] = React.useMemo(() => {
+    const valid = candidateImages.filter((img) => !brokenImages.has(img));
+    return valid.length > 0 ? valid : ['/logo.jpg'];
+  }, [candidateImages, brokenImages]);
+
+  const markImageBroken = (url?: string) => {
+    if (!url || url === '/logo.jpg') return;
+    setBrokenImages((prev) => {
+      if (prev.has(url)) return prev;
+      const next = new Set(prev);
+      next.add(url);
+      return next;
+    });
+  };
+
+  // Reset states when product changes
+  useEffect(() => {
+    setActiveImageIdx(0);
+    setBrokenImages(new Set());
+    setZoomScale(1);
+    setPanOffset({ x: 0, y: 0 });
+    setCopiedShare(false);
+    setShowShareMenu(false);
+  }, [product?.id]);
 
   // Lock body scroll when modal is open and handle ESC key
   useEffect(() => {
@@ -140,38 +207,6 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       // Ignore clipboard failure
     }
   };
-
-  const allImages: string[] = (() => {
-    if (!product) return ['/logo.jpg'];
-    const list: string[] = [];
-    const addIfValid = (url?: string) => {
-      if (url && typeof url === 'string' && url.trim().length > 0 && !list.includes(url.trim())) {
-        list.push(url.trim());
-      }
-    };
-
-    // 1. Primary product image
-    addIfValid(product.image);
-
-    // 2. Secondary gallery images
-    if (Array.isArray(product.images)) {
-      product.images.forEach(addIfValid);
-    }
-
-    // 3. Fallback to canonical data from permanentProductsData if any image was missing
-    const perm = permanentProductsData.find((p) => p.id === product.id);
-    if (perm) {
-      addIfValid(perm.image);
-      if (Array.isArray(perm.images)) {
-        perm.images.forEach(addIfValid);
-      }
-    }
-
-    if (list.length === 0) {
-      list.push('/logo.jpg');
-    }
-    return list;
-  })();
 
   const priceInfo = formatProduct(product);
   const displayName = (isEn && product.nameEn ? product.nameEn : product.name) || 'Savremeni Koreni Unikat';
@@ -477,16 +512,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     title={getProductImageTitle(product, isEn)}
                     className="max-w-full max-h-full object-contain object-center drop-shadow-md rounded-lg transition-all"
                     referrerPolicy="no-referrer"
-                    onError={(e) => {
-                      const target = e.currentTarget;
-                      if (allImages.length > 1) {
-                        const altImg = allImages.find((img) => img && !target.src.endsWith(img));
-                        if (altImg && !target.src.endsWith(altImg)) {
-                          target.src = altImg;
-                          return;
-                        }
-                      }
-                      target.src = '/logo.jpg';
+                    onError={() => {
+                      markImageBroken(currentImageUrl);
                     }}
                   />
                 </div>
@@ -520,13 +547,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               
               {/* Thumbnails list */}
               {allImages.length > 1 && (
-                <div className="mt-3.5 grid grid-cols-4 gap-2.5">
+                <div className={`mt-3.5 grid gap-2.5 ${allImages.length === 2 ? 'grid-cols-2' : allImages.length === 3 ? 'grid-cols-3' : 'grid-cols-4'}`}>
                   {allImages.map((img, idx) => (
                     <button
-                      key={idx}
+                      key={img + idx}
                       onClick={() => setActiveImageIdx(idx)}
                       className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
-                        activeImageIdx === idx ? 'border-[#9E3E26] shadow-md opacity-100 scale-102' : 'border-[#E8E0D5] opacity-70 hover:opacity-100 hover:shadow'
+                        safeActiveIdx === idx ? 'border-[#9E3E26] shadow-md opacity-100 scale-102' : 'border-[#E8E0D5] opacity-70 hover:opacity-100 hover:shadow'
                       }`}
                     >
                       <img 
@@ -534,8 +561,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                         alt={`${displayName} - ${isEn ? 'Handcraft detail view' : 'Detalj ručnog rada'} ${idx + 1}`} 
                         className="w-full h-full object-cover"
                         referrerPolicy="no-referrer"
-                        onError={(e) => {
-                          e.currentTarget.src = '/logo.jpg';
+                        onError={() => {
+                          markImageBroken(img);
                         }}
                       />
                     </button>

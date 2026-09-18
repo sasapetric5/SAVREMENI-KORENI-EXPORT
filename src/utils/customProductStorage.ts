@@ -25,9 +25,20 @@ function healProductsWithCanonicalData(products: Product[]): Product[] {
       ? p.image.trim()
       : (perm?.image || p.images?.[0] || '');
 
-    const validImages = (Array.isArray(p.images) && p.images.length > 0)
+    // Extract all candidate images, preserving up to all 4 product views
+    const rawImages = (Array.isArray(p.images) && p.images.length > 0)
       ? p.images
-      : (perm?.images || (validMain ? [validMain] : []));
+      : (perm?.images || []);
+
+    const validImages = rawImages.filter(
+      (img) => typeof img === 'string' && img.trim().length > 0
+    );
+
+    if (validImages.length === 0 && validMain) {
+      validImages.push(validMain);
+    } else if (validMain && !validImages.includes(validMain)) {
+      validImages.unshift(validMain);
+    }
 
     return {
       ...(perm || {}),

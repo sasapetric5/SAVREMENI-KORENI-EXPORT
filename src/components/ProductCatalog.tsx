@@ -88,9 +88,19 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
         ? p.image.trim()
         : (canonical?.image || p.images?.[0] || '');
 
-      const validImages = (Array.isArray(p.images) && p.images.length > 0)
+      const rawImages = (Array.isArray(p.images) && p.images.length > 0)
         ? p.images
-        : (canonical?.images || (validMain ? [validMain] : []));
+        : (canonical?.images || []);
+
+      const validImages = rawImages.filter(
+        (img) => typeof img === 'string' && img.trim().length > 0
+      );
+
+      if (validImages.length === 0 && validMain) {
+        validImages.push(validMain);
+      } else if (validMain && !validImages.includes(validMain)) {
+        validImages.unshift(validMain);
+      }
 
       return {
         ...(canonical || {}),
