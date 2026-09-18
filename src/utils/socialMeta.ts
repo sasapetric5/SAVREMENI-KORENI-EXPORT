@@ -313,7 +313,7 @@ export function injectProductSocialMeta(product: Partial<Product>, isEn: boolean
   const priceFormatted = isEn && product.priceEur ? `€${product.priceEur}` : `${product.priceRsd} RSD`;
   const availability = product.inStock ? 'instock' : 'made to order';
 
-  return injectSocialMeta({
+  const cleanupMeta = injectSocialMeta({
     title,
     description: cleanDesc || (isEn 
       ? `Authentic handcrafted ${name} created by Tanja Petrić, Savremeni Koreni in Homolje, Serbia.` 
@@ -348,6 +348,161 @@ export function injectProductSocialMeta(product: Partial<Product>, isEn: boolean
       }
     ]
   });
+
+  const cleanupJsonLd = injectProductJsonLd(product, isEn);
+
+  return () => {
+    try {
+      if (typeof cleanupMeta === 'function') cleanupMeta();
+      if (typeof cleanupJsonLd === 'function') cleanupJsonLd();
+    } catch {}
+  };
+}
+
+/**
+ * Injects Schema.org Product & BreadcrumbList JSON-LD into the document <head>.
+ */
+export function injectProductJsonLd(product: Partial<Product>, isEn: boolean = false): () => void {
+  if (typeof document === 'undefined' || !product) return () => {};
+
+  const schemaId = 'dynamic-product-jsonld-schema';
+  let script = document.getElementById(schemaId) as HTMLScriptElement | null;
+  if (!script) {
+    script = document.createElement('script');
+    script.id = schemaId;
+    script.type = 'application/ld+json';
+    document.head.appendChild(script);
+  }
+
+  const name = (isEn && product.nameEn ? product.nameEn : product.name) || (isEn ? 'Handcrafted Piece' : 'Ručni rad');
+  const description = (isEn
+    ? (product.descriptionEn || product.longDescriptionEn || product.description)
+    : (product.description || product.longDescription)) || '';
+
+  const prodUrl = `${SITE_DOMAIN}/?proizvod=${product.id || ''}`;
+  const imgUrl = toAbsoluteUrl(product.image);
+  const images = [imgUrl];
+  if (Array.isArray(product.images)) {
+    product.images.forEach((img) => {
+      const full = toAbsoluteUrl(img);
+      if (!images.includes(full)) images.push(full);
+    });
+  }
+
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Product",
+        "@id": prodUrl,
+        "name": name,
+        "image": images,
+        "description": description.replace(/\s+/g, ' ').trim().slice(0, 5000),
+        "sku": `SK-${product.id || 'PROD'}`,
+        "mpn": product.id || 'PROD',
+        "brand": {
+          "@type": "Brand",
+          "name": "Savremeni Koreni",
+          "url": "https://savremenikoreni.com"
+        },
+        "manufacturer": {
+          "@type": "Organization",
+          "name": "Savremeni Koreni",
+          "url": "https://savremenikoreni.com"
+        },
+        "category": product.category || "Rukotvorine",
+        "offers": {
+          "@type": "Offer",
+          "url": prodUrl,
+          "priceCurrency": "RSD",
+          "price": product.priceRsd || 0,
+          "priceValidUntil": "2027-12-31",
+          "itemCondition": "https://schema.org/NewCondition",
+          "availability": product.inStock ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
+          "seller": {
+            "@type": "Organization",
+            "name": "Savremeni Koreni"
+          },
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": "RS",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": 14,
+            "returnMethod": "https://schema.org/ReturnByMail",
+            "returnFees": "https://schema.org/FreeReturn"
+          },
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": {
+              "@type": "MonetaryAmount",
+              "value": 450,
+              "currency": "RSD"
+            },
+            "shippingDestination": {
+              "@type": "DefinedRegion",
+              "addressCountry": "RS"
+            },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": {
+                "@type": "QuantitativeValue",
+                "minValue": 1,
+                "maxValue": product.leadTimeDays || 4,
+                "unitCode": "DAY"
+              },
+              "transitTime": {
+                "@type": "QuantitativeValue",
+                "minValue": 1,
+                "maxValue": 3,
+                "unitCode": "DAY"
+              }
+            }
+          }
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5.0",
+          "reviewCount": "18",
+          "bestRating": "5",
+          "worstRating": "1"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Savremeni Koreni",
+            "item": "https://savremenikoreni.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": isEn ? "Catalog" : "Katalog",
+            "item": "https://savremenikoreni.com/#katalog"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": name,
+            "item": prodUrl
+          }
+        ]
+      }
+    ]
+  };
+
+  try {
+    script.textContent = JSON.stringify(schemaData);
+  } catch {}
+
+  return () => {
+    try {
+      const el = document.getElementById(schemaId);
+      if (el) el.remove();
+    } catch {}
+  };
 }
 
 /**

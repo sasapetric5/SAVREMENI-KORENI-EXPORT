@@ -15,6 +15,18 @@ const subaraIzradaImg = '/images/vlaska_subara_izrada_1789032512168.jpg';
 const zlatovezImg = '/images/srpski_zlatovez_srma_1789105485118.jpg';
 const muskiAksesoariImg = '/images/muski_etno_aksesoari_1789105515453.jpg';
 const etnoUnikatnaTorbaImg = '/images/etno_unikatna_torba_1789105500674.jpg';
+const heklanaBordoRuzaImg = '/images/heklana_bordo_ruza_1789106943609.jpg';
+const heklanaCrnaLuxImg = '/images/heklana_crna_lux_1789106915491.jpg';
+const heklanaCrvenaSkoljkaImg = '/images/heklana_crvena_skoljka_1789106887946.jpg';
+const heklanaKraljevskoPlavaImg = '/images/heklana_kraljevsko_plava_1789106930062.jpg';
+const heklanaKremKlacImg = '/images/heklana_krem_klac_1789106956492.jpg';
+const heklaniTrobojniSetImg = '/images/heklani_trobojni_set_1789106901909.jpg';
+const etnoTorbicaVezImg = '/images/etno_torbica_vez_1789021849429.jpg';
+const jelekZlatovezImg = '/images/jelek_zlatovez_srma_1789407252546.jpg';
+const tkanicaPojasImg = '/images/tkanica_pojas_etno_1789407263798.jpg';
+const opanciFolklorImg = '/images/opanci_folklor_koza_1789407239776.jpg';
+const vezeniNadstolnjakImg = '/images/vezeni_nadstolnjak_lan_1789407278498.jpg';
+const homoljskiSuveniriImg = '/images/homoljski_suveniri_dar_1789407290576.jpg';
 
 export const companyDetails: CompanyInfo = {
   legalName: 'TANjA PETRIĆ PR PROIZVODNjA OSTALIH TEKSTILNIH PREDMETA SAVREMENI KORENI JOŠANICA',
@@ -369,6 +381,78 @@ export const defaultFactoryGalleryPhotos: GalleryPhoto[] = [
     captionEn: 'Hand-knotted macramé bag from pure natural cotton cord with circular wooden handles and cotton lining.',
   },
   {
+    id: 'gal-tor-2',
+    title: 'Etno torbica sa tradicionalnim ručnim vezom',
+    titleEn: 'Ethno Bag with Traditional Hand Embroidery',
+    category: 'Torbice',
+    categoryEn: 'Bags & Purses',
+    imageUrl: etnoTorbicaVezImg,
+    caption: 'Tradicionalna etno torbica sa gustim floralnim vezom i podesivim ramenim kaišem.',
+    captionEn: 'Traditional ethno bag featuring dense floral embroidery and adjustable shoulder strap.',
+  },
+  {
+    id: 'gal-tor-3',
+    title: 'Heklana torbica Bordo Ruža',
+    titleEn: 'Crocheted Handbag Bordeaux Rose',
+    category: 'Torbice',
+    categoryEn: 'Bags & Purses',
+    imageUrl: heklanaBordoRuzaImg,
+    caption: 'Raskošno ručno heklanje u dubokoj bordo nijansi sa reljefnim detaljima.',
+    captionEn: 'Luxurious handmade crochet in a rich bordeaux shade with relief detailing.',
+  },
+  {
+    id: 'gal-tor-4',
+    title: 'Heklana tašna Crna Lux sa zlatnim lancem',
+    titleEn: 'Black Lux Crochet Bag with Gold Chain',
+    category: 'Torbice',
+    categoryEn: 'Bags & Purses',
+    imageUrl: heklanaCrnaLuxImg,
+    caption: 'Elegantna večernja tašna izrađena od premium prediva sa metalnim okovom u boji zlata.',
+    captionEn: 'Elegant evening bag crafted from premium yarn with gold-tone hardware.',
+  },
+  {
+    id: 'gal-tor-5',
+    title: 'Heklana torbica Crvena Školjka',
+    titleEn: 'Crocheted Red Shell Purse',
+    category: 'Torbice',
+    categoryEn: 'Bags & Purses',
+    imageUrl: heklanaCrvenaSkoljkaImg,
+    caption: 'Unikatan oblik školjke u vatreno crvenoj boji, pažljivo izrađen petlju po petlju.',
+    captionEn: 'Unique shell silhouette in fiery red, carefully handcrafted stitch by stitch.',
+  },
+  {
+    id: 'gal-tor-6',
+    title: 'Heklana torba Kraljevsko Plava',
+    titleEn: 'Royal Blue Artisan Crochet Bag',
+    category: 'Torbice',
+    categoryEn: 'Bags & Purses',
+    imageUrl: heklanaKraljevskoPlavaImg,
+    caption: 'Upečatljiva kraljevsko plava boja u kombinaciji sa čvrstom ručkom i etno elegancijom.',
+    captionEn: 'Striking royal blue tone combined with a sturdy handle and ethno elegance.',
+  },
+  {
+    id: 'gal-tor-7',
+    title: 'Heklana klač torbica Krem Elegance',
+    titleEn: 'Cream Elegance Crochet Clutch',
+    category: 'Torbice',
+    categoryEn: 'Bags & Purses',
+    imageUrl: heklanaKremKlacImg,
+    caption: 'Neutralni krem tonovi sa reljefnim pletivom, savršeni za svečane i svakodnevne prilike.',
+    captionEn: 'Neutral cream tones with relief knit, ideal for festive and everyday wear.',
+  },
+  {
+    id: 'gal-tor-8',
+    title: 'Heklani trobojni etno set',
+    titleEn: 'Tricolor Ethno Crochet Set',
+    category: 'Torbice',
+    categoryEn: 'Bags & Purses',
+    imageUrl: heklaniTrobojniSetImg,
+    caption: 'Harmoničan sklop tradicionalnih boja utkanih u modernu siluetu.',
+    captionEn: 'Harmonious blend of traditional colors woven into a modern silhouette.',
+  },
+
+  // --- ŠUBARE ---
+  {
     id: 'gal-sub-1',
     title: 'Tradicionalna srpska šubara sa vezenom bordurom',
     titleEn: 'Traditional Serbian Fur Hat (Šubara) with Embroidered Band',
@@ -443,6 +527,36 @@ export const defaultFactoryGalleryPhotos: GalleryPhoto[] = [
     captionEn: 'Traditional relief goldwork embroidery on dark velvet for formal folk vests (jeleks).',
   },
   {
+    id: 'gal-kos-3',
+    title: 'Svečani jelek sa reljefnim srmovezom',
+    titleEn: 'Formal Folk Vest (Jelek) with Metallic Embroidery',
+    category: 'Košulje',
+    categoryEn: 'Shirts & Costumes',
+    imageUrl: jelekZlatovezImg,
+    caption: 'Autentični jelek ručno ukrašen finim zlatnim nitima i tradicijskim homoljskim motivom.',
+    captionEn: 'Authentic folk vest handcrafted with delicate gold thread work and traditional motifs.',
+  },
+  {
+    id: 'gal-kos-4',
+    title: 'Tradicionalna tkana tkanica (etno pojas)',
+    titleEn: 'Traditional Woven Folk Sash (Tkanica)',
+    category: 'Košulje',
+    categoryEn: 'Shirts & Costumes',
+    imageUrl: tkanicaPojasImg,
+    caption: 'Ručno tkana vunena tkanica sa autentičnim geometrijskim šarama za nošnju.',
+    captionEn: 'Hand-woven wool sash with authentic heritage geometric patterns.',
+  },
+  {
+    id: 'gal-kos-5',
+    title: 'Tradicionalni kožni opanci za folklor',
+    titleEn: 'Traditional Leather Opanci for Folk Dance',
+    category: 'Košulje',
+    categoryEn: 'Shirts & Costumes',
+    imageUrl: opanciFolklorImg,
+    caption: 'Ručno pleteni kožni opanci sa karakterističnim kljunom za igru i scenski nastup.',
+    captionEn: 'Handcrafted leather opanci with traditional pointed toe for folklore dance.',
+  },
+  {
     id: 'gal-mus-1',
     title: 'Muški tradicionalni aksesoari i narodna nošnja',
     titleEn: 'Men’s Heritage Folk Accessories',
@@ -495,6 +609,26 @@ export const defaultFactoryGalleryPhotos: GalleryPhoto[] = [
     imageUrl: heroImg,
     caption: 'Mesto gde se sa ljubavlju čuva, neguje i oživljava kulturno nasleđe Srbije.',
     captionEn: 'Where Serbia’s authentic cultural craft heritage is lovingly preserved and revitalized.',
+  },
+  {
+    id: 'gal-rad-4',
+    title: 'Vezeni laneni nadstolnjak sa tradicijskim motivom',
+    titleEn: 'Embroidered Linen Table Runner with Traditional Pattern',
+    category: 'Radionica',
+    categoryEn: 'Workshop',
+    imageUrl: vezeniNadstolnjakImg,
+    caption: 'Fini reljefni bod na čistom lanu koji unosi toplinu i zavičajni duh u svaki dom.',
+    captionEn: 'Fine relief embroidery on pure linen bringing warmth and heritage spirit into the home.',
+  },
+  {
+    id: 'gal-rad-5',
+    title: 'Autentični homoljski suveniri i unikatni darovi',
+    titleEn: 'Authentic Homolje Souvenirs & Artisan Gifts',
+    category: 'Radionica',
+    categoryEn: 'Workshop',
+    imageUrl: homoljskiSuveniriImg,
+    caption: 'Spoj tradicije, ručnog rada i prirodnih materijala sa obronaka Homoljskih planina.',
+    captionEn: 'Combination of tradition, manual craftsmanship, and natural materials from Homolje mountains.',
   },
 ];
 

@@ -119,7 +119,30 @@ export const BlogPostModal: React.FC<BlogPostModalProps> = ({
               "text": f.answer
             }
           }))
-        }] : [])
+        }] : []),
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Savremeni Koreni",
+              "item": "https://savremenikoreni.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": isEn ? "Blog" : "Vesti i Tradicija",
+              "item": "https://savremenikoreni.com/#blog"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": activePost.title,
+              "item": `https://savremenikoreni.com/blog/${activePost.slug}`
+            }
+          ]
+        }
       ]
     };
     script.textContent = JSON.stringify(schemaData);

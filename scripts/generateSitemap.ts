@@ -31,7 +31,7 @@ import path from 'path';
 import { productsData } from '../src/data/companyData';
 import { blogPostsData } from '../src/data/blogData';
 import { seoLandingPages } from '../src/data/seoLandingPagesData';
-import { uploadedGalleryPhotos } from '../src/data/uploadedPhotosData';
+import { uploadedPhotosData } from '../src/data/uploadedPhotosData';
 
 const BASE_URL = 'https://savremenikoreni.com';
 
@@ -106,26 +106,26 @@ export function generateSitemapXml() {
     '  </url>\\n\\n' +
     '  <!-- 2. HIGH-INTENT SEO LANDING PAGES -->\\n';
 
-  if (Array.isArray(seoLandingPages)) {
-    seoLandingPages.forEach((lp) => {
-      xml += '  <url>\\n' +
-        '    <loc>' + BASE_URL + lp.path + '</loc>\\n' +
-        '    <xhtml:link rel="alternate" hreflang="sr" href="' + BASE_URL + lp.path + '" />\\n' +
-        '    <xhtml:link rel="alternate" hreflang="sr-RS" href="' + BASE_URL + lp.path + '" />\\n' +
-        '    <xhtml:link rel="alternate" hreflang="en" href="' + BASE_URL + lp.path + '?lang=en" />\\n' +
-        '    <xhtml:link rel="alternate" hreflang="en-US" href="' + BASE_URL + lp.path + '?lang=en" />\\n' +
-        '    <xhtml:link rel="alternate" hreflang="x-default" href="' + BASE_URL + lp.path + '" />\\n' +
-        '    <lastmod>' + currentDate + '</lastmod>\\n' +
-        '    <changefreq>weekly</changefreq>\\n' +
-        '    <priority>0.95</priority>\\n' +
-        '    <image:image>\\n' +
-        '      <image:loc>' + BASE_URL + '/logo.jpg</image:loc>\\n' +
-        '      <image:title>' + escapeXml(lp.titleSr) + '</image:title>\\n' +
-        '      <image:caption>' + escapeXml(lp.subtitleSr) + '</image:caption>\\n' +
-        '    </image:image>\\n' +
-        '  </url>\\n';
-    });
-  }
+  const landingList = Array.isArray(seoLandingPages) ? seoLandingPages : Object.values(seoLandingPages || {});
+  landingList.forEach((lp) => {
+    if (!lp || !lp.path) return;
+    xml += '  <url>\\n' +
+      '    <loc>' + BASE_URL + lp.path + '</loc>\\n' +
+      '    <xhtml:link rel="alternate" hreflang="sr" href="' + BASE_URL + lp.path + '" />\\n' +
+      '    <xhtml:link rel="alternate" hreflang="sr-RS" href="' + BASE_URL + lp.path + '" />\\n' +
+      '    <xhtml:link rel="alternate" hreflang="en" href="' + BASE_URL + lp.path + '?lang=en" />\\n' +
+      '    <xhtml:link rel="alternate" hreflang="en-US" href="' + BASE_URL + lp.path + '?lang=en" />\\n' +
+      '    <xhtml:link rel="alternate" hreflang="x-default" href="' + BASE_URL + lp.path + '" />\\n' +
+      '    <lastmod>' + currentDate + '</lastmod>\\n' +
+      '    <changefreq>weekly</changefreq>\\n' +
+      '    <priority>0.95</priority>\\n' +
+      '    <image:image>\\n' +
+      '      <image:loc>' + (lp.heroImage ? (lp.heroImage.startsWith('http') ? lp.heroImage : BASE_URL + lp.heroImage) : BASE_URL + '/logo.jpg') + '</image:loc>\\n' +
+      '      <image:title>' + escapeXml(lp.titleSr) + '</image:title>\\n' +
+      '      <image:caption>' + escapeXml(lp.subtitleSr) + '</image:caption>\\n' +
+      '    </image:image>\\n' +
+      '  </url>\\n';
+  });
 
   xml += '\\n  <!-- 3. PRODUCT CATALOG & CATEGORIES -->\\n';
   catalogCategories.forEach((cat) => {
@@ -145,6 +145,7 @@ export function generateSitemapXml() {
     productsData.forEach((prod) => {
       const prodTitle = escapeXml(prod.name);
       const prodDesc = escapeXml(prod.description);
+      const prodImg = prod.image ? (prod.image.startsWith('http') ? prod.image : BASE_URL + (prod.image.startsWith('/') ? '' : '/') + prod.image) : BASE_URL + '/logo.jpg';
       xml += '  <url>\\n' +
         '    <loc>' + BASE_URL + '/?proizvod=' + prod.id + '</loc>\\n' +
         '    <xhtml:link rel="alternate" hreflang="sr" href="' + BASE_URL + '/?proizvod=' + prod.id + '" />\\n' +
@@ -154,7 +155,7 @@ export function generateSitemapXml() {
         '    <changefreq>weekly</changefreq>\\n' +
         '    <priority>0.90</priority>\\n' +
         '    <image:image>\\n' +
-        '      <image:loc>' + BASE_URL + '/logo.jpg</image:loc>\\n' +
+        '      <image:loc>' + prodImg + '</image:loc>\\n' +
         '      <image:title>' + prodTitle + '</image:title>\\n' +
         '      <image:caption>' + prodDesc + '</image:caption>\\n' +
         '    </image:image>\\n' +
@@ -167,6 +168,7 @@ export function generateSitemapXml() {
     blogPostsData.forEach((post) => {
       const postTitle = escapeXml(post.title);
       const postExcerpt = escapeXml(post.excerpt);
+      const postImg = post.coverImage ? (post.coverImage.startsWith('http') ? post.coverImage : BASE_URL + (post.coverImage.startsWith('/') ? '' : '/') + post.coverImage) : BASE_URL + '/logo.jpg';
       xml += '  <url>\\n' +
         '    <loc>' + BASE_URL + '/blog/' + post.slug + '</loc>\\n' +
         '    <xhtml:link rel="alternate" hreflang="sr" href="' + BASE_URL + '/blog/' + post.slug + '" />\\n' +
@@ -176,7 +178,7 @@ export function generateSitemapXml() {
         '    <changefreq>weekly</changefreq>\\n' +
         '    <priority>0.85</priority>\\n' +
         '    <image:image>\\n' +
-        '      <image:loc>' + BASE_URL + '/logo.jpg</image:loc>\\n' +
+        '      <image:loc>' + postImg + '</image:loc>\\n' +
         '      <image:title>' + postTitle + '</image:title>\\n' +
         '      <image:caption>' + postExcerpt + '</image:caption>\\n' +
         '    </image:image>\\n' +
@@ -185,8 +187,9 @@ export function generateSitemapXml() {
   }
 
   xml += '\\n  <!-- 6. GALLERY & AUTHENTIC CRAFT PHOTOS -->\\n';
-  if (Array.isArray(uploadedGalleryPhotos)) {
-    uploadedGalleryPhotos.forEach((photo) => {
+  if (Array.isArray(uploadedPhotosData)) {
+    uploadedPhotosData.forEach((photo) => {
+      const photoImg = photo.imageUrl ? (photo.imageUrl.startsWith('http') ? photo.imageUrl : BASE_URL + (photo.imageUrl.startsWith('/') ? '' : '/') + photo.imageUrl) : BASE_URL + '/logo.jpg';
       xml += '  <url>\\n' +
         '    <loc>' + BASE_URL + '/galerija#' + photo.id + '</loc>\\n' +
         '    <xhtml:link rel="alternate" hreflang="sr" href="' + BASE_URL + '/galerija#' + photo.id + '" />\\n' +
@@ -195,9 +198,9 @@ export function generateSitemapXml() {
         '    <changefreq>monthly</changefreq>\\n' +
         '    <priority>0.70</priority>\\n' +
         '    <image:image>\\n' +
-        '      <image:loc>' + BASE_URL + '/logo.jpg</image:loc>\\n' +
-        '      <image:title>' + escapeXml(photo.caption || 'Unikatna rukotvorina') + '</image:title>\\n' +
-        '      <image:caption>Unikatna rukotvorina majstora Tanje Petrić, Savremeni Koreni</image:caption>\\n' +
+        '      <image:loc>' + photoImg + '</image:loc>\\n' +
+        '      <image:title>' + escapeXml(photo.title || photo.caption || 'Unikatna rukotvorina') + '</image:title>\\n' +
+        '      <image:caption>' + escapeXml(photo.caption || 'Unikatna rukotvorina majstora Tanje Petrić, Savremeni Koreni') + '</image:caption>\\n' +
         '    </image:image>\\n' +
         '  </url>\\n';
     });
