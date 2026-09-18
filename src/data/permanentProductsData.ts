@@ -23,12 +23,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/etno_torbica_vez_1789021849429.jpg",
+    "image": "/custom_products/prod_custom-prod-1789203411768_g0.jpg",
     "images": [
-      "/images/etno_torbica_vez_1789021849429.jpg",
-      "/images/etno_unikatna_torba_1789105500674.jpg",
-      "/images/heklana_bordo_ruza_1789106943609.jpg",
-      "/images/heklana_crna_lux_1789106915491.jpg"
+      "/custom_products/prod_custom-prod-1789203411768_g0.jpg",
+      "/custom_products/prod_custom-prod-1789203411768_g1.jpg",
+      "/custom_products/prod_custom-prod-1789203411768_g2.jpg"
     ],
     "priceEur": 55,
     "inStock": true,
@@ -54,12 +53,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/etno_unikatna_torba_1789105500674.jpg",
+    "image": "/custom_products/prod_custom-prod-1789204073718_g0.jpg",
     "images": [
-      "/images/etno_unikatna_torba_1789105500674.jpg",
-      "/images/heklana_bordo_ruza_1789106943609.jpg",
-      "/images/heklana_crna_lux_1789106915491.jpg",
-      "/images/heklana_crvena_skoljka_1789106887946.jpg"
+      "/custom_products/prod_custom-prod-1789204073718_g0.jpg",
+      "/custom_products/prod_custom-prod-1789204073718_g1.jpg",
+      "/custom_products/prod_custom-prod-1789204073718_g2.jpg"
     ],
     "priceEur": 38,
     "inStock": false,
@@ -85,12 +83,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/heklana_bordo_ruza_1789106943609.jpg",
+    "image": "/custom_products/prod_custom-prod-1789204258030_g0.jpg",
     "images": [
-      "/images/heklana_bordo_ruza_1789106943609.jpg",
-      "/images/heklana_crna_lux_1789106915491.jpg",
-      "/images/heklana_crvena_skoljka_1789106887946.jpg",
-      "/images/heklana_kraljevsko_plava_1789106930062.jpg"
+      "/custom_products/prod_custom-prod-1789204258030_g0.jpg",
+      "/custom_products/prod_custom-prod-1789204258030_g1.jpg",
+      "/custom_products/prod_custom-prod-1789204258030_g2.jpg"
     ],
     "priceEur": 38,
     "inStock": true,
@@ -116,12 +113,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/heklana_crna_lux_1789106915491.jpg",
+    "image": "/custom_products/prod_custom-prod-1789205898869_g0.jpg",
     "images": [
-      "/images/heklana_crna_lux_1789106915491.jpg",
-      "/images/heklana_crvena_skoljka_1789106887946.jpg",
-      "/images/heklana_kraljevsko_plava_1789106930062.jpg",
-      "/images/heklana_krem_klac_1789106956492.jpg"
+      "/custom_products/prod_custom-prod-1789205898869_g0.jpg",
+      "/custom_products/prod_custom-prod-1789205898869_g1.jpg",
+      "/custom_products/prod_custom-prod-1789205898869_g2.jpg"
     ],
     "priceEur": 38,
     "inStock": true,
@@ -147,12 +143,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/heklana_crvena_skoljka_1789106887946.jpg",
+    "image": "/custom_products/prod_custom-prod-1789206703824_g0.jpg",
     "images": [
-      "/images/heklana_crvena_skoljka_1789106887946.jpg",
-      "/images/heklana_kraljevsko_plava_1789106930062.jpg",
-      "/images/heklana_krem_klac_1789106956492.jpg",
-      "/images/heklani_nakit_1789021909183.jpg"
+      "/custom_products/prod_custom-prod-1789206703824_g0.jpg",
+      "/custom_products/prod_custom-prod-1789206703824_g1.jpg",
+      "/custom_products/prod_custom-prod-1789206703824_g2.jpg"
     ],
     "priceEur": 41,
     "inStock": true,
@@ -180,12 +175,11 @@ export const permanentProductsData: Product[] = [
       "satenska postava",
       "metalna galanterija"
     ],
-    "image": "/images/heklana_kraljevsko_plava_1789106930062.jpg",
+    "image": "/custom_products/prod_custom-prod-1789207252514_g0.jpg",
     "images": [
-      "/images/heklana_kraljevsko_plava_1789106930062.jpg",
-      "/images/heklana_krem_klac_1789106956492.jpg",
-      "/images/heklani_nakit_1789021909183.jpg",
-      "/images/heklani_trobojni_set_1789106901909.jpg"
+      "/custom_products/prod_custom-prod-1789207252514_g0.jpg",
+      "/custom_products/prod_custom-prod-1789207252514_g1.jpg",
+      "/custom_products/prod_custom-prod-1789207252514_g2.jpg"
     ],
     "priceEur": 38,
     "inStock": true,
@@ -211,12 +205,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/heklana_krem_klac_1789106956492.jpg",
+    "image": "/custom_products/prod_custom-prod-1789207820042_g0.jpg",
     "images": [
-      "/images/heklana_krem_klac_1789106956492.jpg",
-      "/images/heklani_nakit_1789021909183.jpg",
-      "/images/heklani_trobojni_set_1789106901909.jpg",
-      "/images/homoljska_narodna_nosnja_1789032467664.jpg"
+      "/custom_products/prod_custom-prod-1789207820042_g0.jpg",
+      "/custom_products/prod_custom-prod-1789207820042_g1.jpg",
+      "/custom_products/prod_custom-prod-1789207820042_g2.jpg"
     ],
     "priceEur": 41,
     "inStock": true,
@@ -242,12 +235,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/heklani_nakit_1789021909183.jpg",
+    "image": "/custom_products/prod_custom-prod-1789208559853_g0.jpg",
     "images": [
-      "/images/heklani_nakit_1789021909183.jpg",
-      "/images/heklani_trobojni_set_1789106901909.jpg",
-      "/images/homoljska_narodna_nosnja_1789032467664.jpg",
-      "/images/homoljski_suveniri_dar_1789407290576.jpg"
+      "/custom_products/prod_custom-prod-1789208559853_g0.jpg",
+      "/custom_products/prod_custom-prod-1789208559853_g1.jpg",
+      "/custom_products/prod_custom-prod-1789208559853_g2.jpg"
     ],
     "priceEur": 67,
     "inStock": false,
@@ -273,12 +265,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/heklani_trobojni_set_1789106901909.jpg",
+    "image": "/custom_products/prod_custom-prod-1789209800143_g0.jpg",
     "images": [
-      "/images/heklani_trobojni_set_1789106901909.jpg",
-      "/images/homoljska_narodna_nosnja_1789032467664.jpg",
-      "/images/homoljski_suveniri_dar_1789407290576.jpg",
-      "/images/jelek_zlatovez_srma_1789407252546.jpg"
+      "/custom_products/prod_custom-prod-1789209800143_g0.jpg",
+      "/custom_products/prod_custom-prod-1789209800143_g1.jpg",
+      "/custom_products/prod_custom-prod-1789209800143_g2.jpg"
     ],
     "priceEur": 32,
     "inStock": true,
@@ -304,12 +295,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/homoljska_narodna_nosnja_1789032467664.jpg",
+    "image": "/custom_products/prod_custom-prod-1789210279779_g0.jpg",
     "images": [
-      "/images/homoljska_narodna_nosnja_1789032467664.jpg",
-      "/images/homoljski_suveniri_dar_1789407290576.jpg",
-      "/images/jelek_zlatovez_srma_1789407252546.jpg",
-      "/images/luxury_brand_emblem_1789026455362.jpg"
+      "/custom_products/prod_custom-prod-1789210279779_g0.jpg",
+      "/custom_products/prod_custom-prod-1789210279779_g1.jpg",
+      "/custom_products/prod_custom-prod-1789210279779_g2.jpg"
     ],
     "priceEur": 27,
     "inStock": true,
@@ -335,12 +325,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/homoljski_suveniri_dar_1789407290576.jpg",
+    "image": "/custom_products/prod_custom-prod-1789210578864_g0.jpg",
     "images": [
-      "/images/homoljski_suveniri_dar_1789407290576.jpg",
-      "/images/jelek_zlatovez_srma_1789407252546.jpg",
-      "/images/luxury_brand_emblem_1789026455362.jpg",
-      "/images/makrame_predja_repromaterijal_1789032495554.jpg"
+      "/custom_products/prod_custom-prod-1789210578864_g0.jpg",
+      "/custom_products/prod_custom-prod-1789210578864_g1.jpg",
+      "/custom_products/prod_custom-prod-1789210578864_g2.jpg"
     ],
     "priceEur": 32,
     "inStock": true,
@@ -366,12 +355,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/jelek_zlatovez_srma_1789407252546.jpg",
+    "image": "/custom_products/prod_custom-prod-1789211182859_g0.jpg",
     "images": [
-      "/images/jelek_zlatovez_srma_1789407252546.jpg",
-      "/images/luxury_brand_emblem_1789026455362.jpg",
-      "/images/makrame_predja_repromaterijal_1789032495554.jpg",
-      "/images/muski_etno_aksesoari_1789105515453.jpg"
+      "/custom_products/prod_custom-prod-1789211182859_g0.jpg",
+      "/custom_products/prod_custom-prod-1789211182859_g1.jpg",
+      "/custom_products/prod_custom-prod-1789211182859_g2.jpg"
     ],
     "priceEur": 41,
     "inStock": true,
@@ -397,12 +385,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/luxury_brand_emblem_1789026455362.jpg",
+    "image": "/custom_products/prod_custom-prod-1789211608744_g0.jpg",
     "images": [
-      "/images/luxury_brand_emblem_1789026455362.jpg",
-      "/images/makrame_predja_repromaterijal_1789032495554.jpg",
-      "/images/muski_etno_aksesoari_1789105515453.jpg",
-      "/images/opanci_folklor_koza_1789407239776.jpg"
+      "/custom_products/prod_custom-prod-1789211608744_g0.jpg",
+      "/custom_products/prod_custom-prod-1789211608744_g1.jpg",
+      "/custom_products/prod_custom-prod-1789211608744_g2.jpg"
     ],
     "priceEur": 32,
     "inStock": true,
@@ -428,12 +415,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/makrame_predja_repromaterijal_1789032495554.jpg",
+    "image": "/custom_products/prod_custom-prod-1789211834535_g0.jpg",
     "images": [
-      "/images/makrame_predja_repromaterijal_1789032495554.jpg",
-      "/images/muski_etno_aksesoari_1789105515453.jpg",
-      "/images/opanci_folklor_koza_1789407239776.jpg",
-      "/images/srpska_subara_moderna_1789021862584.jpg"
+      "/custom_products/prod_custom-prod-1789211834535_g0.jpg",
+      "/custom_products/prod_custom-prod-1789211834535_g1.jpg",
+      "/custom_products/prod_custom-prod-1789211834535_g2.jpg"
     ],
     "priceEur": 41,
     "inStock": true,
@@ -459,12 +445,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/muski_etno_aksesoari_1789105515453.jpg",
+    "image": "/custom_products/prod_custom-prod-1789212070909_g0.jpg",
     "images": [
-      "/images/muski_etno_aksesoari_1789105515453.jpg",
-      "/images/opanci_folklor_koza_1789407239776.jpg",
-      "/images/srpska_subara_moderna_1789021862584.jpg",
-      "/images/srpski_zlatovez_srma_1789105485118.jpg"
+      "/custom_products/prod_custom-prod-1789212070909_g0.jpg",
+      "/custom_products/prod_custom-prod-1789212070909_g1.jpg",
+      "/custom_products/prod_custom-prod-1789212070909_g2.jpg"
     ],
     "priceEur": 32,
     "inStock": true,
@@ -490,12 +475,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/opanci_folklor_koza_1789407239776.jpg",
+    "image": "/custom_products/prod_custom-prod-1789212465315_g0.jpg",
     "images": [
-      "/images/opanci_folklor_koza_1789407239776.jpg",
-      "/images/srpska_subara_moderna_1789021862584.jpg",
-      "/images/srpski_zlatovez_srma_1789105485118.jpg",
-      "/images/tkanica_pojas_etno_1789407263798.jpg"
+      "/custom_products/prod_custom-prod-1789212465315_g0.jpg",
+      "/custom_products/prod_custom-prod-1789212465315_g1.jpg",
+      "/custom_products/prod_custom-prod-1789212465315_g2.jpg"
     ],
     "priceEur": 34,
     "inStock": true,
@@ -521,12 +505,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/srpska_subara_moderna_1789021862584.jpg",
+    "image": "/custom_products/prod_custom-prod-1789212797315_g0.jpg",
     "images": [
-      "/images/srpska_subara_moderna_1789021862584.jpg",
-      "/images/srpski_zlatovez_srma_1789105485118.jpg",
-      "/images/tkanica_pojas_etno_1789407263798.jpg",
-      "/images/vezena_kosulja_1789021895745.jpg"
+      "/custom_products/prod_custom-prod-1789212797315_g0.jpg",
+      "/custom_products/prod_custom-prod-1789212797315_g1.jpg",
+      "/custom_products/prod_custom-prod-1789212797315_g2.jpg"
     ],
     "priceEur": 67,
     "inStock": false,
@@ -553,12 +536,11 @@ export const permanentProductsData: Product[] = [
       "postava"
     ],
     "dimensions": "25 cm x 18 cm x 7 cm",
-    "image": "/images/srpski_zlatovez_srma_1789105485118.jpg",
+    "image": "/custom_products/prod_custom-prod-1789213210387_g0.jpg",
     "images": [
-      "/images/srpski_zlatovez_srma_1789105485118.jpg",
-      "/images/tkanica_pojas_etno_1789407263798.jpg",
-      "/images/vezena_kosulja_1789021895745.jpg",
-      "/images/vezene_carape_folklor_1789032450227.jpg"
+      "/custom_products/prod_custom-prod-1789213210387_g0.jpg",
+      "/custom_products/prod_custom-prod-1789213210387_g1.jpg",
+      "/custom_products/prod_custom-prod-1789213210387_g2.jpg"
     ],
     "priceEur": 27,
     "inStock": true,
@@ -584,12 +566,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/tkanica_pojas_etno_1789407263798.jpg",
+    "image": "/custom_products/prod_custom-prod-1789213437909_g0.jpg",
     "images": [
-      "/images/tkanica_pojas_etno_1789407263798.jpg",
-      "/images/vezena_kosulja_1789021895745.jpg",
-      "/images/vezene_carape_folklor_1789032450227.jpg",
-      "/images/vezeni_nadstolnjak_lan_1789407278498.jpg"
+      "/custom_products/prod_custom-prod-1789213437909_g0.jpg",
+      "/custom_products/prod_custom-prod-1789213437909_g1.jpg",
+      "/custom_products/prod_custom-prod-1789213437909_g2.jpg"
     ],
     "priceEur": 38,
     "inStock": true,
@@ -615,12 +596,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/vezena_kosulja_1789021895745.jpg",
+    "image": "/custom_products/prod_custom-prod-1789215182204_g0.jpg",
     "images": [
-      "/images/vezena_kosulja_1789021895745.jpg",
-      "/images/vezene_carape_folklor_1789032450227.jpg",
-      "/images/vezeni_nadstolnjak_lan_1789407278498.jpg",
-      "/images/vlaska_bela_subara_1789032431671.jpg"
+      "/custom_products/prod_custom-prod-1789215182204_g0.jpg",
+      "/custom_products/prod_custom-prod-1789215182204_g1.jpg",
+      "/custom_products/prod_custom-prod-1789215182204_g2.jpg"
     ],
     "priceEur": 68,
     "inStock": false,
@@ -646,12 +626,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/vezene_carape_folklor_1789032450227.jpg",
+    "image": "/custom_products/prod_custom-prod-1789215608263_g0.jpg",
     "images": [
-      "/images/vezene_carape_folklor_1789032450227.jpg",
-      "/images/vezeni_nadstolnjak_lan_1789407278498.jpg",
-      "/images/vlaska_bela_subara_1789032431671.jpg",
-      "/images/vlaska_subara_izrada_1789032512168.jpg"
+      "/custom_products/prod_custom-prod-1789215608263_g0.jpg",
+      "/custom_products/prod_custom-prod-1789215608263_g1.jpg",
+      "/custom_products/prod_custom-prod-1789215608263_g2.jpg"
     ],
     "priceEur": 41,
     "inStock": true,
@@ -677,12 +656,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/vezeni_nadstolnjak_lan_1789407278498.jpg",
+    "image": "/custom_products/prod_custom-prod-1789218686318_g0.jpg",
     "images": [
-      "/images/vezeni_nadstolnjak_lan_1789407278498.jpg",
-      "/images/vlaska_bela_subara_1789032431671.jpg",
-      "/images/vlaska_subara_izrada_1789032512168.jpg",
-      "/images/vunene_carape_vez_1789021876638.jpg"
+      "/custom_products/prod_custom-prod-1789218686318_g0.jpg",
+      "/custom_products/prod_custom-prod-1789218686318_g1.jpg",
+      "/custom_products/prod_custom-prod-1789218686318_g2.jpg"
     ],
     "priceEur": 41,
     "inStock": true,
@@ -708,12 +686,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/vlaska_bela_subara_1789032431671.jpg",
+    "image": "/custom_products/prod_custom-prod-1789235265047_g0.jpg",
     "images": [
-      "/images/vlaska_bela_subara_1789032431671.jpg",
-      "/images/vlaska_subara_izrada_1789032512168.jpg",
-      "/images/vunene_carape_vez_1789021876638.jpg",
-      "/images/etno_torbica_vez_1789021849429.jpg"
+      "/custom_products/prod_custom-prod-1789235265047_g0.jpg",
+      "/custom_products/prod_custom-prod-1789235265047_g1.jpg",
+      "/custom_products/prod_custom-prod-1789235265047_g2.jpg"
     ],
     "priceEur": 27,
     "inStock": true,
@@ -739,12 +716,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/vlaska_subara_izrada_1789032512168.jpg",
+    "image": "/custom_products/prod_custom-prod-1789280827861_g0.jpg",
     "images": [
-      "/images/vlaska_subara_izrada_1789032512168.jpg",
-      "/images/vunene_carape_vez_1789021876638.jpg",
-      "/images/etno_torbica_vez_1789021849429.jpg",
-      "/images/etno_unikatna_torba_1789105500674.jpg"
+      "/custom_products/prod_custom-prod-1789280827861_g0.jpg",
+      "/custom_products/prod_custom-prod-1789280827861_g1.jpg",
+      "/custom_products/prod_custom-prod-1789280827861_g2.jpg"
     ],
     "priceEur": 30,
     "inStock": true,
@@ -770,12 +746,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/vunene_carape_vez_1789021876638.jpg",
+    "image": "/custom_products/prod_custom-prod-1789282255011_g0.jpg",
     "images": [
-      "/images/vunene_carape_vez_1789021876638.jpg",
-      "/images/etno_torbica_vez_1789021849429.jpg",
-      "/images/etno_unikatna_torba_1789105500674.jpg",
-      "/images/heklana_bordo_ruza_1789106943609.jpg"
+      "/custom_products/prod_custom-prod-1789282255011_g0.jpg",
+      "/custom_products/prod_custom-prod-1789282255011_g1.jpg",
+      "/custom_products/prod_custom-prod-1789282255011_g2.jpg"
     ],
     "priceEur": 46,
     "inStock": true,
@@ -801,12 +776,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/etno_torbica_vez_1789021849429.jpg",
+    "image": "/custom_products/prod_custom-prod-1789282453042_g0.jpg",
     "images": [
-      "/images/etno_torbica_vez_1789021849429.jpg",
-      "/images/etno_unikatna_torba_1789105500674.jpg",
-      "/images/heklana_bordo_ruza_1789106943609.jpg",
-      "/images/heklana_crna_lux_1789106915491.jpg"
+      "/custom_products/prod_custom-prod-1789282453042_g0.jpg",
+      "/custom_products/prod_custom-prod-1789282453042_g1.jpg",
+      "/custom_products/prod_custom-prod-1789282453042_g2.jpg"
     ],
     "priceEur": 41,
     "inStock": true,
@@ -832,12 +806,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/etno_unikatna_torba_1789105500674.jpg",
+    "image": "/custom_products/prod_custom-prod-1789285964143_g0.jpg",
     "images": [
-      "/images/etno_unikatna_torba_1789105500674.jpg",
-      "/images/heklana_bordo_ruza_1789106943609.jpg",
-      "/images/heklana_crna_lux_1789106915491.jpg",
-      "/images/heklana_crvena_skoljka_1789106887946.jpg"
+      "/custom_products/prod_custom-prod-1789285964143_g0.jpg",
+      "/custom_products/prod_custom-prod-1789285964143_g1.jpg",
+      "/custom_products/prod_custom-prod-1789285964143_g2.jpg"
     ],
     "priceEur": 30,
     "inStock": true,
@@ -863,12 +836,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/heklana_bordo_ruza_1789106943609.jpg",
+    "image": "/custom_products/prod_custom-prod-1789286171903_g0.jpg",
     "images": [
-      "/images/heklana_bordo_ruza_1789106943609.jpg",
-      "/images/heklana_crna_lux_1789106915491.jpg",
-      "/images/heklana_crvena_skoljka_1789106887946.jpg",
-      "/images/heklana_kraljevsko_plava_1789106930062.jpg"
+      "/custom_products/prod_custom-prod-1789286171903_g0.jpg",
+      "/custom_products/prod_custom-prod-1789286171903_g1.jpg",
+      "/custom_products/prod_custom-prod-1789286171903_g2.jpg"
     ],
     "priceEur": 30,
     "inStock": true,
@@ -894,12 +866,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/heklana_crna_lux_1789106915491.jpg",
+    "image": "/custom_products/prod_custom-prod-1789286570316_g0.jpg",
     "images": [
-      "/images/heklana_crna_lux_1789106915491.jpg",
-      "/images/heklana_crvena_skoljka_1789106887946.jpg",
-      "/images/heklana_kraljevsko_plava_1789106930062.jpg",
-      "/images/heklana_krem_klac_1789106956492.jpg"
+      "/custom_products/prod_custom-prod-1789286570316_g0.jpg",
+      "/custom_products/prod_custom-prod-1789286570316_g1.jpg",
+      "/custom_products/prod_custom-prod-1789286570316_g2.jpg"
     ],
     "priceEur": 30,
     "inStock": true,
@@ -925,12 +896,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/heklana_crvena_skoljka_1789106887946.jpg",
+    "image": "/custom_products/prod_custom-prod-1789286897279_g0.jpg",
     "images": [
-      "/images/heklana_crvena_skoljka_1789106887946.jpg",
-      "/images/heklana_kraljevsko_plava_1789106930062.jpg",
-      "/images/heklana_krem_klac_1789106956492.jpg",
-      "/images/heklani_nakit_1789021909183.jpg"
+      "/custom_products/prod_custom-prod-1789286897279_g0.jpg",
+      "/custom_products/prod_custom-prod-1789286897279_g1.jpg",
+      "/custom_products/prod_custom-prod-1789286897279_g2.jpg"
     ],
     "priceEur": 36,
     "inStock": true,
@@ -956,12 +926,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/heklana_kraljevsko_plava_1789106930062.jpg",
+    "image": "/custom_products/prod_custom-prod-1789287135814_g0.jpg",
     "images": [
-      "/images/heklana_kraljevsko_plava_1789106930062.jpg",
-      "/images/heklana_krem_klac_1789106956492.jpg",
-      "/images/heklani_nakit_1789021909183.jpg",
-      "/images/heklani_trobojni_set_1789106901909.jpg"
+      "/custom_products/prod_custom-prod-1789287135814_g0.jpg",
+      "/custom_products/prod_custom-prod-1789287135814_g1.jpg",
+      "/custom_products/prod_custom-prod-1789287135814_g2.jpg"
     ],
     "priceEur": 36,
     "inStock": true,
@@ -987,12 +956,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/heklana_krem_klac_1789106956492.jpg",
+    "image": "/custom_products/prod_custom-prod-1789287464927_g0.jpg",
     "images": [
-      "/images/heklana_krem_klac_1789106956492.jpg",
-      "/images/heklani_nakit_1789021909183.jpg",
-      "/images/heklani_trobojni_set_1789106901909.jpg",
-      "/images/homoljska_narodna_nosnja_1789032467664.jpg"
+      "/custom_products/prod_custom-prod-1789287464927_g0.jpg",
+      "/custom_products/prod_custom-prod-1789287464927_g1.jpg",
+      "/custom_products/prod_custom-prod-1789287464927_g2.jpg"
     ],
     "priceEur": 38,
     "inStock": true,
@@ -1018,12 +986,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/heklani_nakit_1789021909183.jpg",
+    "image": "/custom_products/prod_custom-prod-1789287726315_g0.jpg",
     "images": [
-      "/images/heklani_nakit_1789021909183.jpg",
-      "/images/heklani_trobojni_set_1789106901909.jpg",
-      "/images/homoljska_narodna_nosnja_1789032467664.jpg",
-      "/images/homoljski_suveniri_dar_1789407290576.jpg"
+      "/custom_products/prod_custom-prod-1789287726315_g0.jpg",
+      "/custom_products/prod_custom-prod-1789287726315_g1.jpg",
+      "/custom_products/prod_custom-prod-1789287726315_g2.jpg"
     ],
     "priceEur": 30,
     "inStock": true,
@@ -1049,12 +1016,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/heklani_trobojni_set_1789106901909.jpg",
+    "image": "/custom_products/prod_custom-prod-1789290912081_g0.jpg",
     "images": [
-      "/images/heklani_trobojni_set_1789106901909.jpg",
-      "/images/homoljska_narodna_nosnja_1789032467664.jpg",
-      "/images/homoljski_suveniri_dar_1789407290576.jpg",
-      "/images/jelek_zlatovez_srma_1789407252546.jpg"
+      "/custom_products/prod_custom-prod-1789290912081_g0.jpg",
+      "/custom_products/prod_custom-prod-1789290912081_g1.jpg",
+      "/custom_products/prod_custom-prod-1789290912081_g2.jpg"
     ],
     "priceEur": 51,
     "inStock": true,
@@ -1080,12 +1046,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/homoljska_narodna_nosnja_1789032467664.jpg",
+    "image": "/custom_products/prod_custom-prod-1789291435587_g0.jpg",
     "images": [
-      "/images/homoljska_narodna_nosnja_1789032467664.jpg",
-      "/images/homoljski_suveniri_dar_1789407290576.jpg",
-      "/images/jelek_zlatovez_srma_1789407252546.jpg",
-      "/images/luxury_brand_emblem_1789026455362.jpg"
+      "/custom_products/prod_custom-prod-1789291435587_g0.jpg",
+      "/custom_products/prod_custom-prod-1789291435587_g1.jpg",
+      "/custom_products/prod_custom-prod-1789291435587_g2.jpg"
     ],
     "priceEur": 51,
     "inStock": true,
@@ -1111,12 +1076,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/homoljski_suveniri_dar_1789407290576.jpg",
+    "image": "/custom_products/prod_custom-prod-1789291724457_g0.jpg",
     "images": [
-      "/images/homoljski_suveniri_dar_1789407290576.jpg",
-      "/images/jelek_zlatovez_srma_1789407252546.jpg",
-      "/images/luxury_brand_emblem_1789026455362.jpg",
-      "/images/makrame_predja_repromaterijal_1789032495554.jpg"
+      "/custom_products/prod_custom-prod-1789291724457_g0.jpg",
+      "/custom_products/prod_custom-prod-1789291724457_g1.jpg",
+      "/custom_products/prod_custom-prod-1789291724457_g2.jpg"
     ],
     "priceEur": 49,
     "inStock": true,
@@ -1142,12 +1106,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/jelek_zlatovez_srma_1789407252546.jpg",
+    "image": "/custom_products/prod_custom-prod-1789300552461_g0.jpg",
     "images": [
-      "/images/jelek_zlatovez_srma_1789407252546.jpg",
-      "/images/luxury_brand_emblem_1789026455362.jpg",
-      "/images/makrame_predja_repromaterijal_1789032495554.jpg",
-      "/images/muski_etno_aksesoari_1789105515453.jpg"
+      "/custom_products/prod_custom-prod-1789300552461_g0.jpg",
+      "/custom_products/prod_custom-prod-1789300552461_g1.jpg",
+      "/custom_products/prod_custom-prod-1789300552461_g2.jpg"
     ],
     "priceEur": 32,
     "inStock": true,
@@ -1173,12 +1136,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/luxury_brand_emblem_1789026455362.jpg",
+    "image": "/custom_products/prod_custom-prod-1789301322219_g0.jpg",
     "images": [
-      "/images/luxury_brand_emblem_1789026455362.jpg",
-      "/images/makrame_predja_repromaterijal_1789032495554.jpg",
-      "/images/muski_etno_aksesoari_1789105515453.jpg",
-      "/images/opanci_folklor_koza_1789407239776.jpg"
+      "/custom_products/prod_custom-prod-1789301322219_g0.jpg",
+      "/custom_products/prod_custom-prod-1789301322219_g1.jpg",
+      "/custom_products/prod_custom-prod-1789301322219_g2.jpg"
     ],
     "priceEur": 30,
     "inStock": true,
@@ -1204,12 +1166,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/makrame_predja_repromaterijal_1789032495554.jpg",
+    "image": "/custom_products/prod_custom-prod-1789301789294_g0.jpg",
     "images": [
-      "/images/makrame_predja_repromaterijal_1789032495554.jpg",
-      "/images/muski_etno_aksesoari_1789105515453.jpg",
-      "/images/opanci_folklor_koza_1789407239776.jpg",
-      "/images/srpska_subara_moderna_1789021862584.jpg"
+      "/custom_products/prod_custom-prod-1789301789294_g0.jpg",
+      "/custom_products/prod_custom-prod-1789301789294_g1.jpg",
+      "/custom_products/prod_custom-prod-1789301789294_g2.jpg"
     ],
     "priceEur": 32,
     "inStock": true,
@@ -1235,12 +1196,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/muski_etno_aksesoari_1789105515453.jpg",
+    "image": "/custom_products/prod_custom-prod-1789306811877_g0.jpg",
     "images": [
-      "/images/muski_etno_aksesoari_1789105515453.jpg",
-      "/images/opanci_folklor_koza_1789407239776.jpg",
-      "/images/srpska_subara_moderna_1789021862584.jpg",
-      "/images/srpski_zlatovez_srma_1789105485118.jpg"
+      "/custom_products/prod_custom-prod-1789306811877_g0.jpg",
+      "/custom_products/prod_custom-prod-1789306811877_g1.jpg",
+      "/custom_products/prod_custom-prod-1789306811877_g2.jpg"
     ],
     "priceEur": 7,
     "inStock": true,
@@ -1266,12 +1226,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/opanci_folklor_koza_1789407239776.jpg",
+    "image": "/custom_products/prod_custom-prod-1789306914973_g0.jpg",
     "images": [
-      "/images/opanci_folklor_koza_1789407239776.jpg",
-      "/images/srpska_subara_moderna_1789021862584.jpg",
-      "/images/srpski_zlatovez_srma_1789105485118.jpg",
-      "/images/tkanica_pojas_etno_1789407263798.jpg"
+      "/custom_products/prod_custom-prod-1789306914973_g0.jpg",
+      "/custom_products/prod_custom-prod-1789306914973_g1.jpg",
+      "/custom_products/prod_custom-prod-1789306914973_g2.jpg"
     ],
     "priceEur": 7,
     "inStock": true,
@@ -1297,12 +1256,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/srpska_subara_moderna_1789021862584.jpg",
+    "image": "/custom_products/prod_custom-prod-1789307017430_g0.jpg",
     "images": [
-      "/images/srpska_subara_moderna_1789021862584.jpg",
-      "/images/srpski_zlatovez_srma_1789105485118.jpg",
-      "/images/tkanica_pojas_etno_1789407263798.jpg",
-      "/images/vezena_kosulja_1789021895745.jpg"
+      "/custom_products/prod_custom-prod-1789307017430_g0.jpg",
+      "/custom_products/prod_custom-prod-1789307017430_g1.jpg",
+      "/custom_products/prod_custom-prod-1789307017430_g2.jpg"
     ],
     "priceEur": 7,
     "inStock": true,
@@ -1328,12 +1286,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/srpski_zlatovez_srma_1789105485118.jpg",
+    "image": "/custom_products/prod_custom-prod-1789307088691_g0.jpg",
     "images": [
-      "/images/srpski_zlatovez_srma_1789105485118.jpg",
-      "/images/tkanica_pojas_etno_1789407263798.jpg",
-      "/images/vezena_kosulja_1789021895745.jpg",
-      "/images/vezene_carape_folklor_1789032450227.jpg"
+      "/custom_products/prod_custom-prod-1789307088691_g0.jpg",
+      "/custom_products/prod_custom-prod-1789307088691_g1.jpg",
+      "/custom_products/prod_custom-prod-1789307088691_g2.jpg"
     ],
     "priceEur": 7,
     "inStock": true,
@@ -1359,12 +1316,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/tkanica_pojas_etno_1789407263798.jpg",
+    "image": "/custom_products/prod_custom-prod-1789307337462_g0.jpg",
     "images": [
-      "/images/tkanica_pojas_etno_1789407263798.jpg",
-      "/images/vezena_kosulja_1789021895745.jpg",
-      "/images/vezene_carape_folklor_1789032450227.jpg",
-      "/images/vezeni_nadstolnjak_lan_1789407278498.jpg"
+      "/custom_products/prod_custom-prod-1789307337462_g0.jpg",
+      "/custom_products/prod_custom-prod-1789307337462_g1.jpg",
+      "/custom_products/prod_custom-prod-1789307337462_g2.jpg"
     ],
     "priceEur": 7,
     "inStock": true,
@@ -1390,12 +1346,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/vezena_kosulja_1789021895745.jpg",
+    "image": "/custom_products/prod_custom-prod-1789307502983_g0.jpg",
     "images": [
-      "/images/vezena_kosulja_1789021895745.jpg",
-      "/images/vezene_carape_folklor_1789032450227.jpg",
-      "/images/vezeni_nadstolnjak_lan_1789407278498.jpg",
-      "/images/vlaska_bela_subara_1789032431671.jpg"
+      "/custom_products/prod_custom-prod-1789307502983_g0.jpg",
+      "/custom_products/prod_custom-prod-1789307502983_g1.jpg",
+      "/custom_products/prod_custom-prod-1789307502983_g2.jpg"
     ],
     "priceEur": 7,
     "inStock": true,
@@ -1421,12 +1376,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/vezene_carape_folklor_1789032450227.jpg",
+    "image": "/custom_products/prod_custom-prod-1789307585814_g0.jpg",
     "images": [
-      "/images/vezene_carape_folklor_1789032450227.jpg",
-      "/images/vezeni_nadstolnjak_lan_1789407278498.jpg",
-      "/images/vlaska_bela_subara_1789032431671.jpg",
-      "/images/vlaska_subara_izrada_1789032512168.jpg"
+      "/custom_products/prod_custom-prod-1789307585814_g0.jpg",
+      "/custom_products/prod_custom-prod-1789307585814_g1.jpg",
+      "/custom_products/prod_custom-prod-1789307585814_g2.jpg"
     ],
     "priceEur": 7,
     "inStock": true,
@@ -1452,12 +1406,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/images/vezeni_nadstolnjak_lan_1789407278498.jpg",
+    "image": "/custom_products/prod_custom-prod-1789307658216_g0.jpg",
     "images": [
-      "/images/vezeni_nadstolnjak_lan_1789407278498.jpg",
-      "/images/vlaska_bela_subara_1789032431671.jpg",
-      "/images/vlaska_subara_izrada_1789032512168.jpg",
-      "/images/vunene_carape_vez_1789021876638.jpg"
+      "/custom_products/prod_custom-prod-1789307658216_g0.jpg",
+      "/custom_products/prod_custom-prod-1789307658216_g1.jpg",
+      "/custom_products/prod_custom-prod-1789307658216_g2.jpg"
     ],
     "priceEur": 7,
     "inStock": true,
