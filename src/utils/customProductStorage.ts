@@ -30,13 +30,13 @@ function healProductsWithCanonicalData(products: Product[]): Product[] {
       validMain = perm.image;
     }
 
-    // Extract all candidate images, prioritizing permanent canonical images if available
-    const rawImages = (perm?.images && perm.images.length > 0)
-      ? perm.images
-      : ((Array.isArray(p.images) && p.images.length > 0) ? p.images : []);
+    // Extract all candidate images, prioritizing user product images if available, then permanent canonical images
+    const rawImages = (Array.isArray(p.images) && p.images.length > 0)
+      ? p.images
+      : ((perm?.images && perm.images.length > 0) ? perm.images : []);
 
     const validImages = rawImages.filter(
-      (img) => typeof img === 'string' && img.trim().length > 0 && !img.match(/\/custom_products\/prod_custom-prod-\d+\.jpg$/)
+      (img) => typeof img === 'string' && img.trim().length > 0
     );
 
     if (validImages.length === 0 && validMain) {

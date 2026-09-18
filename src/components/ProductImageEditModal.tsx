@@ -6,12 +6,9 @@ import {
   Star, 
   CheckCircle2, 
   RefreshCw, 
-  AlertCircle, 
-  Sparkles, 
   ShieldCheck, 
   Image as ImageIcon,
-  Languages,
-  Eye
+  Languages
 } from 'lucide-react';
 import { Product } from '../types';
 import { compressImageFile, formatBytes } from '../utils/imageCompressor';
@@ -32,37 +29,50 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
   onSaved,
   showToast
 }) => {
-  const [images, setImages] = useState<string[]>([]);
+  const [slots, setSlots] = useState<(string | null)[]>([null, null, null, null]);
   const [isCompressing, setIsCompressing] = useState(false);
   const [compressionBadge, setCompressionBadge] = useState<string | null>(null);
-  const [replacingIndex, setReplacingIndex] = useState<number | null>(null);
+  const [activeSlotIndex, setActiveSlotIndex] = useState<number | null>(null);
   const [showDescriptionPreview, setShowDescriptionPreview] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const replaceInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (product) {
-      const initialList: string[] = [];
-      if (product.image) initialList.push(product.image);
+      const initialSlots: (string | null)[] = [null, null, null, null];
+      if (product.image) {
+        initialSlots[0] = product.image;
+      }
       if (Array.isArray(product.images)) {
+        let slotIdx = 1;
         product.images.forEach(img => {
-          if (img && !initialList.includes(img)) {
-            initialList.push(img);
+          if (img && img !== product.image && slotIdx < 4) {
+            initialSlots[slotIdx] = img;
+            slotIdx++;
           }
         });
+        if (!initialSlots[0] && product.images[0]) {
+          initialSlots[0] = product.images[0];
+          let sIdx = 1;
+          product.images.slice(1).forEach(img => {
+            if (img && sIdx < 4) {
+              initialSlots[sIdx] = img;
+              sIdx++;
+            }
+          });
+        }
       }
-      setImages(initialList);
+      setSlots(initialSlots);
       setCompressionBadge(null);
-      setReplacingIndex(null);
+      setActiveSlotIndex(null);
     }
   }, [product, isOpen]);
 
   if (!isOpen || !product) return null;
 
-  const handleAddNewImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSlotFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file || activeSlotIndex === null) return;
 
     setIsCompressing(true);
     try {
@@ -72,87 +82,70 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
         preferredFormat: 'image/webp'
       });
 
-      setImages(prev => [...prev, res.dataUrl]);
-      setCompressionBadge(`⚡ Slika optimizovana: ${formatBytes(res.originalSize)} ➔ ${formatBytes(res.compressedSize)} (-${res.savingsPercent}%)`);
-      showToast(`Slika je kompresovana i dodata! (-${res.savingsPercent}%)`);
+      setSlots(prev => {
+        const updated = [...prev];
+        updated[activeSlotIndex] = res.dataUrl;
+        return updated;
+      });
+      setCompressionBadge(`⚡ Slot ${activeSlotIndex + 1} optimizovan: ${formatBytes(res.originalSize)} ➔ ${formatBytes(res.compressedSize)} (-${res.savingsPercent}%)`);
+      showToast(`Slika za Slot ${activeSlotIndex + 1} uspešno postavljena i optimizovana!`);
     } catch (err) {
       console.warn("Greška pri kompresiji, fallback:", err);
       const reader = new FileReader();
       reader.onload = (ev) => {
         const url = ev.target?.result as string;
-        if (url) setImages(prev => [...prev, url]);
+        if (url) {
+          setSlots(prev => {
+            const updated = [...prev];
+            updated[activeSlotIndex] = url;
+            return updated;
+          });
+        }
       };
       reader.readAsDataURL(file);
     } finally {
       setIsCompressing(false);
-      e.target.value = '';
+      setActiveSlotIndex(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
-  const handleReplaceSpecificImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || replacingIndex === null) return;
-
-    setIsCompressing(true);
-    try {
-      const res = await compressImageFile(file, {
-        maxDimension: 1920,
-        quality: 0.85,
-        preferredFormat: 'image/webp'
-      });
-
-      setImages(prev => {
-        const updated = [...prev];
-        updated[replacingIndex] = res.dataUrl;
-        return updated;
-      });
-      setCompressionBadge(`⚡ Zamenjena slika #${replacingIndex + 1}: ${formatBytes(res.originalSize)} ➔ ${formatBytes(res.compressedSize)} (-${res.savingsPercent}%)`);
-      showToast(`Slika #${replacingIndex + 1} uspešno zamenjena i optimizovana!`);
-    } catch (err) {
-      console.warn("Greška pri zameni slike:", err);
-    } finally {
-      setIsCompressing(false);
-      setReplacingIndex(null);
-      e.target.value = '';
-    }
-  };
-
-  const handleDeleteImage = (index: number) => {
-    if (images.length <= 1) {
-      if (!confirm("Ovo je jedina slika proizvoda. Da li sigurno želite da je obrišete?")) {
-        return;
-      }
-    }
-    setImages(prev => prev.filter((_, i) => i !== index));
-    showToast(`Slika #${index + 1} je uklonjena.`);
-  };
-
-  const handleSetAsPrimary = (index: number) => {
-    if (index === 0) return;
-    setImages(prev => {
-      const target = prev[index];
-      const rest = prev.filter((_, i) => i !== index);
-      return [target, ...rest];
+  const handleClearSlot = (index: number) => {
+    setSlots(prev => {
+      const updated = [...prev];
+      updated[index] = null;
+      return updated;
     });
-    showToast(`Slika #${index + 1} je sada postavljena kao glavna slika proizvoda!`);
+    showToast(`Slot ${index + 1} je ispražnjen.`);
+  };
+
+  const handleSetSlotAsPrimary = (index: number) => {
+    if (index === 0) return;
+    setSlots(prev => {
+      const updated = [...prev];
+      const target = updated[index];
+      updated.splice(index, 1);
+      updated.unshift(target);
+      while (updated.length < 4) updated.push(null);
+      return updated.slice(0, 4);
+    });
+    showToast(`Slot ${index + 1} je postavljen kao Glavna slika (Slot 1)!`);
   };
 
   const handleSaveChanges = async () => {
-    if (images.length === 0) {
+    const validSlots = slots.filter((s): s is string => Boolean(s));
+    if (validSlots.length === 0) {
       alert("Proizvod mora imati bar jednu sliku pre čuvanja.");
       return;
     }
 
-    const mainImage = images[0];
-    const additionalImages = images.slice(1);
+    const mainImage = slots[0] || validSlots[0];
+    const allValidImages = slots.filter((s): s is string => Boolean(s));
 
-    // KORISNIKOV GLAVNI ZAHTEV:
-    // Opisi na srpskom i engleskom se čuvaju 100% netaknuti bez ikakvog brisanja!
     const updatedProduct: Product = {
       ...product,
       image: mainImage,
-      images: additionalImages,
-      // Eksplicitno osiguravamo očuvanje svih jezičkih varijanti opisa i naziva
+      images: allValidImages,
       name: product.name,
       nameEn: product.nameEn,
       description: product.description,
@@ -175,7 +168,7 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
       await saveCustomProduct(updatedProduct);
       window.dispatchEvent(new CustomEvent('custom-products-updated', { detail: [updatedProduct] }));
       onSaved(updatedProduct);
-      showToast(`✨ Slike za "${product.name}" su uspešno ažurirane! Opisi na srpskom i engleskom su sačuvani.`);
+      showToast(`✨ Slike za "${product.name}" su uspešno sačuvane u 4 slota! Opisi su sačuvani.`);
       onClose();
     } catch (err) {
       console.error("Greška pri čuvanju slika proizvoda:", err);
@@ -183,9 +176,11 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
     }
   };
 
+  const filledCount = slots.filter(Boolean).length;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
-      <div className="bg-[#1A1512] border border-[#C2872A]/50 rounded-2xl max-w-2xl w-full max-h-[92vh] overflow-hidden flex flex-col shadow-2xl text-white">
+      <div className="bg-[#1A1512] border border-[#C2872A]/50 rounded-2xl max-w-3xl w-full max-h-[92vh] overflow-hidden flex flex-col shadow-2xl text-white">
         
         {/* Header */}
         <div className="p-5 border-b border-stone-800 flex items-center justify-between bg-[#241D19]">
@@ -195,7 +190,7 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
             </div>
             <div>
               <h2 className="text-base sm:text-lg font-serif font-bold text-[#FAF7F2] flex items-center gap-2">
-                <span>Zameni & Dodaj Slike Proizvoda</span>
+                <span>Upravljanje sa 4 Nezavisna Slota Slika</span>
               </h2>
               <p className="text-xs text-[#C2872A] font-medium truncate max-w-md">
                 {product.name} {product.nameEn ? `• ${product.nameEn}` : ''}
@@ -215,15 +210,15 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
         {/* Content */}
         <div className="p-5 sm:p-6 overflow-y-auto space-y-6 flex-1">
           
-          {/* Information Notice: Descriptions Safe Guarantee */}
+          {/* Information Notice */}
           <div className="p-4 bg-emerald-950/40 border border-emerald-500/30 rounded-xl flex items-start gap-3 text-xs text-emerald-200">
             <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
             <div className="space-y-1">
               <p className="font-semibold text-emerald-300">
-                Garantovano očuvanje opisa na Srpskom i Engleskom jeziku
+                Slobodan raspored i zamena u 4 nezavisna slota
               </p>
               <p className="text-stone-300 text-[11px] leading-relaxed">
-                Zamena, dodavanje ili brisanje slika ni na koji način ne dira postojeće opise, cene, materijale niti nazive proizvoda. Sve jezičke verzije ostaju 100% nepromenjene.
+                Možete zameniti, dodati ili postaviti bilo koji slot kao glavnu naslovnu sliku u bilo kom trenutku. Opisi na srpskom i engleskom jeziku su potpuno zaštićeni i netaknuti.
               </p>
             </div>
           </div>
@@ -237,7 +232,7 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
             >
               <span className="flex items-center gap-2">
                 <Languages className="w-4 h-4 text-[#C2872A]" />
-                <span>Pregledaj zaštićene opise ovog proizvoda ({isCompressing ? '...' : '🇷🇸 & 🇬🇧'})</span>
+                <span>Pregledaj zaštićene opise ({'🇷🇸 & 🇬🇧'})</span>
               </span>
               <span className="text-[11px] text-stone-400">{showDescriptionPreview ? 'Sakrij ▲' : 'Prikaži ▼'}</span>
             </button>
@@ -262,32 +257,22 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
             )}
           </div>
 
-          {/* Slike Proizvoda Grid */}
+          {/* 4 Slots Grid */}
           <div>
             <div className="flex items-center justify-between mb-3">
               <label className="text-xs uppercase tracking-wider text-[#E8D0A9] font-semibold flex items-center gap-2">
-                <span>Fotografije Proizvoda ({images.length})</span>
+                <span>4 Nezavisna Slota za Slike ({filledCount}/4 popunjeno)</span>
                 <span className="text-[10px] text-stone-400 font-normal normal-case">
-                  (Prva slika je glavna naslovna slika)
+                  (Slot 1 je glavna naslovna slika)
                 </span>
               </label>
-
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={isCompressing}
-                className="px-3 py-1.5 bg-[#C2872A] hover:bg-[#d49635] text-stone-950 font-bold rounded-lg text-xs flex items-center gap-1.5 transition-all shadow cursor-pointer disabled:opacity-50"
-              >
-                <Upload className="w-3.5 h-3.5" />
-                <span>+ Dodaj Novu Sliku</span>
-              </button>
             </div>
 
             {/* Compression Indicator */}
             {isCompressing && (
               <div className="p-3 bg-[#C2872A]/10 border border-[#C2872A]/30 rounded-xl flex items-center gap-2.5 text-xs text-[#E8D0A9] animate-pulse mb-3">
                 <RefreshCw className="w-4 h-4 animate-spin text-[#C2872A]" />
-                <span>Optimizacija i kompresija slike u ultra-lagan WebP format bez gubitka oštrine...</span>
+                <span>Optimizacija i kompresija slike u WebP format...</span>
               </div>
             )}
 
@@ -298,111 +283,112 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
               </div>
             )}
 
-            {/* Images list */}
-            {images.length === 0 ? (
-              <div 
-                onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-stone-700 hover:border-[#C2872A] rounded-2xl p-8 text-center cursor-pointer transition-colors bg-stone-900/30"
-              >
-                <Upload className="w-8 h-8 text-stone-500 mx-auto mb-2" />
-                <p className="text-sm font-medium text-stone-300">Proizvod trenutno nema sliku</p>
-                <p className="text-xs text-stone-500 mt-1">Kliknite da izaberete sliku sa računara ili telefona</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                {images.map((imgUrl, index) => {
-                  const isPrimary = index === 0;
-                  return (
-                    <div 
-                      key={index}
-                      className={`relative group rounded-xl overflow-hidden border ${
-                        isPrimary ? 'border-[#C2872A] ring-2 ring-[#C2872A]/40' : 'border-stone-800'
-                      } bg-black/60 shadow-md flex flex-col`}
-                    >
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              {slots.map((imgUrl, index) => {
+                const isPrimary = index === 0;
+                const hasImage = Boolean(imgUrl);
+
+                return (
+                  <div 
+                    key={index}
+                    className={`relative group rounded-xl overflow-hidden border ${
+                      isPrimary 
+                        ? 'border-[#C2872A] ring-2 ring-[#C2872A]/40' 
+                        : hasImage 
+                        ? 'border-stone-700' 
+                        : 'border-dashed border-stone-700 bg-stone-900/40'
+                    } bg-black/60 shadow-lg flex flex-col justify-between`}
+                  >
+                    {hasImage ? (
                       <div className="relative aspect-square">
                         <img 
-                          src={imgUrl} 
-                          alt={`Slika ${index + 1}`} 
+                          src={imgUrl!} 
+                          alt={`Slot ${index + 1}`} 
                           className="w-full h-full object-cover"
                         />
                         
-                        {/* Badge for primary or index */}
-                        <div className={`absolute top-1.5 left-1.5 px-2 py-0.5 rounded text-[10px] font-bold ${
+                        {/* Slot Badge */}
+                        <div className={`absolute top-2 left-2 px-2 py-0.5 rounded text-[10px] font-bold ${
                           isPrimary 
                             ? 'bg-[#C2872A] text-stone-950 flex items-center gap-1 shadow' 
-                            : 'bg-black/70 text-stone-300'
+                            : 'bg-black/80 text-stone-300 border border-stone-700'
                         }`}>
                           {isPrimary && <Star className="w-3 h-3 fill-stone-950" />}
-                          <span>{isPrimary ? 'Glavna' : `#${index + 1}`}</span>
+                          <span>{isPrimary ? 'Glavna (Slot 1)' : `Slot ${index + 1}`}</span>
                         </div>
 
                         {/* Hover Overlay Actions */}
-                        <div className="absolute inset-0 bg-black/75 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2">
+                        <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2.5">
                           <button
                             type="button"
                             onClick={() => {
-                              setReplacingIndex(index);
-                              replaceInputRef.current?.click();
+                              setActiveSlotIndex(index);
+                              fileInputRef.current?.click();
                             }}
-                            className="px-2.5 py-1 bg-stone-800 hover:bg-stone-700 text-white rounded text-[11px] font-medium flex items-center gap-1 w-full justify-center transition-colors cursor-pointer border border-stone-600"
-                            title="Zameni ovu sliku drugom"
+                            className="px-3 py-1.5 bg-stone-800 hover:bg-stone-700 text-white rounded-lg text-xs font-medium flex items-center gap-1.5 w-full justify-center transition-colors cursor-pointer border border-stone-600"
+                            title={`Zameni sliku u Slotu ${index + 1}`}
                           >
-                            <RefreshCw className="w-3 h-3 text-[#C2872A]" />
+                            <RefreshCw className="w-3.5 h-3.5 text-[#C2872A]" />
                             <span>Zameni sliku</span>
                           </button>
 
                           {!isPrimary && (
                             <button
                               type="button"
-                              onClick={() => handleSetAsPrimary(index)}
-                              className="px-2.5 py-1 bg-[#C2872A] hover:bg-[#d49635] text-stone-950 rounded text-[11px] font-bold flex items-center gap-1 w-full justify-center transition-colors cursor-pointer shadow"
-                              title="Postavi kao glavnu naslovnu sliku"
+                              onClick={() => handleSetSlotAsPrimary(index)}
+                              className="px-3 py-1.5 bg-[#C2872A] hover:bg-[#d49635] text-stone-950 rounded-lg text-xs font-bold flex items-center gap-1.5 w-full justify-center transition-colors cursor-pointer shadow"
+                              title="Postavi kao glavnu sliku"
                             >
-                              <Star className="w-3 h-3 fill-stone-950" />
+                              <Star className="w-3.5 h-3.5 fill-stone-950" />
                               <span>Učini Glavnom</span>
                             </button>
                           )}
 
                           <button
                             type="button"
-                            onClick={() => handleDeleteImage(index)}
-                            className="px-2.5 py-1 bg-red-950/80 hover:bg-red-900 text-red-200 rounded text-[11px] font-medium flex items-center gap-1 w-full justify-center transition-colors cursor-pointer border border-red-700/50"
-                            title="Obriši ovu sliku"
+                            onClick={() => handleClearSlot(index)}
+                            className="px-3 py-1.5 bg-red-950/80 hover:bg-red-900 text-red-200 rounded-lg text-xs font-medium flex items-center gap-1.5 w-full justify-center transition-colors cursor-pointer border border-red-700/50"
+                            title={`Isprazni Slot ${index + 1}`}
                           >
-                            <Trash2 className="w-3 h-3 text-red-400" />
-                            <span>Obriši sliku</span>
+                            <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                            <span>Isprazni Slot</span>
                           </button>
                         </div>
                       </div>
-
-                      <div className="p-1.5 bg-stone-900/90 text-center border-t border-stone-800">
-                        <span className="text-[10px] text-stone-400">
-                          {isPrimary ? 'Prikazuje se na katalogu' : `Dodatna fotografija #${index + 1}`}
-                        </span>
+                    ) : (
+                      <div 
+                        onClick={() => {
+                          setActiveSlotIndex(index);
+                          fileInputRef.current?.click();
+                        }}
+                        className="aspect-square flex flex-col items-center justify-center p-6 text-center cursor-pointer hover:bg-stone-800/40 transition-colors"
+                      >
+                        <Upload className="w-7 h-7 text-stone-500 mb-2" />
+                        <span className="text-xs font-bold text-stone-300">Slot {index + 1} (Prazno)</span>
+                        <span className="text-[10px] text-stone-500 mt-1">Kliknite da dodate sliku</span>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+                    )}
 
-            {/* Hidden file inputs */}
+                    <div className="p-2 bg-stone-900 text-center border-t border-stone-800">
+                      <span className="text-[10px] text-stone-400">
+                        {isPrimary ? 'Naslovna slika kataloga' : `Rezervni Slot #${index + 1}`}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Hidden file input */}
             <input
               ref={fileInputRef}
               type="file"
               accept="image/*"
               className="hidden"
-              onChange={handleAddNewImage}
-            />
-
-            <input
-              ref={replaceInputRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleReplaceSpecificImage}
+              onChange={handleSlotFileChange}
             />
           </div>
+
         </div>
 
         {/* Footer */}
@@ -418,11 +404,11 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
           <button
             type="button"
             onClick={handleSaveChanges}
-            disabled={isCompressing}
+            disabled={isCompressing || filledCount === 0}
             className="px-6 py-2.5 bg-[#C2872A] hover:bg-[#d49635] text-stone-950 rounded-xl text-xs font-bold transition-all shadow-lg flex items-center gap-2 cursor-pointer font-serif tracking-wide disabled:opacity-50"
           >
             <CheckCircle2 className="w-4 h-4" />
-            <span>Sačuvaj Nove Slike (Zadrži Opise)</span>
+            <span>Sačuvaj Promene (4 Slota)</span>
           </button>
         </div>
 

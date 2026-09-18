@@ -48,7 +48,6 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         url &&
         typeof url === 'string' &&
         url.trim().length > 0 &&
-        !url.match(/\/custom_products\/prod_custom-prod-\d+\.jpg$/) &&
         !list.includes(url.trim())
       ) {
         list.push(url.trim());
@@ -57,18 +56,18 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
     const perm = permanentProductsData.find((p) => p.id === product.id);
 
-    // 1. Primary product image
-    if (perm?.image) {
-      addIfValid(perm.image);
-    } else {
+    // 1. Primary product image (prioritize product.image, then perm.image)
+    if (product.image) {
       addIfValid(product.image);
+    } else if (perm?.image) {
+      addIfValid(perm.image);
     }
 
-    // 2. Secondary gallery images (all additional views)
-    if (perm?.images && perm.images.length > 0) {
-      perm.images.forEach(addIfValid);
-    } else if (Array.isArray(product.images)) {
+    // 2. Secondary gallery images (prioritize product.images, then perm.images)
+    if (Array.isArray(product.images) && product.images.length > 0) {
       product.images.forEach(addIfValid);
+    } else if (perm?.images && perm.images.length > 0) {
+      perm.images.forEach(addIfValid);
     }
 
     if (list.length === 0) {

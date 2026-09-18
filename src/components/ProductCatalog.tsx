@@ -93,12 +93,12 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
         validMain = canonical.image;
       }
 
-      const rawImages = (canonical?.images && canonical.images.length > 0)
-        ? canonical.images
-        : ((Array.isArray(p.images) && p.images.length > 0) ? p.images : []);
+      const rawImages = (Array.isArray(p.images) && p.images.length > 0)
+        ? p.images
+        : ((canonical?.images && canonical.images.length > 0) ? canonical.images : []);
 
       const validImages = rawImages.filter(
-        (img) => typeof img === 'string' && img.trim().length > 0 && !img.match(/\/custom_products\/prod_custom-prod-\d+\.jpg$/)
+        (img) => typeof img === 'string' && img.trim().length > 0
       );
 
       if (validImages.length === 0 && validMain) {
