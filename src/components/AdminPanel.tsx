@@ -67,6 +67,83 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const [galCaptionEn, setGalCaptionEn] = useState('');
   const [galImageUrl, setGalImageUrl] = useState('');
 
+  // Bulk Gallery Upload State (up to 50 photos from phone)
+  const [isBulkUploading, setIsBulkUploading] = useState(false);
+  const [bulkUploadProgress, setBulkUploadProgress] = useState('');
+  const [bulkUploadCategory, setBulkUploadCategory] = useState('Torbice');
+  const bulkFileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleBulkGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileList = e.target.files;
+    if (!fileList || fileList.length === 0) return;
+
+    if (fileList.length > 50) {
+      alert(lang === 'en' ? 'Maximum 50 photos allowed at once.' : 'Maksimalno možete izabrati do 50 slika odjednom.');
+      if (bulkFileInputRef.current) bulkFileInputRef.current.value = '';
+      return;
+    }
+
+    setIsBulkUploading(true);
+    const files = Array.from(fileList);
+    let completedCount = 0;
+    setBulkUploadProgress(lang === 'en' ? `Compressing 0/${files.length}...` : `Kompresujem 0/${files.length}...`);
+
+    const processFile = async (file: File, index: number): Promise<GalleryPhoto | null> => {
+      try {
+        const compressed = await compressImageFile(file, {
+          maxDimension: 1920,
+          quality: 0.85,
+          preferredFormat: 'image/webp'
+        });
+
+        const chosenCategory = bulkUploadCategory || 'Torbice';
+        const displayTitle = `Unikatni rad ${index + 1} - ${chosenCategory}`;
+
+        const newPhoto: GalleryPhoto = {
+          id: 'custom-' + Date.now() + '-' + index + '-' + Math.random().toString(36).substring(2, 8),
+          title: displayTitle,
+          category: chosenCategory,
+          imageUrl: compressed.dataUrl,
+          caption: `Autentični ručni rad u kategoriji ${chosenCategory} - Savremeni Koreni.`,
+          isCustomUploaded: true,
+          dateAdded: new Date().toLocaleDateString(lang === 'en' ? 'en-US' : 'sr-RS'),
+        };
+
+        completedCount++;
+        setBulkUploadProgress(lang === 'en' ? `Compressing ${completedCount}/${files.length}...` : `Kompresujem ${completedCount}/${files.length}...`);
+
+        return newPhoto;
+      } catch (err) {
+        console.error('Bulk compression error:', err);
+        completedCount++;
+        return null;
+      }
+    };
+
+    try {
+      const results = await Promise.all(files.map((f, i) => processFile(f, i)));
+      const validNewPhotos = results.filter((p): p is GalleryPhoto => p !== null);
+
+      if (validNewPhotos.length > 0) {
+        const updated = deduplicatePhotos([...validNewPhotos, ...galleryPhotos]);
+        setGalleryPhotos(updated);
+        await savePhotosToStorage(updated);
+        showToast(lang === 'en' ? `Successfully compressed and added ${validNewPhotos.length} photos into gallery!` : `Uspešno kompresovano i dodato ${validNewPhotos.length} slika u galeriju!`);
+      } else {
+        alert(lang === 'en' ? 'No valid photos could be processed.' : 'Nijedna slika nije uspešno obrađena.');
+      }
+    } catch (err) {
+      console.error('Bulk upload error:', err);
+      alert(lang === 'en' ? 'Error processing photos. Please try again.' : 'Greška pri obradi slika. Pokušajte ponovo.');
+    } finally {
+      setIsBulkUploading(false);
+      setBulkUploadProgress('');
+      if (bulkFileInputRef.current) {
+        bulkFileInputRef.current.value = '';
+      }
+    }
+  };
+
   // Auto Image Compression State
   const [isCompressing, setIsCompressing] = useState(false);
   const [compressionInfo, setCompressionInfo] = useState<{
@@ -1564,6 +1641,57 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     <Sparkles className="w-4 h-4 text-[#C2872A]" />
                     <span>Očisti sve duplikate ({galleryPhotos.length})</span>
                   </button>
+                </div>
+
+                {/* 📱 GRUPNO DODAVANJE SLIKA IZ TELEFONA (DO 50 KOMADA) */}
+                <div className="mb-8 p-6 rounded-2xl bg-gradient-to-br from-[#241D19] to-[#121212] border border-[#C2872A]/30 shadow-lg">
+                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                    <div className="space-y-2">
+                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#C2872A]/20 text-[#E8D0A9] text-xs font-bold border border-[#C2872A]/40">
+                        <Upload className="w-4 h-4" />
+                        <span>Grupno dodavanje iz telefona (Do 50 slika)</span>
+                      </div>
+                      <h3 className="font-serif text-lg sm:text-xl font-bold text-white">
+                        Brzo otpremanje i automatska kompresija
+                      </h3>
+                      <p className="text-xs sm:text-sm text-stone-400 max-w-xl">
+                        Izaberite kategoriju, izaberite do 50 slika sa vašeg telefona ili računara. Nisu potrebna imena (automatski se generišu), slike se kompresuju u WebP format i direktno ubacuju u galeriju.
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+                      <select
+                        value={bulkUploadCategory}
+                        onChange={(e) => setBulkUploadCategory(e.target.value)}
+                        className="w-full sm:w-auto bg-[#121212] border border-stone-700 rounded-xl px-4 py-3 text-xs font-semibold text-white focus:border-[#C2872A] focus:outline-none cursor-pointer"
+                      >
+                        <option value="Torbice">👜 Torbice</option>
+                        <option value="Šubare">🎩 Šubare</option>
+                        <option value="Čarape">🧦 Čarape</option>
+                        <option value="Košulje">👔 Košulje</option>
+                        <option value="Nakit">📿 Nakit</option>
+                        <option value="Pokloni">🎁 Pokloni</option>
+                      </select>
+
+                      <button
+                        type="button"
+                        onClick={() => bulkFileInputRef.current?.click()}
+                        disabled={isBulkUploading}
+                        className="w-full sm:w-auto px-6 py-3 bg-[#C2872A] hover:bg-[#d49635] text-stone-950 font-bold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer disabled:opacity-50 shrink-0"
+                      >
+                        <Upload className="w-4 h-4" />
+                        <span>{bulkUploadProgress || (isBulkUploading ? 'Obrada...' : 'Izaberi slike sa telefona (Do 50)')}</span>
+                      </button>
+                      <input
+                        ref={bulkFileInputRef}
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className="hidden"
+                        onChange={handleBulkGalleryUpload}
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 <form onSubmit={handleAddGalleryPhoto} className="space-y-6">

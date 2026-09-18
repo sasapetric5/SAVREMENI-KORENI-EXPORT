@@ -196,6 +196,7 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
   const [activeTab, setActiveTab] = useState<string>('sve');
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryPhoto | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<string>('');
   const [uploadTargetCategory, setUploadTargetCategory] = useState<string>('Torbice');
   const [isOrganizerOpen, setIsOrganizerOpen] = useState(false);
   const [organizerSearch, setOrganizerSearch] = useState('');
@@ -432,7 +433,7 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
     setTimeout(() => setUploadSuccessMessage(null), 4000);
   };
 
-  // Handle batch file uploads reliably (up to 50 photos at once, auto-compression, no names required)
+  // Handle batch file uploads reliably (up to 50 photos at once from phone/device, auto-compression, no names required)
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
     if (!fileList || fileList.length === 0) return;
@@ -445,6 +446,8 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
 
     setIsUploading(true);
     const files = Array.from(fileList);
+    let completedCount = 0;
+    setUploadProgress(isEn ? `Compressing 0/${files.length}...` : `Kompresujem 0/${files.length}...`);
 
     const processFile = async (file: File, index: number): Promise<GalleryPhoto | null> => {
       try {
@@ -455,7 +458,6 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
         });
 
         const chosenCategory = uploadTargetCategory || 'Torbice';
-        // Auto-generate title without requiring user input names
         const displayTitle = `Unikatni rad ${index + 1} - ${chosenCategory}`;
 
         const newPhoto: GalleryPhoto = {
@@ -468,9 +470,13 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
           dateAdded: new Date().toLocaleDateString(isEn ? 'en-US' : 'sr-RS'),
         };
 
+        completedCount++;
+        setUploadProgress(isEn ? `Compressing ${completedCount}/${files.length}...` : `Kompresujem ${completedCount}/${files.length}...`);
+
         return newPhoto;
       } catch (err) {
         console.error('Compress file error:', err);
+        completedCount++;
         return null;
       }
     };
@@ -488,11 +494,15 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
 
         setUploadSuccessMessage(isEn ? `Successfully compressed and added ${validNewPhotos.length} photos into "${uploadTargetCategory}"!` : `Uspešno kompresovano i dodato ${validNewPhotos.length} slika u kategoriju "${uploadTargetCategory}"!`);
         setTimeout(() => setUploadSuccessMessage(null), 5000);
+      } else {
+        alert(isEn ? 'No valid photos could be processed.' : 'Nijedna slika nije uspešno obrađena.');
       }
     } catch (err) {
       console.error('Upload processing error:', err);
+      alert(isEn ? 'Error processing photos. Please try again.' : 'Greška pri obradi slika. Pokušajte ponovo.');
     } finally {
       setIsUploading(false);
+      setUploadProgress('');
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
@@ -735,7 +745,7 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
                 className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#9E3E26] hover:bg-[#7F2F1C] text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer disabled:opacity-50"
               >
                 <UploadCloud className="w-4 h-4" />
-                <span>{isUploading ? (isEn ? 'Compressing & Adding...' : 'Kompresujem i dodajem...') : (isEn ? 'Select Photos (Max 50)' : 'Izaberi slike (Do 50)')}</span>
+                <span>{uploadProgress || (isUploading ? (isEn ? 'Processing...' : 'Obrada u toku...') : (isEn ? 'Select Photos from Phone (Max 50)' : 'Izaberi slike sa telefona (Do 50)'))}</span>
               </button>
               <input
                 ref={fileInputRef}
