@@ -565,13 +565,22 @@ export const defaultFactoryGalleryPhotos: GalleryPhoto[] = [
   },
 ];
 
-// Helper to merge permanent gallery photos so all uploaded photos are bundled statically
+// Helper to merge permanent gallery photos so all uploaded photos are bundled statically without duplicates
 function mergeGallery(factory: GalleryPhoto[], permanent: GalleryPhoto[]): GalleryPhoto[] {
-  if (!permanent || permanent.length === 0) return factory;
-  const map = new Map<string, GalleryPhoto>();
-  factory.forEach(p => map.set(p.id, p));
-  permanent.forEach(p => map.set(p.id, p));
-  return Array.from(map.values());
+  const result: GalleryPhoto[] = [];
+  const seenUrls = new Set<string>();
+  const seenIds = new Set<string>();
+
+  const all = [...(permanent || []), ...(factory || [])];
+  for (const p of all) {
+    if (!p || !p.imageUrl || typeof p.imageUrl !== 'string') continue;
+    const cleanUrl = p.imageUrl.trim();
+    if (seenUrls.has(cleanUrl) || seenIds.has(p.id)) continue;
+    seenUrls.add(cleanUrl);
+    seenIds.add(p.id);
+    result.push(p);
+  }
+  return result;
 }
 
 export const initialGalleryPhotos: GalleryPhoto[] = mergeGallery(defaultFactoryGalleryPhotos, permanentGalleryPhotosData);

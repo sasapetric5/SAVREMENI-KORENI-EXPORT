@@ -9,6 +9,32 @@ import {
 const STORE_NAME = 'gallery_photos';
 const STORAGE_KEY = 'savremeni_koreni_user_photos_v1';
 
+export function deduplicatePhotos(photos: GalleryPhoto[]): GalleryPhoto[] {
+  if (!Array.isArray(photos)) return [];
+  const seenUrls = new Set<string>();
+  const seenIds = new Set<string>();
+  const seenHashes = new Set<string>();
+  const result: GalleryPhoto[] = [];
+
+  for (const p of photos) {
+    if (!p || !p.imageUrl || typeof p.imageUrl !== 'string') continue;
+    const url = p.imageUrl.trim();
+    if (url.length === 0 || seenUrls.has(url) || seenIds.has(p.id)) continue;
+
+    // Extract photo hash if available e.g. 1789202284189-geqh6y
+    const hashMatch = url.match(/1789\d+-[a-z0-9]+/);
+    const photoHash = hashMatch ? hashMatch[0] : url;
+
+    if (seenHashes.has(photoHash)) continue;
+
+    seenUrls.add(url);
+    seenIds.add(p.id);
+    seenHashes.add(photoHash);
+    result.push(p);
+  }
+  return result;
+}
+
 /**
  * Loads all stored photos from IndexedDB, with graceful migration from localStorage and Supabase sync.
  */
@@ -30,7 +56,7 @@ export async function loadPhotosFromStorage(): Promise<GalleryPhoto[] | null> {
           } catch {
             // ignore
           }
-          resolve(result);
+          resolve(deduplicatePhotos(result));
         } else {
           // Check for legacy localStorage data to migrate
           try {
@@ -38,14 +64,15 @@ export async function loadPhotosFromStorage(): Promise<GalleryPhoto[] | null> {
             if (saved) {
               const parsed = JSON.parse(saved);
               if (Array.isArray(parsed) && parsed.length > 0) {
+                const deduped = deduplicatePhotos(parsed);
                 // Save to IndexedDB and clear localStorage
-                savePhotosToStorage(parsed).catch(console.error);
+                savePhotosToStorage(deduped).catch(console.error);
                 try {
                   localStorage.removeItem(STORAGE_KEY);
                 } catch {
                   // ignore
                 }
-                resolve(parsed);
+                resolve(deduped);
                 return;
               }
             }
@@ -67,7 +94,7 @@ export async function loadPhotosFromStorage(): Promise<GalleryPhoto[] | null> {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          localPhotos = parsed;
+          localPhotos = deduplicatePhotos(parsed);
         }
       }
     } catch {
@@ -85,7 +112,7 @@ export async function loadPhotosFromStorage(): Promise<GalleryPhoto[] | null> {
         if (localPhotos) {
           localPhotos.forEach((p) => map.set(p.id, p));
         }
-        const merged = Array.from(map.values());
+        const merged = deduplicatePhotos(Array.from(map.values()));
         if (!localPhotos || localPhotos.length === 0) {
           savePhotosToStorage(merged).catch(console.warn);
         }
@@ -96,7 +123,7 @@ export async function loadPhotosFromStorage(): Promise<GalleryPhoto[] | null> {
     }
   }
 
-  return localPhotos;
+  return localPhotos ? deduplicatePhotos(localPhotos) : null;
 }
 
 /**

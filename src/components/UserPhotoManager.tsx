@@ -3,7 +3,8 @@ import { motion } from 'motion/react';
 import { UploadCloud, Image as ImageIcon, Trash2, Plus, Check, Sparkles, ZoomIn, X, Info, Layers, Tag, Filter, SlidersHorizontal, ArrowRight, ShoppingBag, ChevronDown, ChevronUp, RotateCcw, Download, Upload } from 'lucide-react';
 import { GalleryPhoto } from '../types';
 import { initialGalleryPhotos } from '../data/companyData';
-import { loadPhotosFromStorage, savePhotosToStorage, clearAllStoredPhotos } from '../utils/photoStorage';
+import { loadPhotosFromStorage, savePhotosToStorage, clearAllStoredPhotos, deduplicatePhotos } from '../utils/photoStorage';
+import { compressImageFile } from '../utils/imageCompressor';
 import { AddProductFromPhotoModal } from './AddProductFromPhotoModal';
 import { useLanguage } from '../context/LanguageContext';
 import { getGalleryPhotoAlt } from '../utils/imageSeo';
@@ -378,59 +379,33 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
     setIsUploading(true);
     const files = Array.from(fileList);
 
-    const processFile = (file: File): Promise<GalleryPhoto | null> => {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const result = event.target?.result as string;
-          if (!result) return resolve(null);
+    const processFile = async (file: File): Promise<GalleryPhoto | null> => {
+      try {
+        const compressed = await compressImageFile(file, {
+          maxDimension: 1920,
+          quality: 0.85,
+          preferredFormat: 'image/webp'
+        });
 
-          const img = new Image();
-          img.src = result;
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 1200;
-            const MAX_HEIGHT = 1200;
-            let width = img.width;
-            let height = img.height;
+        const chosenCategory = uploadTargetCategory || 'Torbice';
+        const rawClean = file.name.replace(/\.[^/.]+$/, '').replace(/10000\d*/g, '').trim();
+        const displayTitle = rawClean || `Rukotvorina - ${chosenCategory}`;
 
-            if (width > height) {
-              if (width > MAX_WIDTH) {
-                height = Math.round(height * (MAX_WIDTH / width));
-                width = MAX_WIDTH;
-              }
-            } else {
-              if (height > MAX_HEIGHT) {
-                width = Math.round(width * (MAX_HEIGHT / height));
-                height = MAX_HEIGHT;
-              }
-            }
-
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx?.drawImage(img, 0, 0, width, height);
-
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
-            const chosenCategory = uploadTargetCategory || 'Torbice';
-
-            const newPhoto: GalleryPhoto = {
-              id: 'custom-' + Date.now() + '-' + Math.random().toString(36).substring(2, 8),
-              title: file.name.replace(/\.[^/.]+$/, '').replace(/10000/, 'Slika '),
-              category: chosenCategory,
-              imageUrl: compressedDataUrl,
-              caption: `Autentični rad u kategoriji ${chosenCategory} - Savremeni Koreni.`,
-              isCustomUploaded: true,
-              dateAdded: new Date().toLocaleDateString(isEn ? 'en-US' : 'sr-RS'),
-            };
-
-            resolve(newPhoto);
-          };
-          img.onerror = () => resolve(null);
+        const newPhoto: GalleryPhoto = {
+          id: 'custom-' + Date.now() + '-' + Math.random().toString(36).substring(2, 8),
+          title: displayTitle,
+          category: chosenCategory,
+          imageUrl: compressed.dataUrl,
+          caption: `Autentični rad u kategoriji ${chosenCategory} - Savremeni Koreni.`,
+          isCustomUploaded: true,
+          dateAdded: new Date().toLocaleDateString(isEn ? 'en-US' : 'sr-RS'),
         };
-        reader.onerror = () => resolve(null);
-        reader.readAsDataURL(file);
-      });
+
+        return newPhoto;
+      } catch (err) {
+        console.error('Compress file error:', err);
+        return null;
+      }
     };
 
     try {
@@ -439,14 +414,12 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
 
       if (validNewPhotos.length > 0) {
         setPhotos((prev) => {
-          const existingUrls = new Set(prev.map(p => p.imageUrl));
-          const nonDuplicateNew = validNewPhotos.filter(p => !existingUrls.has(p.imageUrl));
-          const updated = [...nonDuplicateNew, ...prev];
-          savePhotosToStorage(updated).catch(console.error);
-          return updated;
+          const deduped = deduplicatePhotos([...validNewPhotos, ...prev]);
+          savePhotosToStorage(deduped).catch(console.error);
+          return deduped;
         });
 
-        setUploadSuccessMessage(isEn ? `Successfully added ${validNewPhotos.length} photos to "${uploadTargetCategory}"!` : `Uspešno dodato ${validNewPhotos.length} fotografija u kategoriju "${uploadTargetCategory}"!`);
+        setUploadSuccessMessage(isEn ? `Successfully added & compressed ${validNewPhotos.length} photos in "${uploadTargetCategory}"!` : `Uspešno dodato i kompresovano ${validNewPhotos.length} fotografija u kategoriju "${uploadTargetCategory}"!`);
         setTimeout(() => setUploadSuccessMessage(null), 4000);
       }
     } catch (err) {

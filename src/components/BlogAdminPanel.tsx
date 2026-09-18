@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   FileText, 
   Sparkles, 
@@ -10,10 +10,21 @@ import {
   AlertCircle, 
   Globe, 
   Check, 
-  Copy 
+  Copy,
+  Image as ImageIcon,
+  Camera,
+  Search,
+  SlidersHorizontal
 } from 'lucide-react';
 import { generateSeoSlug } from '../utils/slug';
 import { blogPostsData } from '../data/blogData';
+import { BlogPost } from '../types';
+import { BlogImageEditModal } from './BlogImageEditModal';
+import { SeoAeoGeoBlogModal } from './SeoAeoGeoBlogModal';
+import { GeneratedBlogPostResult } from '../utils/seoAeoGeoBlogGenerator';
+import { loadAllBlogPosts, deleteCustomBlog } from '../utils/blogStorage';
+import { saveCustomLandingPage } from '../utils/landingPageStorage';
+import { compressImageFile, formatBytes } from '../utils/imageCompressor';
 
 export interface BlogAdminPanelProps {
   customBlogs: any[];
@@ -43,21 +54,66 @@ export const BlogAdminPanel: React.FC<BlogAdminPanelProps> = ({
   const [blogImage, setBlogImage] = useState('');
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
 
+  const [allPosts, setAllPosts] = useState<BlogPost[]>(() => loadAllBlogPosts());
+  const [selectedBlogForImages, setSelectedBlogForImages] = useState<BlogPost | null>(null);
+  const [isBlogImageModalOpen, setIsBlogImageModalOpen] = useState(false);
+  const [isSeoMakerOpen, setIsSeoMakerOpen] = useState(false);
+  const [searchFilter, setSearchFilter] = useState('');
+  const [isCompressingNew, setIsCompressingNew] = useState(false);
+  const [compressStats, setCompressStats] = useState<string | null>(null);
+
+  const handleApplyGeneratedArticle = (res: GeneratedBlogPostResult) => {
+    setBlogTitleSr(res.titleSr);
+    setBlogTitleEn(res.titleEn);
+    setBlogSlug(res.slug);
+    setBlogExcerptSr(res.excerptSr);
+    setBlogExcerptEn(res.excerptEn);
+    setBlogContentSr(res.contentSr);
+    setBlogContentEn(res.contentEn);
+    setIsSlugManuallyEdited(true);
+    setSlugSource('sr');
+    showToast(`✨ Članak "${res.titleSr}" je uspešno učitan u formu! Pregledajte ga i sačuvajte.`);
+  };
+
   const blogFileInputRef = useRef<HTMLInputElement>(null);
 
-  // Helper to convert image file to Base64
-  const handleImageFile = (file: File, callback: (base64: string) => void) => {
-    if (file.size > 5 * 1024 * 1024) {
-      showToast("Slika je prevelika! Maksimalna dozvoljena veličina je 5MB.");
-      return;
-    }
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      if (typeof reader.result === 'string') {
-        callback(reader.result);
-      }
+  const refreshAllPosts = () => {
+    setAllPosts(loadAllBlogPosts());
+  };
+
+  useEffect(() => {
+    refreshAllPosts();
+    const handler = () => {
+      refreshAllPosts();
     };
-    reader.readAsDataURL(file);
+    window.addEventListener('blog-posts-updated', handler);
+    return () => window.removeEventListener('blog-posts-updated', handler);
+  }, []);
+
+  // Helper to convert and compress image file to WebP
+  const handleImageFile = async (file: File, callback: (base64: string) => void) => {
+    setIsCompressingNew(true);
+    try {
+      const res = await compressImageFile(file, {
+        maxDimension: 1920,
+        quality: 0.85,
+        preferredFormat: 'image/webp'
+      });
+      callback(res.dataUrl);
+      setCompressStats(`⚡ Slika kompresovana u WebP: ${formatBytes(res.originalSize)} ➔ ${formatBytes(res.compressedSize)} (-${res.savingsPercent}%)`);
+      showToast(`Slika za blog uspešno optimizovana! (-${res.savingsPercent}%)`);
+    } catch (err) {
+      console.warn("Kompresija blog slike:", err);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          callback(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setIsCompressingNew(false);
+    }
   };
 
   // Handle Serbian Title change with auto slug generation
@@ -192,17 +248,28 @@ export const BlogAdminPanel: React.FC<BlogAdminPanelProps> = ({
             </p>
           </div>
 
-          {onTranslateBlog && (
+          <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
-              onClick={onTranslateBlog}
-              disabled={isTranslating}
-              className="px-4 py-2 bg-gradient-to-r from-[#9E3E26] to-[#C2872A] hover:opacity-95 text-white font-medium text-xs rounded-xl flex items-center gap-2 transition-all shadow-md disabled:opacity-50 cursor-pointer"
+              onClick={() => setIsSeoMakerOpen(true)}
+              className="px-4 py-2 bg-gradient-to-r from-[#C2872A] to-[#9E3E26] hover:opacity-95 text-stone-950 font-bold text-xs rounded-xl flex items-center gap-2 transition-all shadow-md cursor-pointer"
             >
-              <Sparkles className={`w-4 h-4 ${isTranslating ? 'animate-spin' : ''}`} />
-              <span>{isTranslating ? 'Prevođenje...' : '✨ Prevedi Članak na Engleski'}</span>
+              <Sparkles className="w-4 h-4 text-stone-950" />
+              <span>⚡ SEO + AEO + GEO Maker (Ljudski stil)</span>
             </button>
-          )}
+
+            {onTranslateBlog && (
+              <button
+                type="button"
+                onClick={onTranslateBlog}
+                disabled={isTranslating}
+                className="px-4 py-2 bg-stone-800 hover:bg-stone-700 text-stone-200 font-medium text-xs rounded-xl flex items-center gap-2 transition-all border border-stone-700 disabled:opacity-50 cursor-pointer"
+              >
+                <Sparkles className={`w-4 h-4 ${isTranslating ? 'animate-spin' : ''}`} />
+                <span>{isTranslating ? 'Prevođenje...' : '✨ Prevedi na Engleski'}</span>
+              </button>
+            )}
+          </div>
         </div>
 
         <form onSubmit={handleSaveBlog} className="space-y-6">
@@ -326,10 +393,11 @@ export const BlogAdminPanel: React.FC<BlogAdminPanelProps> = ({
               <button
                 type="button"
                 onClick={() => blogFileInputRef.current?.click()}
-                className="px-4 py-2.5 bg-white/5 hover:bg-white/10 text-stone-300 text-xs rounded-xl flex items-center gap-2 border border-white/10 cursor-pointer"
+                disabled={isCompressingNew}
+                className="px-4 py-2.5 bg-white/5 hover:bg-white/10 text-stone-300 text-xs rounded-xl flex items-center gap-2 border border-white/10 cursor-pointer disabled:opacity-50"
               >
                 <Upload className="w-4 h-4 text-[#C2872A]" />
-                <span>Izaberi Sliku za Blog</span>
+                <span>{isCompressingNew ? 'Optimizacija...' : 'Izaberi Sliku za Blog'}</span>
               </button>
 
               <input
@@ -346,11 +414,18 @@ export const BlogAdminPanel: React.FC<BlogAdminPanelProps> = ({
               />
 
               {blogImage && (
-                <div className="w-10 h-10 rounded-lg overflow-hidden border border-[#C2872A]">
+                <div className="w-12 h-12 rounded-lg overflow-hidden border border-[#C2872A] relative group">
                   <img src={blogImage} alt="Blog thumb" className="w-full h-full object-cover" />
                 </div>
               )}
             </div>
+
+            {compressStats && (
+              <p className="text-[11px] text-emerald-400 mt-2 flex items-center gap-1">
+                <Check className="w-3.5 h-3.5" />
+                <span>{compressStats}</span>
+              </p>
+            )}
           </div>
 
           {/* Excerpt / Sažetak (SR & EN) */}
@@ -422,85 +497,160 @@ export const BlogAdminPanel: React.FC<BlogAdminPanelProps> = ({
       </div>
 
       {/* List of Published Articles */}
-      <div>
-        <h3 className="text-base font-serif text-[#E8D0A9] mb-4">
-          Objavljeni Članci na Sajtu ({blogPostsData.length + customBlogs.length})
-        </h3>
+      <div className="space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 className="text-base font-serif text-[#E8D0A9]">
+              Objavljeni Članci na Sajtu ({allPosts.length})
+            </h3>
+            <p className="text-xs text-stone-400">
+              Upravljajte slikama, naslovnim fotografijama i sekcijama za svaki blog članak
+            </p>
+          </div>
+
+          <div className="relative max-w-xs w-full">
+            <Search className="w-4 h-4 text-stone-500 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={searchFilter}
+              onChange={(e) => setSearchFilter(e.target.value)}
+              placeholder="Pretraži članke..."
+              className="w-full bg-[#121212] border border-stone-800 rounded-xl pl-9 pr-3 py-2 text-xs text-stone-200 placeholder-stone-500 focus:border-[#C2872A] focus:outline-none"
+            />
+          </div>
+        </div>
 
         <div className="space-y-3">
-          {customBlogs.map((b) => (
-            <div 
-              key={b.id}
-              className="bg-[#241D19] border border-[#C2872A]/40 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4"
-            >
-              <div>
-                <span className="text-[10px] uppercase tracking-wider text-[#E8D0A9] bg-[#C2872A]/20 px-2 py-0.5 rounded border border-[#C2872A]/40">
-                  Vaš Članak
-                </span>
-                <h4 className="text-sm font-medium text-stone-200 mt-1">{b.title}</h4>
-                <div className="flex items-center gap-2 mt-1">
-                  <p className="text-xs text-[#E8D0A9] font-mono bg-stone-900/80 px-2 py-0.5 rounded border border-stone-800">
-                    /blog/{b.slug}
-                  </p>
-                  <button
-                    onClick={() => handleCopyLink(b.slug)}
-                    className="text-stone-400 hover:text-white transition-colors cursor-pointer p-1"
-                    title="Kopiraj pun SEO link"
-                  >
-                    {copiedSlug === b.slug ? (
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    ) : (
-                      <Copy className="w-3.5 h-3.5" />
-                    )}
-                  </button>
-                </div>
-              </div>
+          {allPosts
+            .filter(b => 
+              !searchFilter.trim() || 
+              b.title.toLowerCase().includes(searchFilter.toLowerCase()) || 
+              (b.titleEn && b.titleEn.toLowerCase().includes(searchFilter.toLowerCase())) ||
+              b.slug.toLowerCase().includes(searchFilter.toLowerCase())
+            )
+            .map((b) => {
+              const isCustom = b.id.startsWith('custom-');
+              return (
+                <div 
+                  key={b.id}
+                  className={`bg-[#241D19] border ${
+                    isCustom ? 'border-[#C2872A]/40' : 'border-white/10'
+                  } rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:border-[#C2872A]/60 transition-all`}
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    {/* Thumbnail */}
+                    <div className="w-16 h-16 rounded-lg overflow-hidden bg-black/50 border border-stone-800 shrink-0 relative">
+                      {b.coverImage ? (
+                        <img 
+                          src={b.coverImage} 
+                          alt={b.title} 
+                          className="w-full h-full object-cover" 
+                        />
+                      ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center text-stone-600">
+                          <ImageIcon className="w-5 h-5" />
+                          <span className="text-[9px] mt-0.5">Nema slike</span>
+                        </div>
+                      )}
+                    </div>
 
-              <button
-                onClick={() => {
-                  const f = customBlogs.filter(x => x.id !== b.id);
-                  setCustomBlogs(f);
-                  localStorage.setItem('koreni_custom_blog_posts', JSON.stringify(f));
-                  showToast("Članak obrisan.");
-                }}
-                className="p-2 text-stone-500 hover:text-red-400 transition-colors cursor-pointer"
-                title="Obriši članak"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded font-medium ${
+                          isCustom 
+                            ? 'text-[#E8D0A9] bg-[#C2872A]/20 border border-[#C2872A]/40'
+                            : 'text-stone-400 bg-white/5 border border-white/10'
+                        }`}>
+                          {isCustom ? 'Vaš Članak' : 'SEO Vodič'}
+                        </span>
+                        <span className="text-[11px] text-stone-400">{b.categoryLabel || 'Blog'}</span>
+                      </div>
 
-          {blogPostsData.slice(0, 4).map((b) => (
-            <div 
-              key={b.id}
-              className="bg-[#241D19] border border-white/5 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 opacity-85"
-            >
-              <div>
-                <span className="text-[10px] uppercase tracking-wider text-stone-400 bg-white/5 px-2 py-0.5 rounded">
-                  Sistemski SEO Vodič
-                </span>
-                <h4 className="text-sm font-medium text-stone-300 mt-1">{b.title}</h4>
-                <div className="flex items-center gap-2 mt-1">
-                  <p className="text-xs text-stone-500 font-mono">/blog/{b.slug}</p>
-                  <button
-                    onClick={() => handleCopyLink(b.slug)}
-                    className="text-stone-500 hover:text-stone-300 transition-colors cursor-pointer p-1"
-                    title="Kopiraj link"
-                  >
-                    {copiedSlug === b.slug ? (
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    ) : (
-                      <Copy className="w-3.5 h-3.5" />
+                      <h4 className="text-sm font-medium text-stone-200 mt-1 truncate">{b.title}</h4>
+                      
+                      <div className="flex items-center gap-2 mt-1">
+                        <p className="text-xs text-[#E8D0A9] font-mono bg-stone-900/80 px-2 py-0.5 rounded border border-stone-800 truncate">
+                          /blog/{b.slug}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => handleCopyLink(b.slug)}
+                          className="text-stone-400 hover:text-white transition-colors cursor-pointer p-1"
+                          title="Kopiraj pun SEO link"
+                        >
+                          {copiedSlug === b.slug ? (
+                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          ) : (
+                            <Copy className="w-3.5 h-3.5" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedBlogForImages(b);
+                        setIsBlogImageModalOpen(true);
+                      }}
+                      className="px-3 py-1.5 bg-[#C2872A]/20 hover:bg-[#C2872A] text-[#E8D0A9] hover:text-stone-950 border border-[#C2872A]/50 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow"
+                      title="Postavi, zameni ili obriši slike u ovom članku"
+                    >
+                      <Camera className="w-3.5 h-3.5" />
+                      <span>Upravljaj Slikama</span>
+                    </button>
+
+                    {isCustom && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const f = customBlogs.filter(x => x.id !== b.id);
+                          setCustomBlogs(f);
+                          deleteCustomBlog(b.id);
+                          showToast("Članak obrisan.");
+                        }}
+                        className="p-2 text-stone-500 hover:text-red-400 transition-colors cursor-pointer"
+                        title="Obriši članak"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     )}
-                  </button>
+                  </div>
                 </div>
-              </div>
-              <span className="text-xs text-emerald-400/80">Google Aktivan</span>
-            </div>
-          ))}
+              );
+            })}
         </div>
       </div>
+
+      {/* Modal za upravljanje slikama u blogu */}
+      <BlogImageEditModal
+        blog={selectedBlogForImages}
+        isOpen={isBlogImageModalOpen}
+        onClose={() => {
+          setIsBlogImageModalOpen(false);
+          setSelectedBlogForImages(null);
+        }}
+        onSaved={() => {
+          refreshAllPosts();
+        }}
+        showToast={showToast}
+      />
+
+      {/* Modal za SEO + AEO + GEO Generisanje Blogova i Ciljanih Landing Stranica */}
+      <SeoAeoGeoBlogModal
+        isOpen={isSeoMakerOpen}
+        onClose={() => setIsSeoMakerOpen(false)}
+        onApplyArticle={handleApplyGeneratedArticle}
+        onApplyLandingPage={(landingRes) => {
+          saveCustomLandingPage(landingRes);
+          showToast(`✨ Ciljana Landing Stranica "/${landingRes.slug}" je uspešno sačuvana!`);
+        }}
+        showToast={showToast}
+        initialMode="blog"
+      />
     </div>
   );
 };

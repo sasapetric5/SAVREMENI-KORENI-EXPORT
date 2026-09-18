@@ -32,7 +32,6 @@ import { CurrencyProvider } from './context/CurrencyContext';
 import { LogoUploadModal } from './components/LogoUploadModal';
 import { WebVitalsMonitor } from './components/WebVitalsMonitor';
 import { AdminPanel } from './components/AdminPanel';
-import { AutoProjectPersister } from './components/AutoProjectPersister';
 import { GoogleAdSenseBanner } from './components/GoogleAdSenseBanner';
 import { initAnalytics, trackProductView, trackBlogPostView, trackConversion } from './utils/analytics';
 import { initWebVitalsTracking } from './utils/webVitals';
@@ -277,9 +276,6 @@ function AppContent() {
 
             {/* W3C Web Vitals & Loading Diagnostics Section */}
             <WebVitalsMonitor />
-
-            {/* Background Auto Project Persistence Bridge (Browser IndexedDB -> GitHub Files) */}
-            <AutoProjectPersister />
           </>
         )}
       </main>

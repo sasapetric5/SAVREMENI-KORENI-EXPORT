@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { seoLandingPages, SeoLandingPageData } from '../data/seoLandingPagesData';
+import { getLandingPageBySlug } from '../utils/landingPageStorage';
 import { productsData, companyDetails } from '../data/companyData';
 import { Product } from '../types';
 import { getProductImageAlt, getProductImageTitle } from '../utils/imageSeo';
@@ -42,7 +43,16 @@ export const SeoLandingPage: React.FC<SeoLandingPageProps> = ({
   const { isEn } = useLanguage();
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
-  const pageData: SeoLandingPageData | undefined = seoLandingPages[slug];
+  const [pageData, setPageData] = useState<SeoLandingPageData | undefined>(() => getLandingPageBySlug(slug) || seoLandingPages[slug]);
+
+  useEffect(() => {
+    setPageData(getLandingPageBySlug(slug) || seoLandingPages[slug]);
+    const handleUpdate = () => {
+      setPageData(getLandingPageBySlug(slug) || seoLandingPages[slug]);
+    };
+    window.addEventListener('landing-pages-updated', handleUpdate);
+    return () => window.removeEventListener('landing-pages-updated', handleUpdate);
+  }, [slug]);
 
   // Dynamic SEO meta tags, title and schema injection
   useEffect(() => {

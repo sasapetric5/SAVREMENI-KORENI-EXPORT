@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Database, Download, Upload, CheckCircle2, AlertCircle, 
-  Copy, Check, RefreshCw, ExternalLink, ShieldCheck, HardDrive
+  Copy, Check, RefreshCw, ExternalLink, ShieldCheck, HardDrive, KeyRound, Lock,
+  GitBranch, GitCommit, Eye, EyeOff, Send
 } from 'lucide-react';
 import { isSupabaseConfigured, syncCustomProductsToSupabase, syncGalleryPhotosToSupabase } from '../lib/supabase';
 import { downloadFullBackup, restoreFromBackupData } from '../utils/backupStorage';
 import { getCustomProducts } from '../utils/customProductStorage';
 import { loadPhotosFromStorage } from '../utils/photoStorage';
 import { triggerPermanentProjectPersistence } from './AutoProjectPersister';
+import { isUsingDefaultPin } from '../utils/adminAuth';
 
 interface DatabaseAdminPanelProps {
   showToast: (msg: string) => void;
+  onOpenChangePassword?: () => void;
 }
 
 const SUPABASE_SQL_SCRIPT = `-- Kreiranje tabela za Savremeni Koreni na Supabase
@@ -64,7 +67,7 @@ CREATE POLICY "Javno citanje gallery_photos" ON gallery_photos FOR SELECT USING 
 CREATE POLICY "Javni unos gallery_photos" ON gallery_photos FOR ALL USING (true);
 `;
 
-export const DatabaseAdminPanel: React.FC<DatabaseAdminPanelProps> = ({ showToast }) => {
+export const DatabaseAdminPanel: React.FC<DatabaseAdminPanelProps> = ({ showToast, onOpenChangePassword }) => {
   const [productCount, setProductCount] = useState<number>(0);
   const [productImagesCount, setProductImagesCount] = useState<number>(0);
   const [photoCount, setPhotoCount] = useState<number>(0);
@@ -82,6 +85,136 @@ export const DatabaseAdminPanel: React.FC<DatabaseAdminPanelProps> = ({ showToas
   } | null>(null);
   const [copiedSql, setCopiedSql] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // GitHub integration state
+  const [githubToken, setGithubToken] = useState<string>(() => localStorage.getItem('koreni_github_pat') || '');
+  const [githubRepo, setGithubRepo] = useState<string>(() => {
+    const saved = localStorage.getItem('koreni_github_repo');
+    if (!saved || saved === 'skoksap/SAVREMENI-KORENI-EXPORT') {
+      localStorage.setItem('koreni_github_repo', 'sasapetric5/SAVREMENI-KORENI-EXPORT');
+      return 'sasapetric5/SAVREMENI-KORENI-EXPORT';
+    }
+    return saved;
+  });
+  const [githubBranch, setGithubBranch] = useState<string>(() => localStorage.getItem('koreni_github_branch') || 'main');
+  const [showPat, setShowPat] = useState<boolean>(false);
+  const [isTestingGithub, setIsTestingGithub] = useState<boolean>(false);
+  const [githubStatus, setGithubStatus] = useState<{
+    success: boolean;
+    message: string;
+    fullRepo?: string;
+    defaultBranch?: string;
+  } | null>(null);
+  const [isPushingGithub, setIsPushingGithub] = useState<boolean>(false);
+  const [lastCommitUrl, setLastCommitUrl] = useState<string | null>(null);
+
+  const handleSaveGithubConfig = (token: string, repo: string, branch: string) => {
+    localStorage.setItem('koreni_github_pat', token);
+    localStorage.setItem('koreni_github_repo', repo);
+    localStorage.setItem('koreni_github_branch', branch);
+  };
+
+  const handleTestGithubConnection = async () => {
+    if (!githubToken.trim()) {
+      showToast('Unesite GitHub Personal Access Token (PAT)');
+      return;
+    }
+    setIsTestingGithub(true);
+    try {
+      handleSaveGithubConfig(githubToken, githubRepo, githubBranch);
+      const res = await fetch('/api/github/test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          token: githubToken,
+          repo: githubRepo
+        })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setGithubStatus({
+          success: true,
+          message: data.message,
+          fullRepo: data.fullRepo,
+          defaultBranch: data.defaultBranch
+        });
+        showToast(data.message);
+      } else {
+        setGithubStatus({
+          success: false,
+          message: data.error || 'Greška pri povezivanju sa GitHub-om'
+        });
+        showToast(data.error || 'Neuspešno testiranje GitHub konekcije.');
+      }
+    } catch (err: any) {
+      showToast('Greška pri komunikaciji sa GitHub-om.');
+    } finally {
+      setIsTestingGithub(false);
+    }
+  };
+
+  const handlePushToGithub = async () => {
+    if (!githubToken.trim()) {
+      showToast('Molimo unesite GitHub Personal Access Token (PAT).');
+      return;
+    }
+    setIsPushingGithub(true);
+    try {
+      handleSaveGithubConfig(githubToken, githubRepo, githubBranch);
+      
+      showToast('1/2 Upisujem lokalne fajlove u projekat...');
+      await triggerPermanentProjectPersistence((progress) => {
+        setPersistProgress(progress);
+      });
+
+      showToast('2/2 Šaljem sve promene direktno na GitHub repozitorijum...');
+      const res = await fetch('/api/github/push', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          token: githubToken,
+          repo: githubRepo,
+          branch: githubBranch,
+          commitMessage: `Automatska sinhronizacija iz Admin Panela (${new Date().toLocaleDateString('sr-RS')} ${new Date().toLocaleTimeString('sr-RS')})`
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setLastCommitUrl(data.commitUrl);
+        setGithubStatus({
+          success: true,
+          message: data.message,
+          fullRepo: data.targetRepo,
+          defaultBranch: data.targetBranch
+        });
+        showToast(`✅ ${data.message}`);
+        await loadStats();
+      } else {
+        const errorMsg = data.error || 'Greška pri slanju na GitHub repozitorijum.';
+        setGithubStatus({
+          success: false,
+          message: errorMsg,
+          fullRepo: githubRepo,
+          defaultBranch: githubBranch
+        });
+        showToast(`❌ ${errorMsg}`);
+      }
+    } catch (err: any) {
+      console.error('GitHub push failed:', err);
+      const errMsg = err?.message || 'Greška pri sinhronizaciji sa GitHub repozitorijumom.';
+      setGithubStatus({
+        success: false,
+        message: errMsg,
+        fullRepo: githubRepo,
+        defaultBranch: githubBranch
+      });
+      showToast(`❌ ${errMsg}`);
+    } finally {
+      setIsPushingGithub(false);
+      setPersistProgress('');
+    }
+  };
 
   const loadStats = async () => {
     try {
@@ -265,38 +398,206 @@ export const DatabaseAdminPanel: React.FC<DatabaseAdminPanelProps> = ({ showToas
         </div>
       </div>
 
-      {/* Trajno ugrađivanje u GitHub & Cloudflare Pages */}
-      <div className="bg-gradient-to-br from-[#1E293B] to-[#0F172A] border-2 border-emerald-500/40 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-semibold mb-2">
-              <CheckCircle2 className="w-4 h-4" />
-              Automatska sinhronizacija u GitHub & Cloudflare Pages
-            </div>
-            <h2 className="text-xl font-serif text-white font-bold">
-              Trajno Čuvanje Svih Proizvoda i Slika u Kodu Projekta
-            </h2>
+      {/* Administratorska Bezbednost & Lozinka */}
+      <div className="bg-[#241D19] border border-[#C2872A]/40 rounded-2xl p-5 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-[#C2872A]/20 border border-[#C2872A]/40 flex items-center justify-center text-[#E8D0A9] shrink-0">
+            <KeyRound className="w-6 h-6" />
           </div>
-          <button
-            onClick={handlePermanentPersist}
-            disabled={isPersistingRepo}
-            className="px-6 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold text-sm rounded-xl flex items-center gap-2.5 transition-all shadow-lg hover:shadow-emerald-500/20 cursor-pointer disabled:opacity-50 shrink-0"
-          >
-            <RefreshCw className={`w-5 h-5 ${isPersistingRepo ? 'animate-spin' : ''}`} />
-            <span>{isPersistingRepo ? (persistProgress || 'Upisujem u projekat...') : '⚡ Trajno upiši sve u GitHub kod'}</span>
-          </button>
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-base font-serif text-[#E8D0A9]">Administratorska Lozinka za Pristup</h2>
+              <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded font-medium ${
+                isUsingDefaultPin()
+                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                  : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+              }`}>
+                {isUsingDefaultPin() ? 'Fabrička Lozinka' : 'Aktivna Vaša Lozinka'}
+              </span>
+            </div>
+            <p className="text-xs text-stone-300 mt-1">
+              Lozinka više nije javno prikazana na dugmetu sajta. Ovde možete promeniti svoju lozinku ili je po potrebi vratiti na fabričku.
+            </p>
+          </div>
         </div>
 
-        <p className="text-xs text-stone-300 leading-relaxed max-w-3xl mb-4">
-          Ova funkcija uzima sve vaše proizvode (svih 47) i sve optimizovane fotografije iz vašeg pretraživača i fizički ih upisuje u repozitorijum projekta (<code className="text-emerald-300 bg-emerald-950/40 px-1 py-0.5 rounded">public/custom_products/</code> i <code className="text-emerald-300 bg-emerald-950/40 px-1 py-0.5 rounded">src/data/permanentProductsData.ts</code>). Nakon toga, svaki put kada uradite deploy na Cloudflare Pages, sajt će odmah prikazivati identične podatke bez ikakve potrebe za ručnim radom!
+        {onOpenChangePassword && (
+          <button
+            type="button"
+            onClick={onOpenChangePassword}
+            className="px-5 py-2.5 bg-[#C2872A] hover:bg-[#a87422] text-stone-950 font-semibold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer shrink-0 font-serif"
+          >
+            <KeyRound className="w-4 h-4" />
+            <span>Promeni Lozinku</span>
+          </button>
+        )}
+      </div>
+
+      {/* Trajno ugrađivanje i Direktan Push na GitHub (SAVREMENI-KORENI-EXPORT) */}
+      <div className="bg-gradient-to-br from-[#1E293B] via-[#0F172A] to-[#1E1B18] border-2 border-emerald-500/50 rounded-2xl p-6 shadow-2xl relative overflow-hidden space-y-6">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+        
+        {/* Top Header */}
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-white/10">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold mb-2">
+              <CheckCircle2 className="w-4 h-4" />
+              Direktna Automatska Sinhronizacija sa GitHub Repozitorijumom
+            </div>
+            <h2 className="text-xl font-serif text-white font-bold flex items-center gap-2">
+              <GitBranch className="w-6 h-6 text-emerald-400" />
+              Povezivanje i Automatski Push na GitHub (<code className="text-emerald-300 font-mono text-base">SAVREMENI-KORENI-EXPORT</code>)
+            </h2>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={handlePermanentPersist}
+              disabled={isPersistingRepo || isPushingGithub}
+              className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-stone-200 font-medium text-xs rounded-xl flex items-center gap-2 border border-slate-700 transition-all cursor-pointer disabled:opacity-50"
+              title="Samo lokalno upiši u fajlove na serveru"
+            >
+              <HardDrive className="w-4 h-4 text-emerald-400" />
+              <span>{isPersistingRepo ? (persistProgress || 'Upisujem lokalno...') : 'Lokalno u kod'}</span>
+            </button>
+
+            <button
+              onClick={handlePushToGithub}
+              disabled={isPushingGithub || isPersistingRepo}
+              className="px-6 py-3 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-sm rounded-xl flex items-center gap-2.5 transition-all shadow-xl shadow-emerald-950/50 hover:shadow-emerald-500/20 cursor-pointer disabled:opacity-50"
+            >
+              <Send className={`w-5 h-5 ${isPushingGithub ? 'animate-bounce' : ''}`} />
+              <span>{isPushingGithub ? (persistProgress || 'Šaljem na GitHub...') : '⚡ DIREKTNO PUSTI NA GITHUB (SAVREMENI-KORENI-EXPORT)'}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Info text */}
+        <p className="text-xs text-stone-300 leading-relaxed">
+          Ova funkcija trajno upisuje sve vaše proizvode ({productCount}), sve optimizovane fotografije ({productImagesCount + photoCount}) i sve SEO stranice direktno u vaš GitHub repozitorijum <strong className="text-emerald-400">SAVREMENI-KORENI-EXPORT</strong>. 
+          Čim kliknete dugme, GitHub prima novi commit i vaš Cloudflare Pages ili Vercel hosting odmah pravi novu verziju sajta sa svim podacima uživo!
         </p>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-3 border-t border-white/10 text-xs">
+        {/* GitHub Credentials Setup Form */}
+        <div className="bg-black/50 rounded-xl p-4 border border-white/10 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xs font-bold text-stone-200 uppercase tracking-wider flex items-center gap-2">
+              <KeyRound className="w-4 h-4 text-emerald-400" />
+              Podešavanje GitHub Tokena i Repozitorijuma
+            </h3>
+            <a 
+              href="https://github.com/settings/tokens" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-[11px] text-emerald-400 hover:text-emerald-300 underline flex items-center gap-1"
+            >
+              <ExternalLink className="w-3 h-3" />
+              Kreiraj GitHub Token (PAT sa 'repo' dozvolom)
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="md:col-span-1">
+              <label className="block text-[11px] font-medium text-stone-300 mb-1">
+                GitHub Token (PAT / Personal Access Token):
+              </label>
+              <div className="relative">
+                <input
+                  type={showPat ? 'text' : 'password'}
+                  value={githubToken}
+                  onChange={(e) => {
+                    setGithubToken(e.target.value);
+                    handleSaveGithubConfig(e.target.value, githubRepo, githubBranch);
+                  }}
+                  placeholder="ghp_1234567890abcdef..."
+                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-stone-500 focus:outline-none focus:border-emerald-500 pr-9 font-mono"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPat(!showPat)}
+                  className="absolute right-2.5 top-2 text-stone-400 hover:text-white"
+                >
+                  {showPat ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-medium text-stone-300 mb-1">
+                Naziv Repozitorijuma na GitHub-u:
+              </label>
+              <input
+                type="text"
+                value={githubRepo}
+                onChange={(e) => {
+                  setGithubRepo(e.target.value);
+                  handleSaveGithubConfig(githubToken, e.target.value, githubBranch);
+                }}
+                placeholder="sasapetric5/SAVREMENI-KORENI-EXPORT"
+                className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-stone-500 focus:outline-none focus:border-emerald-500 font-mono"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-medium text-stone-300 mb-1">
+                Grana (Branch):
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={githubBranch}
+                  onChange={(e) => {
+                    setGithubBranch(e.target.value);
+                    handleSaveGithubConfig(githubToken, githubRepo, e.target.value);
+                  }}
+                  placeholder="main"
+                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-stone-500 focus:outline-none focus:border-emerald-500 font-mono"
+                />
+                <button
+                  type="button"
+                  onClick={handleTestGithubConnection}
+                  disabled={isTestingGithub}
+                  className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-emerald-400 font-semibold text-xs rounded-lg border border-emerald-500/30 transition-all shrink-0 flex items-center gap-1 cursor-pointer"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${isTestingGithub ? 'animate-spin' : ''}`} />
+                  Testiraj
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {githubStatus && (
+            <div className={`p-3 rounded-lg text-xs flex items-center justify-between border ${
+              githubStatus.success 
+                ? 'bg-emerald-950/50 border-emerald-500/40 text-emerald-300' 
+                : 'bg-rose-950/50 border-rose-500/40 text-rose-300'
+            }`}>
+              <div className="flex items-center gap-2">
+                {githubStatus.success ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <AlertCircle className="w-4 h-4 text-rose-400" />}
+                <span>{githubStatus.message}</span>
+              </div>
+              {lastCommitUrl && (
+                <a
+                  href={lastCommitUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-2.5 py-1 bg-emerald-800/60 hover:bg-emerald-700 text-white font-semibold text-[11px] rounded flex items-center gap-1 shrink-0"
+                >
+                  <GitCommit className="w-3.5 h-3.5" />
+                  Pogledaj Commit na GitHub-u
+                  <ExternalLink className="w-3 h-3 ml-0.5" />
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-2 text-xs">
           <div className="bg-black/40 rounded-xl p-3 border border-white/5">
             <span className="text-stone-400 block text-[11px]">Kolekcija Proizvoda:</span>
             <span className="text-white font-bold text-sm block mt-0.5">{productCount} unikatnih modela</span>
-            <span className="text-[11px] text-amber-400/90 block mt-1 font-medium">{productImagesCount} slika proizvoda (do 4 po modelu)</span>
+            <span className="text-[11px] text-amber-400/90 block mt-1 font-medium">{productImagesCount} slika proizvoda</span>
           </div>
 
           <div className="bg-black/40 rounded-xl p-3 border border-white/5">

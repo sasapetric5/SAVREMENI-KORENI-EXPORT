@@ -174,7 +174,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateLandingPage, onOpenTra
                   className="hover:text-[#FAF7F2] text-[#E8D0A9] transition-colors flex items-center gap-1.5 font-medium cursor-pointer"
                 >
                   <Lock className="w-3.5 h-3.5 text-[#C2872A]" />
-                  <span>Admin Panel (Koreni2026)</span>
+                  <span>Admin Panel</span>
                 </button>
               </li>
               <li>
@@ -403,7 +403,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateLandingPage, onOpenTra
                   else window.location.href = '/admin';
                 }}
                 className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#C2872A]/15 hover:bg-[#C2872A]/30 border border-[#C2872A]/50 hover:border-[#C2872A] text-[#E8D0A9] hover:text-[#FAF7F2] rounded-full text-xs font-serif font-medium transition-all shadow-sm cursor-pointer ml-2"
-                title="Administratorski pristup (Koreni2026)"
+                title="Administratorski pristup"
               >
                 <Lock className="w-3.5 h-3.5 text-[#C2872A]" />
                 <span>Admin Panel</span>

@@ -348,12 +348,12 @@ export const AddProductFromPhotoModal: React.FC<AddProductFromPhotoModalProps> =
                 onChange={(e) => setCategory(e.target.value as ProductCategory)}
                 className="w-full px-3 py-2 text-xs sm:text-sm bg-white border border-[#E8E0D5] rounded-xl focus:outline-hidden focus:border-[#9E3E26]"
               >
-                <option value="torbice">{isEn ? '👜 Unique Bags & Purses' : '👜 Unikatne Torbice'}</option>
-                <option value="subare">{isEn ? '🎩 Traditional Hats & Caps' : '🎩 Tradicionalne Šubare'}</option>
-                <option value="carape">{isEn ? '🧦 Woolen Socks & Knitwear' : '🧦 Vunene Čarape'}</option>
-                <option value="kosulje">{isEn ? '👔 Embroidered Folk Costumes' : '👔 Vezene Košulje'}</option>
-                <option value="nakit">{isEn ? '📿 Crocheted Ethno Jewelry' : '📿 Heklani Nakit'}</option>
-                <option value="dom-pokloni">{isEn ? '✨ Ethno Home & Gifts' : '✨ Etno Dom & Pokloni'}</option>
+                <option value="torbice">{isEn ? '👜 UNIQUE BAGS' : '👜 UNIKATNE TORBICE'}</option>
+                <option value="subare">{isEn ? '🎩 FUR HATS' : '🎩 ŠUBARE'}</option>
+                <option value="carape">{isEn ? '🧦 EMBROIDERED SOCKS' : '🧦 VEZENE ČARAPE'}</option>
+                <option value="kosulje">{isEn ? '👔 EMBROIDERED SHIRTS' : '👔 VEZENE KOŠULJE'}</option>
+                <option value="nakit">{isEn ? '📿 CROCHETED JEWELRY' : '📿 HEKLANI NAKIT'}</option>
+                <option value="dom-pokloni">{isEn ? '🎁 UNIQUE GIFTS' : '🎁 UNIKATNI POKLONI'}</option>
               </select>
             </div>
           </div>
