@@ -98,7 +98,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   };
 
   const allImages = React.useMemo(() => {
-    if (!product) return [];
+    if (!product) return ['/logo.jpg'];
     const list: string[] = [];
     const addIfValid = (url?: string) => {
       if (url && typeof url === 'string' && url.trim().length > 0 && !list.includes(url.trim())) {
@@ -123,15 +123,27 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       }
     }
 
+    if (list.length === 0) {
+      list.push('/logo.jpg');
+    }
     return list;
   }, [product]);
+
   const priceInfo = formatProduct(product);
-  const displayName = isEn && product.nameEn ? product.nameEn : product.name;
+  const displayName = (isEn && product.nameEn ? product.nameEn : product.name) || 'Savremeni Koreni Unikat';
   const displayDesc = isEn 
-    ? (product.longDescriptionEn || product.descriptionEn || product.longDescription || product.description)
-    : (product.longDescription || product.description);
-  const displayTechniques = isEn && product.craftTechniquesEn ? product.craftTechniquesEn : product.craftTechniques;
-  const displayMaterials = isEn && product.materialsEn ? product.materialsEn : product.materials;
+    ? (product.longDescriptionEn || product.descriptionEn || product.longDescription || product.description || '')
+    : (product.longDescription || product.description || '');
+  
+  const rawTech = isEn && product.craftTechniquesEn ? product.craftTechniquesEn : product.craftTechniques;
+  const displayTechniques: string[] = Array.isArray(rawTech) ? rawTech : [];
+
+  const rawMat = isEn && product.materialsEn ? product.materialsEn : product.materials;
+  const displayMaterials: string[] = Array.isArray(rawMat) ? rawMat : [];
+
+  const safeActiveIdx = Math.max(0, Math.min(activeImageIdx, allImages.length - 1));
+  const currentImageUrl = allImages[safeActiveIdx] || allImages[0] || product.image || '/logo.jpg';
+  const displayCategory = (product.category || 'radionica').toUpperCase();
 
   const priceNotice = priceInfo.isConverted 
     ? `${priceInfo.formatted} (${priceInfo.rsdFormatted})`
@@ -154,7 +166,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#E8E0D5] bg-white sticky top-0 z-10">
           <div className="flex items-center gap-2">
             <span className="text-xs uppercase font-bold tracking-wider text-[#9E3E26] bg-[#F4E8E3] px-2.5 py-1 rounded">
-              {product.category.toUpperCase()}
+              {displayCategory}
             </span>
             {product.badge && (
               <span className="text-xs uppercase font-bold tracking-wider text-[#C2872A] bg-[#FAF7F2] border border-[#C2872A]/30 px-2 py-0.5 rounded">
@@ -183,7 +195,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   
                   {/* Pinterest Pin */}
                   <a
-                    href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(`https://savremenikoreni.com/katalog?product=${product.id}`)}&media=${encodeURIComponent(toAbsoluteUrl(product.image))}&description=${encodeURIComponent(isEn ? `Discover authentic Serbian handcrafted "${displayName}" by Savremeni Koreni` : `Pogledajte prelepi unikatni ručni rad "${product.name}" iz radionice Savremeni Koreni. 100% autorska izrada.`)}`}
+                    href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(`https://savremenikoreni.com/katalog?product=${product.id}`)}&media=${encodeURIComponent(toAbsoluteUrl(currentImageUrl))}&description=${encodeURIComponent(isEn ? `Discover authentic Serbian handcrafted "${displayName}" by Savremeni Koreni` : `Pogledajte prelepi unikatni ručni rad "${product.name || displayName}" iz radionice Savremeni Koreni. 100% autorska izrada.`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2.5 px-3 py-2 text-xs text-[#241D19] hover:bg-[#FAF7F2] transition-colors"
@@ -615,9 +627,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
           {/* Product Reviews & Star Rating Section */}
           <ProductReviews
-            productId={product.id}
+            productId={product.id || 'prod_default'}
             productName={displayName}
-            productCategory={product.category}
+            productCategory={product.category || 'radionica'}
           />
         </div>
 

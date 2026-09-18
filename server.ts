@@ -345,15 +345,21 @@ async function startServer() {
           }
         });
 
-        const diskFiles = fs.readdirSync(uploadDir);
-        diskFiles.forEach((f: string) => {
-          if (!activeFiles.has(f)) {
-            try {
-              fs.unlinkSync(path.join(uploadDir, f));
-              deletedOrphansCount++;
-            } catch {}
-          }
-        });
+        if (fs.existsSync(publicUploadDir)) {
+          const diskFiles = fs.readdirSync(publicUploadDir);
+          diskFiles.forEach((f: string) => {
+            if (!activeFiles.has(f)) {
+              try {
+                fs.unlinkSync(path.join(publicUploadDir, f));
+                if (fs.existsSync(distUploadDir)) {
+                  const distFile = path.join(distUploadDir, f);
+                  if (fs.existsSync(distFile)) fs.unlinkSync(distFile);
+                }
+                deletedOrphansCount++;
+              } catch {}
+            }
+          });
+        }
       } catch (err) {
         console.warn("Orphan cleanup warning:", err);
       }

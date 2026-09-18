@@ -420,12 +420,16 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                           loading="lazy"
                           onError={(e) => {
                             const target = e.currentTarget;
+                            if ((target as any)._hasFailedOnce) return;
+                            (target as any)._hasFailedOnce = true;
                             if (product.images && product.images.length > 0) {
                               const altAngle = product.images.find(img => img && !target.src.endsWith(img));
                               if (altAngle && !target.src.endsWith(altAngle)) {
                                 target.src = altAngle;
+                                return;
                               }
                             }
+                            target.src = '/logo.jpg';
                           }}
                         />
                       );

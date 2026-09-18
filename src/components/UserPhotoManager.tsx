@@ -9,6 +9,7 @@ import { AddProductFromPhotoModal } from './AddProductFromPhotoModal';
 import { useLanguage } from '../context/LanguageContext';
 import { getGalleryPhotoAlt } from '../utils/imageSeo';
 import { downloadFullBackup, restoreFromBackupData } from '../utils/backupStorage';
+import { triggerPermanentProjectPersistence } from './AutoProjectPersister';
 
 export interface CategoryGroupDef {
   key: string;
@@ -207,6 +208,30 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
   const [categoryPageSize, setCategoryPageSize] = useState<Record<string, number>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
   const backupFileInputRef = useRef<HTMLInputElement>(null);
+  const [isPersistingProject, setIsPersistingProject] = useState(false);
+
+  const handlePersistToProject = async () => {
+    setIsPersistingProject(true);
+    try {
+      const res = await triggerPermanentProjectPersistence((status) => {
+        setUploadSuccessMessage(status);
+      });
+      if (res.success) {
+        setUploadSuccessMessage(
+          isEn
+            ? `Successfully permanently saved ${res.savedPhotosCount} photos and ${res.savedProductsCount} products for Cloudflare & GitHub!`
+            : `Uspešno trajno sačuvano ${res.savedPhotosCount} slika i ${res.savedProductsCount} proizvoda za Cloudflare i GitHub!`
+        );
+      } else {
+        setUploadSuccessMessage(res.error || (isEn ? 'Failed to sync with server.' : 'Greška pri sinhronizaciji.'));
+      }
+    } catch (e: any) {
+      setUploadSuccessMessage(e?.message || 'Greška pri sinhronizaciji.');
+    } finally {
+      setIsPersistingProject(false);
+      setTimeout(() => setUploadSuccessMessage(null), 7000);
+    }
+  };
 
   const handleExportBackup = async () => {
     const res = await downloadFullBackup();
@@ -731,6 +756,16 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={handlePersistToProject}
+              disabled={isPersistingProject}
+              title={isEn ? "Permanently save all gallery photos & products for Cloudflare & GitHub deployment" : "Trajno sačuvaj sve slike i proizvode u kod za Cloudflare i GitHub"}
+              className="text-xs text-white bg-[#9E3E26] hover:bg-[#7F2F1C] disabled:opacity-50 px-3 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer transition-all shadow-xs font-semibold active:scale-95"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-200" />
+              <span>{isPersistingProject ? (isEn ? 'Saving to Code...' : 'Upisujem u kod...') : (isEn ? 'Save for Cloudflare & GitHub' : 'Sačuvaj za Cloudflare & GitHub')}</span>
+            </button>
+
             <button
               onClick={handleExportBackup}
               title={isEn ? "Download full backup of all photos & products (JSON)" : "Preuzmi rezervnu kopiju svih slika i proizvoda (JSON)"}

@@ -142,25 +142,27 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const formatPrice = (
-    priceRsd: number,
+    priceRsd: number | undefined | null,
     priceEur?: number,
     targetCurrency?: Currency
   ): FormattedPriceResult => {
     const target = targetCurrency || currency;
-    const amount = convertAmount(priceRsd, target, priceEur);
-    const info = CURRENCIES[target];
+    const safePriceRsd = typeof priceRsd === 'number' && !isNaN(priceRsd) ? priceRsd : (typeof priceEur === 'number' && !isNaN(priceEur) ? Math.round(priceEur * 117.2) : 0);
+    const safePriceEur = typeof priceEur === 'number' && !isNaN(priceEur) ? priceEur : undefined;
+    const amount = convertAmount(safePriceRsd, target, safePriceEur);
+    const info = CURRENCIES[target] || CURRENCIES.RSD;
 
-    const rsdFormatted = `${priceRsd.toLocaleString(isEn ? 'en-US' : 'sr-RS')} RSD`;
+    const rsdFormatted = `${safePriceRsd.toLocaleString(isEn ? 'en-US' : 'sr-RS')} RSD`;
 
     let formatted = '';
     let secondaryLabel = '';
 
     if (target === 'RSD') {
-      formatted = `${priceRsd.toLocaleString(isEn ? 'en-US' : 'sr-RS')} RSD`;
-      if (priceEur) {
-        secondaryLabel = `(~€${priceEur})`;
+      formatted = `${safePriceRsd.toLocaleString(isEn ? 'en-US' : 'sr-RS')} RSD`;
+      if (safePriceEur) {
+        secondaryLabel = `(~€${safePriceEur})`;
       } else {
-        const eur = Math.round(priceRsd / 117.2);
+        const eur = Math.round(safePriceRsd / 117.2);
         secondaryLabel = `(~€${eur})`;
       }
     } else if (target === 'EUR') {
@@ -179,7 +181,7 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       amount,
       currency: target,
       symbol: info.symbol,
-      rsdAmount: priceRsd,
+      rsdAmount: safePriceRsd,
       rsdFormatted,
       isConverted: target !== 'RSD',
       secondaryLabel,
@@ -187,10 +189,14 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const formatProduct = (
-    product: { priceRsd: number; priceEur?: number },
+    product: { priceRsd?: number; priceEur?: number; price?: number } | null | undefined,
     targetCurrency?: Currency
   ): FormattedPriceResult => {
-    return formatPrice(product.priceRsd, product.priceEur, targetCurrency);
+    if (!product) {
+      return formatPrice(0, undefined, targetCurrency);
+    }
+    const pRsd = typeof product.priceRsd === 'number' ? product.priceRsd : (typeof product.price === 'number' ? product.price : 0);
+    return formatPrice(pRsd, product.priceEur, targetCurrency);
   };
 
   return (
