@@ -1,7 +1,5 @@
 {
   "name": "savremeni-koreni-export",
   "compatibility_date": "2025-01-01",
-  "assets": {
-    "directory": "./dist"
-  }
+  "pages_build_output_dir": "./dist"
 }
