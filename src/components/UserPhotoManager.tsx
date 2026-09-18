@@ -598,27 +598,20 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
       className="group relative aspect-3/4 rounded-2xl overflow-hidden bg-[#FAF7F2] border border-[#E8E0D5] shadow-2xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer"
     >
       <div className="relative w-full h-full bg-[#FAF7F2] overflow-hidden">
-        {!loadedImageIds[photo.id] && (
-          <div className="absolute inset-0 bg-[#E8E0D5]/35 animate-pulse flex flex-col items-center justify-center p-3 text-center pointer-events-none z-0">
-            <span className="text-[11px] font-serif tracking-widest text-[#9E3E26]/50 uppercase font-semibold">
-              Savremeni Koreni
-            </span>
-            <span className="text-[10px] text-[#241D19]/40 mt-1 font-sans">
-              {photo.category}
-            </span>
-          </div>
-        )}
         <img
-          src={photo.imageUrl}
+          src={photo.imageUrl || '/logo.jpg'}
           alt={getGalleryPhotoAlt(photo, isEn)}
           title={isEn ? `${photo.titleEn || photo.title} — Artisan craft by Savremeni Koreni (Homolje, Serbia)` : `${photo.title} — Autentični ručni rad Savremeni Koreni (Jošanica)`}
           aria-label={getGalleryPhotoAlt(photo, isEn)}
           loading="lazy"
           decoding="async"
-          onLoad={() => setLoadedImageIds((prev) => (prev[photo.id] ? prev : { ...prev, [photo.id]: true }))}
-          className={`w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-500 ${
-            loadedImageIds[photo.id] ? 'opacity-100' : 'opacity-0'
-          }`}
+          onError={(e) => {
+            const target = e.currentTarget;
+            if (!target.src.endsWith('/logo.jpg')) {
+              target.src = '/logo.jpg';
+            }
+          }}
+          className="w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-500 opacity-100"
           referrerPolicy="no-referrer"
         />
       </div>

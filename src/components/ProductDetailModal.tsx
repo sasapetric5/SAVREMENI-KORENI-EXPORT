@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Check, Clock, MessageCircle, Phone, ShoppingBag, Sparkles, Shield, Info, ChevronLeft, ChevronRight, Share2, Feather, HeartHandshake, Droplet, SunMedium, Layers, ShieldCheck, ZoomIn } from 'lucide-react';
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+import { X, Check, Clock, MessageCircle, Phone, ShoppingBag, Sparkles, Shield, Info, ChevronLeft, ChevronRight, Share2, Feather, HeartHandshake, Droplet, SunMedium, Layers, ShieldCheck, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { Product } from '../types';
 import { companyDetails } from '../data/companyData';
 import { permanentProductsData } from '../data/permanentProductsData';
@@ -27,7 +26,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const [activeImageIdx, setActiveImageIdx] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const [isZoomed, setIsZoomed] = useState(false);
+  const [zoomScale, setZoomScale] = useState(1);
+  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
+  const [panStart, setPanStart] = useState({ x: 0, y: 0 });
   const [copiedShare, setCopiedShare] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   
@@ -35,10 +37,65 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const [showMagnifier, setShowMagnifier] = useState(false);
   const [magnifierPos, setMagnifierPos] = useState({ x: 0, y: 0, relX: 0, relY: 0 });
-  const [magnifierEnabled, setMagnifierEnabled] = useState(true);
+  const [magnifierEnabled, setMagnifierEnabled] = useState(false);
+
+  // Lock body scroll when modal is open and handle ESC key
+  useEffect(() => {
+    if (!product) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      } else if (e.key === 'ArrowLeft') {
+        setActiveImageIdx((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+      } else if (e.key === 'ArrowRight') {
+        setActiveImageIdx((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [product, onClose]);
+
+  // Dynamically inject OpenGraph and Twitter card meta tags safely
+  useEffect(() => {
+    if (!product) return;
+    try {
+      const cleanup = injectProductSocialMeta(product, isEn);
+      return () => {
+        try {
+          if (typeof cleanup === 'function') cleanup();
+        } catch {}
+      };
+    } catch {}
+  }, [product, isEn]);
+
+  // Reset zoom & selection when product or active image changes
+  useEffect(() => {
+    setActiveImageIdx(0);
+    setZoomScale(1);
+    setPanOffset({ x: 0, y: 0 });
+    setCopiedShare(false);
+    setShowShareMenu(false);
+  }, [product]);
+
+  useEffect(() => {
+    setZoomScale(1);
+    setPanOffset({ x: 0, y: 0 });
+    setTouchStart(null);
+    setTouchEnd(null);
+  }, [activeImageIdx]);
+
+  if (!product) return null;
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!imageContainerRef.current || isZoomed || !magnifierEnabled) return;
+    if (!imageContainerRef.current || zoomScale > 1 || !magnifierEnabled) return;
     const rect = imageContainerRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -50,27 +107,14 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     setMagnifierPos({ x, y, relX, relY });
   };
 
-  // Dynamically inject OpenGraph and Twitter card meta tags for high-quality social sharing
-  useEffect(() => {
-    if (!product) return;
-    const cleanup = injectProductSocialMeta(product, isEn);
-    return cleanup;
-  }, [product, isEn]);
-
-  useEffect(() => {
-    setActiveImageIdx(0);
-    setIsZoomed(false);
-    setCopiedShare(false);
-  }, [product]);
-
-  // Reset zoom state when image changes
-  useEffect(() => {
-    setIsZoomed(false);
-    setTouchStart(null);
-    setTouchEnd(null);
-  }, [activeImageIdx]);
-
-  if (!product) return null;
+  const toggleZoom = () => {
+    if (zoomScale > 1) {
+      setZoomScale(1);
+      setPanOffset({ x: 0, y: 0 });
+    } else {
+      setZoomScale(2.2);
+    }
+  };
 
   const handleShareProduct = async () => {
     const url = `https://savremenikoreni.com/katalog?product=${product.id}`;
@@ -97,7 +141,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     }
   };
 
-  const allImages = React.useMemo(() => {
+  const allImages: string[] = (() => {
     if (!product) return ['/logo.jpg'];
     const list: string[] = [];
     const addIfValid = (url?: string) => {
@@ -127,7 +171,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       list.push('/logo.jpg');
     }
     return list;
-  }, [product]);
+  })();
 
   const priceInfo = formatProduct(product);
   const displayName = (isEn && product.nameEn ? product.nameEn : product.name) || 'Savremeni Koreni Unikat';
@@ -145,57 +189,53 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const currentImageUrl = allImages[safeActiveIdx] || allImages[0] || product.image || '/logo.jpg';
   const displayCategory = (product.category || 'radionica').toUpperCase();
 
-  const priceNotice = priceInfo.isConverted 
-    ? `${priceInfo.formatted} (${priceInfo.rsdFormatted})`
-    : `${priceInfo.rsdFormatted} ${product.priceEur ? `(~€${product.priceEur})` : ''}`;
-
-  const whatsappMessage = encodeURIComponent(
-    isEn
-      ? `Hello Tanja! I am interested in your handcrafted piece from the Savremeni Koreni website: "${displayName}" (${priceNotice}). Is it available for ordering?`
-      : `Dobar dan Tanja! Zainteresovan/a sam za vaš unikat sa sajta Savremeni Koreni: "${product.name}" (${priceNotice}). Da li je dostupan za poručivanje?`
-  );
-  const whatsappUrl = `https://wa.me/381603318319?text=${whatsappMessage}`;
+  const whatsappUrl = `https://wa.me/381643075214?text=${encodeURIComponent(
+    isEn 
+      ? `Hello Tanja, I am interested in ordering the handcrafted piece: "${displayName}". Could you share more details on availability?` 
+      : `Poštovana Tanja, pišem u vezi porudžbine unikatnog rada "${displayName}". Molim Vas za detalje oko izrade i slanja.`
+  )}`;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-xs overflow-y-auto animate-in fade-in duration-200"
+      onClick={onClose}
+    >
       <div 
-        className="relative w-full max-w-3xl bg-[#FAF7F2] rounded-2xl shadow-2xl border border-[#E8E0D5] overflow-hidden my-8 max-h-[90vh] flex flex-col"
+        className="relative max-w-4xl w-full bg-[#FAF7F2] rounded-2xl overflow-hidden shadow-2xl border border-[#E8E0D5] my-auto flex flex-col max-h-[92vh]"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#E8E0D5] bg-white sticky top-0 z-10">
+        {/* Modal Header Bar */}
+        <div className="p-4 sm:p-5 bg-white border-b border-[#E8E0D5] flex items-center justify-between z-20 shrink-0">
           <div className="flex items-center gap-2">
-            <span className="text-xs uppercase font-bold tracking-wider text-[#9E3E26] bg-[#F4E8E3] px-2.5 py-1 rounded">
+            <span className="text-xs uppercase font-bold tracking-wider text-[#9E3E26] bg-[#F4E8E3] px-2.5 py-1 rounded-md">
               {displayCategory}
             </span>
-            {product.badge && (
-              <span className="text-xs uppercase font-bold tracking-wider text-[#C2872A] bg-[#FAF7F2] border border-[#C2872A]/30 px-2 py-0.5 rounded">
-                {product.badge}
-              </span>
-            )}
+            <span className="text-xs text-[#241D19]/60 font-serif italic hidden sm:inline">
+              {isEn ? 'Handcrafted in Jošanica, Homolje' : 'Ručni rad iz Jošanice, Homolje'}
+            </span>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Social Share Menu Button */}
             <div className="relative">
               <button
                 onClick={() => setShowShareMenu(!showShareMenu)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FAF7F2] hover:bg-[#F4E8E3] text-[#241D19] border border-[#E8E0D5] text-xs font-medium shadow-2xs hover:shadow-sm transition-all cursor-pointer"
-                title={isEn ? 'Share & Pin options' : 'Opcije za deljenje i Pinterest'}
-                aria-label={isEn ? 'Share product' : 'Podeli proizvod'}
+                className="p-2 sm:px-3 sm:py-1.5 rounded-full sm:rounded-lg bg-[#FAF7F2] hover:bg-[#F4E8E3] border border-[#E8E0D5] text-[#241D19] text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs"
+                title={isEn ? 'Share product' : 'Podeli proizvod'}
               >
                 <Share2 className="w-3.5 h-3.5 text-[#9E3E26]" />
                 <span className="hidden sm:inline">{isEn ? 'Share' : 'Podeli'}</span>
               </button>
 
               {showShareMenu && (
-                <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl border border-[#E8E0D5] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                  <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#9E3E26]/60 border-b border-[#E8E0D5]/50 mb-1">
-                    {isEn ? 'Share & Pin' : 'Podeli i zakači'}
+                <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-[#E8E0D5] py-2 z-50 animate-in fade-in">
+                  <div className="px-3 py-1.5 border-b border-[#E8E0D5]/50 text-[10px] font-bold uppercase tracking-wider text-[#241D19]/60">
+                    {isEn ? 'Share this piece' : 'Podelite ovaj unikat'}
                   </div>
-                  
-                  {/* Pinterest Pin */}
+
+                  {/* Pinterest Direct Pin */}
                   <a
-                    href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(`https://savremenikoreni.com/katalog?product=${product.id}`)}&media=${encodeURIComponent(toAbsoluteUrl(currentImageUrl))}&description=${encodeURIComponent(isEn ? `Discover authentic Serbian handcrafted "${displayName}" by Savremeni Koreni` : `Pogledajte prelepi unikatni ručni rad "${product.name || displayName}" iz radionice Savremeni Koreni. 100% autorska izrada.`)}`}
+                    href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(`https://savremenikoreni.com/katalog?product=${product.id}`)}&media=${encodeURIComponent(toAbsoluteUrl(currentImageUrl))}&description=${encodeURIComponent(isEn ? `Discover authentic Serbian handcrafted "${displayName}" by Savremeni Koreni` : `Pogledajte prelepi unikatni ručni rad "${product.name}" iz radionice Savremeni Koreni. 100% autorska izrada.`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2.5 px-3 py-2 text-xs text-[#241D19] hover:bg-[#FAF7F2] transition-colors"
@@ -272,85 +312,110 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 </div>
               )}
             </div>
+
             <CurrencySelector variant="topbar" />
+
             <button
               onClick={onClose}
-              className="p-2.5 sm:p-3 bg-[#9E3E26] hover:bg-[#7F2F1C] text-white rounded-full border-2 border-white dark:border-[#382C24] shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center justify-center group shrink-0 active:scale-95 z-50"
+              className="p-2 sm:p-2.5 bg-[#9E3E26] hover:bg-[#7F2F1C] text-white rounded-full border-2 border-white shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center justify-center group shrink-0 active:scale-95 z-50"
               aria-label={isEn ? 'Close modal' : 'Zatvori prozor'}
               title={isEn ? 'Close (ESC)' : 'Zatvori (ESC)'}
             >
-              <X className="w-5.5 h-5.5 stroke-[3] transition-transform group-hover:scale-110" />
+              <X className="w-5 h-5 stroke-[2.5] transition-transform group-hover:scale-110" />
             </button>
           </div>
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 sm:p-8 overflow-y-auto space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div className="p-4 sm:p-8 overflow-y-auto space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8">
             {/* Image Column */}
             <div className="md:col-span-6 flex flex-col">
               {/* Action Buttons Container (Above Image) */}
-              <div className="flex justify-between items-center mb-3">
-                {/* Magnifier Mode Badge Toggle Hint */}
-                <button
-                  type="button"
-                  onClick={() => setMagnifierEnabled(!magnifierEnabled)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer border shadow-sm ${
-                    magnifierEnabled
-                      ? 'bg-[#9E3E26]/90 text-white border-[#9E3E26]'
-                      : 'bg-[#FAF7F2] text-[#241D19] border-[#E8E0D5] hover:bg-[#F4E8E3]'
-                  }`}
-                  title={isEn ? 'Toggle Magnifying Lens' : 'Uključi/isključi lupu veza'}
-                >
-                  <ZoomIn className="w-3.5 h-3.5 text-[#E8D0A9]" />
-                  <span className="text-[11px]">
-                    {isEn ? (magnifierEnabled ? 'Magnifier Active' : 'Enable Lens') : (magnifierEnabled ? 'Lupa Veza Aktivna' : 'Uključi Lupu')}
-                  </span>
-                </button>
+              <div className="flex justify-between items-center mb-2.5">
+                {/* Zoom / Lens Controls */}
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={toggleZoom}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 cursor-pointer border shadow-xs ${
+                      zoomScale > 1
+                        ? 'bg-[#9E3E26] text-white border-[#9E3E26]'
+                        : 'bg-white text-[#241D19] border-[#E8E0D5] hover:bg-[#F4E8E3]'
+                    }`}
+                    title={isEn ? 'Zoom image' : 'Uvećaj sliku'}
+                  >
+                    {zoomScale > 1 ? <ZoomOut className="w-3.5 h-3.5" /> : <ZoomIn className="w-3.5 h-3.5 text-[#9E3E26]" />}
+                    <span className="text-[11px]">
+                      {zoomScale > 1 ? (isEn ? 'Reset Zoom' : 'Umanji') : (isEn ? 'Zoom 2x' : 'Uvećaj 2x')}
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMagnifierEnabled(!magnifierEnabled);
+                      if (zoomScale > 1) setZoomScale(1);
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 cursor-pointer border shadow-xs ${
+                      magnifierEnabled
+                        ? 'bg-[#241D19] text-[#E8D0A9] border-[#241D19]'
+                        : 'bg-white text-[#241D19] border-[#E8E0D5] hover:bg-[#F4E8E3]'
+                    }`}
+                    title={isEn ? 'Magnifying lens for embroidery details' : 'Lupa za detalje veza'}
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-[#C2872A]" />
+                    <span className="text-[11px]">
+                      {isEn ? (magnifierEnabled ? 'Lens Active' : 'Embroidery Lens') : (magnifierEnabled ? 'Lupa aktivna' : 'Lupa veza')}
+                    </span>
+                  </button>
+                </div>
 
                 {/* Pinterest Auto-Share Image Pin */}
                 <a
-                  href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(`https://savremenikoreni.com/katalog?product=${product.id}`)}&media=${encodeURIComponent(toAbsoluteUrl(allImages[activeImageIdx]))}&description=${encodeURIComponent(isEn ? `Discover authentic Serbian handcrafted "${displayName}" by Savremeni Koreni` : `Pogledajte prelepi unikatni ručni rad "${product.name}" iz radionice Savremeni Koreni. 100% autorska izrada.`)}`}
+                  href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(`https://savremenikoreni.com/katalog?product=${product.id}`)}&media=${encodeURIComponent(toAbsoluteUrl(currentImageUrl))}&description=${encodeURIComponent(isEn ? `Discover authentic Serbian handcrafted "${displayName}" by Savremeni Koreni` : `Pogledajte prelepi unikatni ručni rad "${product.name}" iz radionice Savremeni Koreni. 100% autorska izrada.`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3 py-1.5 rounded-full text-xs font-bold bg-[#E60023] hover:bg-[#b8001c] text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-sm border border-[#E60023]"
+                  className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#E60023] hover:bg-[#b8001c] text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-xs border border-[#E60023]"
                   title={isEn ? 'Pin this image on Pinterest' : 'Zakači ovu sliku na Pinterest'}
                 >
                   <span className="w-3.5 h-3.5 rounded-full bg-white text-[#E60023] flex items-center justify-center font-black text-[9px] leading-none shrink-0">
                     P
                   </span>
-                  <span className="text-[11px] font-semibold">{isEn ? 'Pin it' : 'Zakači sliku'}</span>
+                  <span className="text-[11px] font-semibold">{isEn ? 'Pin' : 'Zakači'}</span>
                 </a>
               </div>
 
+              {/* Main Image Stage */}
               <div 
                 ref={imageContainerRef}
-                className="relative aspect-square sm:aspect-3/4 w-full rounded-2xl overflow-hidden border border-[#E8E0D5] bg-[#FAF7F2] shadow-lg group flex items-center justify-center cursor-crosshair"
+                className="relative aspect-square sm:aspect-3/4 w-full rounded-2xl overflow-hidden border border-[#E8E0D5] bg-[#FAF7F2] shadow-md group flex items-center justify-center cursor-pointer select-none"
                 onMouseEnter={() => setShowMagnifier(true)}
-                onMouseLeave={() => setShowMagnifier(false)}
+                onMouseLeave={() => {
+                  setShowMagnifier(false);
+                  setIsPanning(false);
+                }}
                 onMouseMove={handleMouseMove}
-                onTouchStartCapture={(e) => {
+                onDoubleClick={toggleZoom}
+                onTouchStart={(e) => {
                   setTouchEnd(null);
-                  setTouchStart(e.targetTouches[0].clientX);
+                  if (e.targetTouches[0]) {
+                    setTouchStart(e.targetTouches[0].clientX);
+                  }
                 }}
-                onTouchMoveCapture={(e) => {
-                  setTouchEnd(e.targetTouches[0].clientX);
+                onTouchMove={(e) => {
+                  if (e.targetTouches[0]) {
+                    setTouchEnd(e.targetTouches[0].clientX);
+                  }
                 }}
-                onTouchEndCapture={() => {
-                  if (!touchStart || !touchEnd) return;
-                  // Only swipe if the image is NOT zoomed in
-                  if (isZoomed) return;
-                  
+                onTouchEnd={() => {
+                  if (!touchStart || !touchEnd || zoomScale > 1) return;
                   const distance = touchStart - touchEnd;
-                  const isLeftSwipe = distance > 50;
-                  const isRightSwipe = distance < -50;
-                  
                   if (allImages.length > 1) {
-                    if (isLeftSwipe) {
-                      setActiveImageIdx(prev => (prev === allImages.length - 1 ? 0 : prev + 1));
-                    }
-                    if (isRightSwipe) {
-                      setActiveImageIdx(prev => (prev === 0 ? allImages.length - 1 : prev - 1));
+                    if (distance > 45) {
+                      setActiveImageIdx((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
+                    } else if (distance < -45) {
+                      setActiveImageIdx((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
                     }
                   }
                 }}
@@ -358,7 +423,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 {/* Blurred backdrop for a premium look and to cover empty space */}
                 <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                   <img
-                    src={allImages[activeImageIdx]}
+                    src={currentImageUrl}
                     alt=""
                     className="w-full h-full object-cover blur-2xl opacity-40 scale-110"
                     referrerPolicy="no-referrer"
@@ -367,7 +432,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 </div>
 
                 {/* Floating Craftsman Magnifying Glass Lens */}
-                {showMagnifier && magnifierEnabled && !isZoomed && (
+                {showMagnifier && magnifierEnabled && zoomScale <= 1 && (
                   <div
                     className="pointer-events-none absolute z-30 rounded-full border-2 border-[#C2872A] shadow-2xl overflow-hidden bg-white hidden sm:block transition-opacity duration-150"
                     style={{
@@ -375,7 +440,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                       height: '180px',
                       left: `${magnifierPos.x - 90}px`,
                       top: `${magnifierPos.y - 90}px`,
-                      backgroundImage: `url(${allImages[activeImageIdx]})`,
+                      backgroundImage: `url(${currentImageUrl})`,
                       backgroundRepeat: 'no-repeat',
                       backgroundSize: '360% 360%',
                       backgroundPosition: `${magnifierPos.relX * 100}% ${magnifierPos.relY * 100}%`,
@@ -392,59 +457,60 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   </div>
                 )}
 
-                <div className="absolute inset-0 z-10">
-                  <TransformWrapper
-                    key={activeImageIdx}
-                    initialScale={1}
-                    minScale={1}
-                    maxScale={4}
-                    doubleClick={{ mode: "toggle" }}
-                    wheel={{ step: 0.1 }}
-                    panning={{ disabled: !isZoomed }}
-                    onTransform={(ref) => {
-                      setIsZoomed(ref.state.scale > 1.05);
+                {/* Primary Photo Display */}
+                <div 
+                  className="relative z-10 w-full h-full flex items-center justify-center p-3 transition-transform duration-300"
+                  style={{
+                    transform: `scale(${zoomScale}) translate(${panOffset.x}px, ${panOffset.y}px)`,
+                    cursor: zoomScale > 1 ? 'zoom-out' : magnifierEnabled ? 'crosshair' : 'zoom-in',
+                  }}
+                  onClick={() => {
+                    if (zoomScale > 1) {
+                      setZoomScale(1);
+                      setPanOffset({ x: 0, y: 0 });
+                    }
+                  }}
+                >
+                  <img
+                    src={currentImageUrl}
+                    alt={getProductImageAlt(product, isEn)}
+                    title={getProductImageTitle(product, isEn)}
+                    className="max-w-full max-h-full object-contain object-center drop-shadow-md rounded-lg transition-all"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (allImages.length > 1) {
+                        const altImg = allImages.find((img) => img && !target.src.endsWith(img));
+                        if (altImg && !target.src.endsWith(altImg)) {
+                          target.src = altImg;
+                          return;
+                        }
+                      }
+                      target.src = '/logo.jpg';
                     }}
-                  >
-                    {({ state }) => (
-                      <TransformComponent wrapperClass="!w-full !h-full" contentClass="!w-full !h-full flex items-center justify-center">
-                        <img
-                          src={allImages[activeImageIdx] || allImages[0] || ''}
-                          alt={getProductImageAlt(product, isEn)}
-                          title={getProductImageTitle(product, isEn)}
-                          className="max-w-full max-h-full object-contain object-center transition-transform duration-300 drop-shadow-md p-2"
-                          referrerPolicy="no-referrer"
-                          onError={(e) => {
-                            const target = e.currentTarget;
-                            if (allImages.length > 1) {
-                              const altImg = allImages.find((img) => img && !target.src.endsWith(img));
-                              if (altImg && !target.src.endsWith(altImg)) {
-                                target.src = altImg;
-                              }
-                            }
-                          }}
-                        />
-                      </TransformComponent>
-                    )}
-                  </TransformWrapper>
+                  />
                 </div>
                 
+                {/* Navigation arrows */}
                 {allImages.length > 1 && (
                   <>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        setActiveImageIdx(prev => (prev === 0 ? allImages.length - 1 : prev - 1));
+                        setActiveImageIdx((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
                       }}
-                      className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 p-1.5 sm:p-2 rounded-full bg-white/60 hover:bg-white text-[#241D19]/80 hover:text-[#241D19] shadow-sm backdrop-blur-xs opacity-70 sm:opacity-40 sm:group-hover:opacity-100 transition-all z-20 cursor-pointer"
+                      className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 hover:bg-white text-[#241D19] shadow-md backdrop-blur-xs transition-all z-20 cursor-pointer"
+                      aria-label={isEn ? 'Previous image' : 'Prethodna slika'}
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </button>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        setActiveImageIdx(prev => (prev === allImages.length - 1 ? 0 : prev + 1));
+                        setActiveImageIdx((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
                       }}
-                      className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 p-1.5 sm:p-2 rounded-full bg-white/60 hover:bg-white text-[#241D19]/80 hover:text-[#241D19] shadow-sm backdrop-blur-xs opacity-70 sm:opacity-40 sm:group-hover:opacity-100 transition-all z-20 cursor-pointer"
+                      className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 hover:bg-white text-[#241D19] shadow-md backdrop-blur-xs transition-all z-20 cursor-pointer"
+                      aria-label={isEn ? 'Next image' : 'Sledeća slika'}
                     >
                       <ChevronRight className="w-5 h-5" />
                     </button>
@@ -452,27 +518,32 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 )}
               </div>
               
+              {/* Thumbnails list */}
               {allImages.length > 1 && (
-                <div className="mt-4 grid grid-cols-4 gap-3">
+                <div className="mt-3.5 grid grid-cols-4 gap-2.5">
                   {allImages.map((img, idx) => (
                     <button
                       key={idx}
                       onClick={() => setActiveImageIdx(idx)}
                       className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
-                        activeImageIdx === idx ? 'border-[#9E3E26] shadow-md opacity-100' : 'border-transparent opacity-60 hover:opacity-100 hover:shadow'
+                        activeImageIdx === idx ? 'border-[#9E3E26] shadow-md opacity-100 scale-102' : 'border-[#E8E0D5] opacity-70 hover:opacity-100 hover:shadow'
                       }`}
                     >
                       <img 
                         src={img} 
                         alt={`${displayName} - ${isEn ? 'Handcraft detail view' : 'Detalj ručnog rada'} ${idx + 1}`} 
-                        className="w-full h-full object-cover" 
+                        className="w-full h-full object-cover"
+                        referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          e.currentTarget.src = '/logo.jpg';
+                        }}
                       />
                     </button>
                   ))}
                 </div>
               )}
 
-              <div className="mt-5 p-4 bg-white rounded-xl border border-[#E8E0D5] text-xs space-y-2 shadow-sm">
+              <div className="mt-4 p-3.5 bg-white rounded-xl border border-[#E8E0D5] text-xs space-y-2 shadow-xs">
                 <div className="flex items-center justify-between text-[#241D19]/75">
                   <span>{isEn ? 'Workshop:' : 'Radionica:'}</span>
                   <span className="font-semibold text-[#241D19]">Savremeni Koreni, Jošanica</span>
@@ -607,7 +678,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   <summary className="flex items-center justify-between font-serif font-bold text-xs sm:text-sm text-[#241D19] cursor-pointer select-none list-none">
                     <span className="flex items-center gap-1.5 text-[#4E6852]">
                       <HeartHandshake className="w-4 h-4 text-[#4E6852]" />
-                      {isEn ? 'Cultural & Heritage Value' : 'Etnološka vrednost i autentičnost'}
+                      {isEn ? 'Cultural & Heritage Value' : 'Etnolojska vrednost i autentičnost'}
                     </span>
                     <span className="text-xs text-[#241D19]/50 group-open:rotate-180 transition-transform">▼</span>
                   </summary>
@@ -634,7 +705,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         </div>
 
         {/* Modal Footer / Direct Actions */}
-        <div className="p-4 sm:p-6 bg-white border-t border-[#E8E0D5] flex flex-col gap-3 sticky bottom-0 z-10">
+        <div className="p-4 sm:p-5 bg-white border-t border-[#E8E0D5] flex flex-col gap-3 shrink-0">
           {/* Payment Card Security Badge Strip */}
           <div className="flex items-center justify-between text-[10px] text-[#241D19]/70 pb-1 border-b border-[#E8E0D5]/50 flex-wrap gap-1">
             <span className="font-medium flex items-center gap-1">
@@ -654,7 +725,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             <div className="flex items-center gap-2 flex-wrap">
               <a
                 href={`tel:${companyDetails.phone}`}
-                className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg border border-[#E8E0D5] hover:bg-[#FAF7F2] text-xs font-semibold text-[#241D19] transition-colors"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-[#E8E0D5] hover:bg-[#FAF7F2] text-xs font-semibold text-[#241D19] transition-colors"
               >
                 <Phone className="w-3.5 h-3.5 text-[#9E3E26]" />
                 <span className="hidden sm:inline">{isEn ? 'Call' : 'Pozovi'}:</span> {companyDetails.phoneFormatted}
@@ -664,7 +735,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg bg-[#25D366]/15 hover:bg-[#25D366]/25 text-[#128C7E] border border-[#25D366]/30 text-xs font-semibold transition-colors"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-[#25D366]/15 hover:bg-[#25D366]/25 text-[#128C7E] border border-[#25D366]/30 text-xs font-semibold transition-colors"
               >
                 <MessageCircle className="w-3.5 h-3.5 text-[#128C7E]" />
                 <span>WhatsApp</span>
@@ -672,7 +743,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
               <button
                 onClick={onClose}
-                className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg border border-[#E8E0D5] hover:bg-red-50 hover:text-red-700 hover:border-red-200 text-xs font-semibold text-[#241D19]/70 transition-colors cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-[#E8E0D5] hover:bg-red-50 hover:text-red-700 hover:border-red-200 text-xs font-semibold text-[#241D19]/70 transition-colors cursor-pointer"
                 title={isEn ? 'Close modal' : 'Zatvori prozor'}
               >
                 <X className="w-3.5 h-3.5" />

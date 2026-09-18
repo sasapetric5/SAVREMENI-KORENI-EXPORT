@@ -28,11 +28,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   private handleReload = () => {
-    try {
-      localStorage.removeItem('savremeni_koreni_user_photos_v1');
-    } catch {
-      // ignore
-    }
+    this.setState({ hasError: false, error: null });
     window.location.reload();
   };
 

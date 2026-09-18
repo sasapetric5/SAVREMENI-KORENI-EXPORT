@@ -84,37 +84,54 @@ export function toAbsoluteUrl(url?: string): string {
 /**
  * Helper to get or create a <meta> tag by name or property.
  */
-function setMetaElement(attrKey: 'name' | 'property', attrVal: string, content: string): HTMLMetaElement {
-  let element = document.head.querySelector(`meta[${attrKey}="${attrVal}"]`) as HTMLMetaElement | null;
-  if (!element) {
-    element = document.createElement('meta');
-    element.setAttribute(attrKey, attrVal);
-    document.head.appendChild(element);
+function setMetaElement(attrKey: 'name' | 'property', attrVal: string, content: string): HTMLMetaElement | null {
+  try {
+    if (typeof document === 'undefined' || !document.head) return null;
+    let element = document.head.querySelector(`meta[${attrKey}="${attrVal}"]`) as HTMLMetaElement | null;
+    if (!element) {
+      element = document.createElement('meta');
+      element.setAttribute(attrKey, attrVal);
+      document.head.appendChild(element);
+    }
+    element.setAttribute('content', content || '');
+    return element;
+  } catch (e) {
+    return null;
   }
-  element.setAttribute('content', content);
-  return element;
 }
 
 /**
  * Removes custom dynamic meta tags matching a specific selector.
  */
 function removeMetaElement(attrKey: 'name' | 'property', attrVal: string) {
-  const elements = document.head.querySelectorAll(`meta[${attrKey}="${attrVal}"]`);
-  elements.forEach((el) => el.remove());
+  try {
+    if (typeof document === 'undefined' || !document.head) return;
+    const elements = document.head.querySelectorAll(`meta[${attrKey}="${attrVal}"]`);
+    elements.forEach((el) => {
+      try {
+        el.remove();
+      } catch {}
+    });
+  } catch {}
 }
 
 /**
  * Updates or creates a link tag (e.g. canonical).
  */
-function setLinkElement(rel: string, href: string): HTMLLinkElement {
-  let element = document.head.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement | null;
-  if (!element) {
-    element = document.createElement('link');
-    element.setAttribute('rel', rel);
-    document.head.appendChild(element);
+function setLinkElement(rel: string, href: string): HTMLLinkElement | null {
+  try {
+    if (typeof document === 'undefined' || !document.head) return null;
+    let element = document.head.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement | null;
+    if (!element) {
+      element = document.createElement('link');
+      element.setAttribute('rel', rel);
+      document.head.appendChild(element);
+    }
+    element.setAttribute('href', href || '');
+    return element;
+  } catch (e) {
+    return null;
   }
-  element.setAttribute('href', href);
-  return element;
 }
 
 /**
@@ -122,31 +139,34 @@ function setLinkElement(rel: string, href: string): HTMLLinkElement {
  * Returns a cleanup function that restores previous metadata when unmounted.
  */
 export function injectSocialMeta(config: SocialMetaConfig): () => void {
-  // Store previous head state for reliable rollback
-  const prevTitle = document.title;
-  const prevDesc = (document.head.querySelector('meta[name="description"]') as HTMLMetaElement)?.content || '';
-  const prevOgTitle = (document.head.querySelector('meta[property="og:title"]') as HTMLMetaElement)?.content || '';
-  const prevOgDesc = (document.head.querySelector('meta[property="og:description"]') as HTMLMetaElement)?.content || '';
-  const prevOgImage = (document.head.querySelector('meta[property="og:image"]') as HTMLMetaElement)?.content || '';
-  const prevOgUrl = (document.head.querySelector('meta[property="og:url"]') as HTMLMetaElement)?.content || '';
-  const prevOgType = (document.head.querySelector('meta[property="og:type"]') as HTMLMetaElement)?.content || 'website';
-  const prevTwitterCard = (document.head.querySelector('meta[name="twitter:card"]') as HTMLMetaElement)?.content || 'summary_large_image';
-  const prevCanonical = (document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement)?.href || SITE_DOMAIN;
+  try {
+    if (typeof document === 'undefined' || !document.head) return () => {};
 
-  // 1. Basic SEO Tags
-  document.title = config.title;
-  setMetaElement('name', 'description', config.description);
+    // Store previous head state for reliable rollback
+    const prevTitle = document.title || '';
+    const prevDesc = (document.head.querySelector('meta[name="description"]') as HTMLMetaElement)?.content || '';
+    const prevOgTitle = (document.head.querySelector('meta[property="og:title"]') as HTMLMetaElement)?.content || '';
+    const prevOgDesc = (document.head.querySelector('meta[property="og:description"]') as HTMLMetaElement)?.content || '';
+    const prevOgImage = (document.head.querySelector('meta[property="og:image"]') as HTMLMetaElement)?.content || '';
+    const prevOgUrl = (document.head.querySelector('meta[property="og:url"]') as HTMLMetaElement)?.content || '';
+    const prevOgType = (document.head.querySelector('meta[property="og:type"]') as HTMLMetaElement)?.content || 'website';
+    const prevTwitterCard = (document.head.querySelector('meta[name="twitter:card"]') as HTMLMetaElement)?.content || 'summary_large_image';
+    const prevCanonical = (document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement)?.href || SITE_DOMAIN;
 
-  const fullUrl = config.url ? (config.url.startsWith('http') ? config.url : `${SITE_DOMAIN}${config.url}`) : SITE_DOMAIN;
-  setLinkElement('canonical', fullUrl);
+    // 1. Basic SEO Tags
+    if (config.title) document.title = config.title;
+    if (config.description) setMetaElement('name', 'description', config.description);
 
-  const fullImageUrl = toAbsoluteUrl(config.imageUrl);
+    const fullUrl = config.url ? (config.url.startsWith('http') ? config.url : `${SITE_DOMAIN}${config.url}`) : SITE_DOMAIN;
+    setLinkElement('canonical', fullUrl);
 
-  // 2. OpenGraph Meta Tags
-  setMetaElement('property', 'og:site_name', config.siteName || DEFAULT_BRAND);
-  setMetaElement('property', 'og:title', config.title);
-  setMetaElement('property', 'og:description', config.description);
-  setMetaElement('property', 'og:url', fullUrl);
+    const fullImageUrl = toAbsoluteUrl(config.imageUrl);
+
+    // 2. OpenGraph Meta Tags
+    setMetaElement('property', 'og:site_name', config.siteName || DEFAULT_BRAND);
+    setMetaElement('property', 'og:title', config.title || '');
+    setMetaElement('property', 'og:description', config.description || '');
+    setMetaElement('property', 'og:url', fullUrl);
   setMetaElement('property', 'og:type', config.ogType || 'website');
   setMetaElement('property', 'og:image', fullImageUrl);
   setMetaElement('property', 'og:image:secure_url', fullImageUrl);
@@ -235,35 +255,41 @@ export function injectSocialMeta(config: SocialMetaConfig): () => void {
     }
   }
 
-  // Return teardown function that reverts to saved initial state
-  return () => {
-    document.title = prevTitle;
-    if (prevDesc) setMetaElement('name', 'description', prevDesc);
-    if (prevOgTitle) setMetaElement('property', 'og:title', prevOgTitle);
-    if (prevOgDesc) setMetaElement('property', 'og:description', prevOgDesc);
-    if (prevOgImage) setMetaElement('property', 'og:image', prevOgImage);
-    if (prevOgUrl) setMetaElement('property', 'og:url', prevOgUrl);
-    if (prevOgType) setMetaElement('property', 'og:type', prevOgType);
-    if (prevTwitterCard) setMetaElement('name', 'twitter:card', prevTwitterCard);
-    if (prevCanonical) setLinkElement('canonical', prevCanonical);
+    // Return teardown function that reverts to saved initial state
+    return () => {
+      try {
+        if (typeof document === 'undefined') return;
+        if (prevTitle) document.title = prevTitle;
+        if (prevDesc) setMetaElement('name', 'description', prevDesc);
+        if (prevOgTitle) setMetaElement('property', 'og:title', prevOgTitle);
+        if (prevOgDesc) setMetaElement('property', 'og:description', prevOgDesc);
+        if (prevOgImage) setMetaElement('property', 'og:image', prevOgImage);
+        if (prevOgUrl) setMetaElement('property', 'og:url', prevOgUrl);
+        if (prevOgType) setMetaElement('property', 'og:type', prevOgType);
+        if (prevTwitterCard) setMetaElement('name', 'twitter:card', prevTwitterCard);
+        if (prevCanonical) setLinkElement('canonical', prevCanonical);
 
-    // Clean up entity-specific tags
-    removeMetaElement('property', 'product:price:amount');
-    removeMetaElement('property', 'product:price:currency');
-    removeMetaElement('property', 'product:availability');
-    removeMetaElement('property', 'product:brand');
-    removeMetaElement('property', 'product:category');
-    removeMetaElement('property', 'product:condition');
-    removeMetaElement('property', 'product:retailer_item_id');
-    removeMetaElement('property', 'article:published_time');
-    removeMetaElement('property', 'article:author');
-    removeMetaElement('property', 'article:section');
-    removeMetaElement('property', 'article:tag');
-    removeMetaElement('name', 'twitter:label1');
-    removeMetaElement('name', 'twitter:data1');
-    removeMetaElement('name', 'twitter:label2');
-    removeMetaElement('name', 'twitter:data2');
-  };
+        // Clean up entity-specific tags
+        removeMetaElement('property', 'product:price:amount');
+        removeMetaElement('property', 'product:price:currency');
+        removeMetaElement('property', 'product:availability');
+        removeMetaElement('property', 'product:brand');
+        removeMetaElement('property', 'product:category');
+        removeMetaElement('property', 'product:condition');
+        removeMetaElement('property', 'product:retailer_item_id');
+        removeMetaElement('property', 'article:published_time');
+        removeMetaElement('property', 'article:author');
+        removeMetaElement('property', 'article:section');
+        removeMetaElement('property', 'article:tag');
+        removeMetaElement('name', 'twitter:label1');
+        removeMetaElement('name', 'twitter:data1');
+        removeMetaElement('name', 'twitter:label2');
+        removeMetaElement('name', 'twitter:data2');
+      } catch {}
+    };
+  } catch (e) {
+    return () => {};
+  }
 }
 
 /**
