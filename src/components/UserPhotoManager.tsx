@@ -557,10 +557,7 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
           onLoad={() => setLoadedImageIds((prev) => (prev[photo.id] ? prev : { ...prev, [photo.id]: true }))}
           onError={(e) => {
             const target = e.currentTarget as HTMLImageElement;
-            if (!target.src.includes('etno_unikatna_torba_1789105500674.jpg')) {
-              target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
-              target.style.opacity = '1';
-            }
+            target.style.opacity = '0';
           }}
           className={`w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-500 ${
             loadedImageIds[photo.id] ? 'opacity-100' : 'opacity-0'

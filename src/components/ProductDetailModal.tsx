@@ -318,16 +318,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 {/* Blurred backdrop for a premium look and to cover empty space */}
                 <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                   <img
-                    src={allImages[activeImageIdx] || '/images/etno_unikatna_torba_1789105500674.jpg'}
+                    src={allImages[activeImageIdx]}
                     alt=""
                     className="w-full h-full object-cover blur-2xl opacity-40 scale-110"
                     referrerPolicy="no-referrer"
-                    onError={(e) => {
-                      const target = e.currentTarget;
-                      if (!target.src.includes('etno_unikatna_torba_1789105500674.jpg')) {
-                        target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
-                      }
-                    }}
                   />
                   <div className="absolute inset-0 bg-white/20"></div>
                 </div>
@@ -374,17 +368,11 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     {({ state }) => (
                       <TransformComponent wrapperClass="!w-full !h-full" contentClass="!w-full !h-full flex items-center justify-center">
                         <img
-                          src={allImages[activeImageIdx] || '/images/etno_unikatna_torba_1789105500674.jpg'}
+                          src={allImages[activeImageIdx]}
                           alt={getProductImageAlt(product, isEn)}
                           title={getProductImageTitle(product, isEn)}
                           className="max-w-full max-h-full object-contain object-center transition-transform duration-300 drop-shadow-md p-2"
                           referrerPolicy="no-referrer"
-                          onError={(e) => {
-                            const target = e.currentTarget;
-                            if (!target.src.includes('etno_unikatna_torba_1789105500674.jpg')) {
-                              target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
-                            }
-                          }}
                         />
                       </TransformComponent>
                     )}

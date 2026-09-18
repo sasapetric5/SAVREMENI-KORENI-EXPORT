@@ -378,18 +378,12 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     {/* Blurred backdrop for a premium look and to cover empty space */}
                     <div className="absolute inset-0 z-0 overflow-hidden bg-[#E8E0D5]/30 animate-pulse">
                       <img
-                        src={product.image || '/images/etno_unikatna_torba_1789105500674.jpg'}
+                        src={product.image}
                         alt=""
                         aria-hidden="true"
                         className="w-full h-full object-cover blur-2xl opacity-40 scale-110"
                         referrerPolicy="no-referrer"
                         loading="lazy"
-                        onError={(e) => {
-                          const target = e.currentTarget;
-                          if (target.src !== '/images/etno_unikatna_torba_1789105500674.jpg') {
-                            target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
-                          }
-                        }}
                       />
                       <div className="absolute inset-0 bg-white/30 backdrop-blur-[2px]"></div>
                     </div>
@@ -398,19 +392,13 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                       const imgAttrs = parseProductImageAttributes(product, isEn);
                       return (
                         <img
-                          src={product.image || '/images/etno_unikatna_torba_1789105500674.jpg'}
+                          src={product.image}
                           alt={imgAttrs.alt}
                           title={imgAttrs.title}
                           aria-label={imgAttrs['aria-label']}
                           className="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-[1.03] relative z-10 drop-shadow-sm p-4"
                           referrerPolicy="no-referrer"
                           loading="lazy"
-                          onError={(e) => {
-                            const target = e.currentTarget;
-                            if (target.src !== '/images/etno_unikatna_torba_1789105500674.jpg') {
-                              target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
-                            }
-                          }}
                         />
                       );
                     })()}
