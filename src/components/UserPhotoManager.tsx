@@ -175,6 +175,16 @@ const cleanAndDeduplicate = (list: GalleryPhoto[]): GalleryPhoto[] => {
   return result;
 };
 
+const getGalleryCategoryFallbackImage = (category?: string): string => {
+  const cat = (category || '').toLowerCase();
+  if (cat.includes('šubar') || cat.includes('subar')) return '/images/srpska_subara_moderna_1789021862584.jpg';
+  if (cat.includes('čar') || cat.includes('car')) return '/images/vunene_carape_vez_1789021876638.jpg';
+  if (cat.includes('košulj') || cat.includes('kosulj')) return '/images/vezena_kosulja_1789021895745.jpg';
+  if (cat.includes('nakit')) return '/images/heklani_nakit_1789021909183.jpg';
+  if (cat.includes('dom') || cat.includes('poklon')) return '/images/vezeni_nadstolnjak_lan_1789407278498.jpg';
+  return '/images/etno_torbica_vez_1789021849429.jpg';
+};
+
 interface UserPhotoManagerProps {
   onPhotosUpdated?: (photos: GalleryPhoto[]) => void;
   isOpenModal?: boolean;
@@ -593,8 +603,9 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
           onLoad={() => setLoadedImageIds((prev) => (prev[photo.id] ? prev : { ...prev, [photo.id]: true }))}
           onError={(e) => {
             const target = e.currentTarget as HTMLImageElement;
-            if (!target.src.endsWith('/images/etno_unikatna_torba_1789105500674.jpg')) {
-              target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
+            const fallback = getGalleryCategoryFallbackImage(photo.category);
+            if (!target.src.includes(fallback)) {
+              target.src = fallback;
             }
             setLoadedImageIds((prev) => ({ ...prev, [photo.id]: true }));
           }}
@@ -1040,8 +1051,9 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
                             referrerPolicy="no-referrer"
                             onError={(e) => {
                               const target = e.currentTarget as HTMLImageElement;
-                              if (!target.src.endsWith('/images/etno_unikatna_torba_1789105500674.jpg')) {
-                                target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
+                              const fallback = getGalleryCategoryFallbackImage(photo.category);
+                              if (!target.src.includes(fallback)) {
+                                target.src = fallback;
                               }
                             }}
                           />
@@ -1125,8 +1137,9 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
                   referrerPolicy="no-referrer"
                   onError={(e) => {
                     const target = e.currentTarget as HTMLImageElement;
-                    if (!target.src.endsWith('/images/etno_unikatna_torba_1789105500674.jpg')) {
-                      target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
+                    const fallback = getGalleryCategoryFallbackImage(selectedPhoto.category);
+                    if (!target.src.includes(fallback)) {
+                      target.src = fallback;
                     }
                   }}
                 />

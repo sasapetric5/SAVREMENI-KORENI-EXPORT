@@ -66,21 +66,36 @@ export async function loadCustomProductsFromStorage(): Promise<Product[]> {
     }
   }
 
-  // Also check backend server if available
+  // Check backend server or static permanent data to ensure image URLs are valid
   try {
     const res = await fetch('/api/products/custom');
     if (res.ok) {
       const serverProducts = await res.json();
       if (Array.isArray(serverProducts) && serverProducts.length > 0) {
-        // Merge without duplicates
         const map = new Map<string, Product>();
-        serverProducts.forEach((p: Product) => map.set(p.id, p));
+        // First put local products
         localProducts.forEach((p) => map.set(p.id, p));
-        return Array.from(map.values());
+        // Then overwrite/merge with server products so image URLs are always authoritative
+        serverProducts.forEach((sp: Product) => {
+          const existing = map.get(sp.id);
+          if (existing) {
+            map.set(sp.id, {
+              ...existing,
+              image: sp.image || existing.image,
+              images: (sp.images && sp.images.length > 0) ? sp.images : existing.images
+            });
+          } else {
+            map.set(sp.id, sp);
+          }
+        });
+        const merged = Array.from(map.values());
+        // Save cleaned data back to IndexedDB/localStorage
+        saveCustomProductsToStorage(merged).catch(() => {});
+        return merged;
       }
     }
   } catch {
-    // server might be offline or client SPA fallback
+    // server might be offline
   }
 
   return localProducts;

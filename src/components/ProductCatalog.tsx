@@ -11,6 +11,24 @@ import { CurrencySelector } from './CurrencySelector';
 import { ProductCardSkeleton } from './Skeletons';
 import { parseProductImageAttributes } from '../utils/imageSeo';
 
+const getCategoryFallbackImage = (category: string): string => {
+  switch (category) {
+    case 'subare':
+      return '/images/srpska_subara_moderna_1789021862584.jpg';
+    case 'carape':
+      return '/images/vunene_carape_vez_1789021876638.jpg';
+    case 'kosulje':
+      return '/images/vezena_kosulja_1789021895745.jpg';
+    case 'nakit':
+      return '/images/heklani_nakit_1789021909183.jpg';
+    case 'dom-pokloni':
+      return '/images/vezeni_nadstolnjak_lan_1789407278498.jpg';
+    case 'torbice':
+    default:
+      return '/images/etno_unikatna_torba_1789105500674.jpg';
+  }
+};
+
 interface ProductCatalogProps {
   onSelectProduct: (product: Product) => void;
   onOrderProduct: (productName: string) => void;
@@ -386,8 +404,9 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                         loading="lazy"
                         onError={(e) => {
                           const target = e.currentTarget as HTMLImageElement;
-                          if (!target.src.endsWith('/images/etno_unikatna_torba_1789105500674.jpg')) {
-                            target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
+                          const fallback = getCategoryFallbackImage(product.category);
+                          if (!target.src.includes(fallback)) {
+                            target.src = fallback;
                           }
                         }}
                       />
@@ -407,8 +426,9 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                           loading="lazy"
                           onError={(e) => {
                             const target = e.currentTarget as HTMLImageElement;
-                            if (!target.src.endsWith('/images/etno_unikatna_torba_1789105500674.jpg')) {
-                              target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
+                            const fallback = getCategoryFallbackImage(product.category);
+                            if (!target.src.includes(fallback)) {
+                              target.src = fallback;
                             }
                           }}
                         />
