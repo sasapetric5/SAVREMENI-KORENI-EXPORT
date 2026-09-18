@@ -3,6 +3,7 @@ import { X, Check, Clock, MessageCircle, Phone, ShoppingBag, Sparkles, Shield, I
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { Product } from '../types';
 import { companyDetails } from '../data/companyData';
+import { permanentProductsData } from '../data/permanentProductsData';
 import { useLanguage } from '../context/LanguageContext';
 import { useCurrency } from '../context/CurrencyContext';
 import { CurrencySelector } from './CurrencySelector';
@@ -96,7 +97,34 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     }
   };
 
-  const allImages = product ? [product.image, ...(product.images || [])].filter(Boolean) : [];
+  const allImages = React.useMemo(() => {
+    if (!product) return [];
+    const list: string[] = [];
+    const addIfValid = (url?: string) => {
+      if (url && typeof url === 'string' && url.trim().length > 0 && !list.includes(url.trim())) {
+        list.push(url.trim());
+      }
+    };
+
+    // 1. Primary product image
+    addIfValid(product.image);
+
+    // 2. Secondary gallery images
+    if (Array.isArray(product.images)) {
+      product.images.forEach(addIfValid);
+    }
+
+    // 3. Fallback to canonical data from permanentProductsData if any image was missing
+    const perm = permanentProductsData.find((p) => p.id === product.id);
+    if (perm) {
+      addIfValid(perm.image);
+      if (Array.isArray(perm.images)) {
+        perm.images.forEach(addIfValid);
+      }
+    }
+
+    return list;
+  }, [product]);
   const priceInfo = formatProduct(product);
   const displayName = isEn && product.nameEn ? product.nameEn : product.name;
   const displayDesc = isEn 
@@ -368,11 +396,20 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     {({ state }) => (
                       <TransformComponent wrapperClass="!w-full !h-full" contentClass="!w-full !h-full flex items-center justify-center">
                         <img
-                          src={allImages[activeImageIdx]}
+                          src={allImages[activeImageIdx] || allImages[0] || ''}
                           alt={getProductImageAlt(product, isEn)}
                           title={getProductImageTitle(product, isEn)}
                           className="max-w-full max-h-full object-contain object-center transition-transform duration-300 drop-shadow-md p-2"
                           referrerPolicy="no-referrer"
+                          onError={(e) => {
+                            const target = e.currentTarget;
+                            if (allImages.length > 1) {
+                              const altImg = allImages.find((img) => img && !target.src.endsWith(img));
+                              if (altImg && !target.src.endsWith(altImg)) {
+                                target.src = altImg;
+                              }
+                            }
+                          }}
                         />
                       </TransformComponent>
                     )}

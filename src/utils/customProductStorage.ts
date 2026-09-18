@@ -1,6 +1,7 @@
 import { Product } from '../types';
 import { openAppDB } from './db';
 import { triggerSitemapUpdate } from './sitemapNotification';
+import { permanentProductsData } from '../data/permanentProductsData';
 import {
   isSupabaseConfigured,
   fetchSupabaseCustomProducts,
@@ -9,6 +10,43 @@ import {
 
 const STORE_NAME = 'custom_products';
 const LOCAL_STORAGE_KEY = 'savremeni_koreni_custom_products_v1';
+
+/**
+ * Heals and normalizes a product list by ensuring every product has its canonical
+ * image and images array intact from permanent data or its gallery list.
+ */
+function healProductsWithCanonicalData(products: Product[]): Product[] {
+  const permMap = new Map(permanentProductsData.map((p) => [p.id, p]));
+  
+  // First map existing products
+  const healed: Product[] = products.map((p) => {
+    const perm = permMap.get(p.id);
+    const validMain = (p.image && typeof p.image === 'string' && p.image.trim().length > 0)
+      ? p.image.trim()
+      : (perm?.image || p.images?.[0] || '');
+
+    const validImages = (Array.isArray(p.images) && p.images.length > 0)
+      ? p.images
+      : (perm?.images || (validMain ? [validMain] : []));
+
+    return {
+      ...(perm || {}),
+      ...p,
+      image: validMain,
+      images: validImages,
+    };
+  });
+
+  // Ensure any permanent products not present in the local list are included
+  const existingIds = new Set(healed.map((p) => p.id));
+  for (const perm of permanentProductsData) {
+    if (!existingIds.has(perm.id)) {
+      healed.push(perm);
+    }
+  }
+
+  return healed;
+}
 
 export async function loadCustomProductsFromStorage(): Promise<Product[]> {
   let localProducts: Product[] = [];
@@ -59,7 +97,7 @@ export async function loadCustomProductsFromStorage(): Promise<Product[]> {
         if (localProducts.length === 0) {
           saveCustomProductsToStorage(merged).catch(console.warn);
         }
-        return merged;
+        return healProductsWithCanonicalData(merged);
       }
     } catch (sbErr) {
       console.warn('Could not sync with Supabase:', sbErr);
@@ -76,14 +114,19 @@ export async function loadCustomProductsFromStorage(): Promise<Product[]> {
         const map = new Map<string, Product>();
         serverProducts.forEach((p: Product) => map.set(p.id, p));
         localProducts.forEach((p) => map.set(p.id, p));
-        return Array.from(map.values());
+        return healProductsWithCanonicalData(Array.from(map.values()));
       }
     }
   } catch {
     // server might be offline or client SPA fallback
   }
 
-  return localProducts;
+  // If local storage is empty, directly return permanent data
+  if (localProducts.length === 0) {
+    return permanentProductsData;
+  }
+
+  return healProductsWithCanonicalData(localProducts);
 }
 
 export async function saveCustomProductsToStorage(products: Product[]): Promise<void> {

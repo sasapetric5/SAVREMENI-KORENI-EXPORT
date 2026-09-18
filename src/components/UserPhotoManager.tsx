@@ -271,11 +271,11 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
       if (isMounted) {
         let baseList: GalleryPhoto[] = [];
         if (savedPhotos && savedPhotos.length > 0) {
-          // Clean saved photos to get rid of any old dummy/broken records
+          // Clean saved photos and ensure all permanent authentic photos are preserved
           const cleanSaved = cleanAndDeduplicate(savedPhotos);
-          const customPhotos = cleanSaved.filter(p => p.isCustomUploaded);
-          const factoryPhotos = initialGalleryPhotos.filter(fp => !initialDeletedIds.includes(fp.id));
-          baseList = [...customPhotos, ...factoryPhotos];
+          const savedUrlSet = new Set(cleanSaved.map(p => p.imageUrl));
+          const missingPermanent = initialGalleryPhotos.filter(p => !savedUrlSet.has(p.imageUrl) && !initialDeletedIds.includes(p.id));
+          baseList = cleanAndDeduplicate([...cleanSaved, ...missingPermanent]);
         } else {
           baseList = [...initialGalleryPhotos.filter(p => !initialDeletedIds.includes(p.id))];
         }

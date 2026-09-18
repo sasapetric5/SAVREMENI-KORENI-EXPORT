@@ -77,10 +77,28 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   }, []);
 
   const allProducts = useMemo(() => {
-    // Combine custom products (top priority) + default products
+    // Combine custom products with productsData while guaranteeing authentic images
+    const permMap = new Map(productsData.map(p => [p.id, p]));
     const customIds = new Set(customProducts.map(p => p.id));
     const defaults = productsData.filter(p => !customIds.has(p.id));
-    const combined = [...customProducts, ...defaults];
+
+    const combined = [...customProducts, ...defaults].map(p => {
+      const canonical = permMap.get(p.id);
+      const validMain = (p.image && typeof p.image === 'string' && p.image.trim().length > 0)
+        ? p.image.trim()
+        : (canonical?.image || p.images?.[0] || '');
+
+      const validImages = (Array.isArray(p.images) && p.images.length > 0)
+        ? p.images
+        : (canonical?.images || (validMain ? [validMain] : []));
+
+      return {
+        ...(canonical || {}),
+        ...p,
+        image: validMain,
+        images: validImages,
+      };
+    });
     
     // Apply stock overrides
     const withOverrides = combined.map(p => {
@@ -376,9 +394,9 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     onClick={() => onSelectProduct(product)}
                   >
                     {/* Blurred backdrop for a premium look and to cover empty space */}
-                    <div className="absolute inset-0 z-0 overflow-hidden bg-[#E8E0D5]/30 animate-pulse">
+                    <div className="absolute inset-0 z-0 overflow-hidden bg-[#E8E0D5]/30">
                       <img
-                        src={product.image}
+                        src={product.image || product.images?.[0] || ''}
                         alt=""
                         aria-hidden="true"
                         className="w-full h-full object-cover blur-2xl opacity-40 scale-110"
@@ -390,15 +408,25 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
                     {(() => {
                       const imgAttrs = parseProductImageAttributes(product, isEn);
+                      const primarySrc = product.image || product.images?.[0] || '';
                       return (
                         <img
-                          src={product.image}
+                          src={primarySrc}
                           alt={imgAttrs.alt}
                           title={imgAttrs.title}
                           aria-label={imgAttrs['aria-label']}
                           className="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-[1.03] relative z-10 drop-shadow-sm p-4"
                           referrerPolicy="no-referrer"
                           loading="lazy"
+                          onError={(e) => {
+                            const target = e.currentTarget;
+                            if (product.images && product.images.length > 0) {
+                              const altAngle = product.images.find(img => img && !target.src.endsWith(img));
+                              if (altAngle && !target.src.endsWith(altAngle)) {
+                                target.src = altAngle;
+                              }
+                            }
+                          }}
                         />
                       );
                     })()}
