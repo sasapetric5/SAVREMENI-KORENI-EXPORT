@@ -432,21 +432,15 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
     setTimeout(() => setUploadSuccessMessage(null), 4000);
   };
 
-  // Handle batch file uploads reliably (up to 50 photos at once, auto-compression, no names required)
+  // Handle batch file uploads reliably
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
     if (!fileList || fileList.length === 0) return;
 
-    if (fileList.length > 50) {
-      alert(isEn ? 'Maximum 50 photos allowed at once.' : 'Maksimalno možete dodati do 50 slika odjednom.');
-      if (fileInputRef.current) fileInputRef.current.value = '';
-      return;
-    }
-
     setIsUploading(true);
     const files = Array.from(fileList);
 
-    const processFile = async (file: File, index: number): Promise<GalleryPhoto | null> => {
+    const processFile = async (file: File): Promise<GalleryPhoto | null> => {
       try {
         const compressed = await compressImageFile(file, {
           maxDimension: 1920,
@@ -455,15 +449,15 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
         });
 
         const chosenCategory = uploadTargetCategory || 'Torbice';
-        // Auto-generate title without requiring user input names
-        const displayTitle = `Unikatni rad ${index + 1} - ${chosenCategory}`;
+        const rawClean = file.name.replace(/\.[^/.]+$/, '').replace(/10000\d*/g, '').trim();
+        const displayTitle = rawClean || `Rukotvorina - ${chosenCategory}`;
 
         const newPhoto: GalleryPhoto = {
-          id: 'custom-' + Date.now() + '-' + index + '-' + Math.random().toString(36).substring(2, 8),
+          id: 'custom-' + Date.now() + '-' + Math.random().toString(36).substring(2, 8),
           title: displayTitle,
           category: chosenCategory,
           imageUrl: compressed.dataUrl,
-          caption: `Autentični ručni rad u kategoriji ${chosenCategory} - Savremeni Koreni.`,
+          caption: `Autentični rad u kategoriji ${chosenCategory} - Savremeni Koreni.`,
           isCustomUploaded: true,
           dateAdded: new Date().toLocaleDateString(isEn ? 'en-US' : 'sr-RS'),
         };
@@ -476,7 +470,7 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
     };
 
     try {
-      const results = await Promise.all(files.map((f, i) => processFile(f, i)));
+      const results = await Promise.all(files.map(processFile));
       const validNewPhotos = results.filter((p): p is GalleryPhoto => p !== null);
 
       if (validNewPhotos.length > 0) {
@@ -486,8 +480,8 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
           return deduped;
         });
 
-        setUploadSuccessMessage(isEn ? `Successfully compressed and added ${validNewPhotos.length} photos into "${uploadTargetCategory}"!` : `Uspešno kompresovano i dodato ${validNewPhotos.length} slika u kategoriju "${uploadTargetCategory}"!`);
-        setTimeout(() => setUploadSuccessMessage(null), 5000);
+        setUploadSuccessMessage(isEn ? `Successfully added & compressed ${validNewPhotos.length} photos in "${uploadTargetCategory}"!` : `Uspešno dodato i kompresovano ${validNewPhotos.length} fotografija u kategoriju "${uploadTargetCategory}"!`);
+        setTimeout(() => setUploadSuccessMessage(null), 4000);
       }
     } catch (err) {
       console.error('Upload processing error:', err);
@@ -698,56 +692,6 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
             <span className="text-[11px] text-[#241D19]/60">{isEn ? 'Saved' : 'Sačuvano'}</span>
           </div>
         )}
-
-        {/* Bulk Image Upload & Compression Panel (up to 50 photos, no name required, auto-compressed and posted to gallery) */}
-        <div className="mb-10 bg-gradient-to-br from-[#FAF7F2] to-[#F4E8E3]/50 border border-[#E8E0D5] rounded-3xl p-6 sm:p-8 shadow-sm">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="space-y-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#9E3E26]/10 text-[#9E3E26] text-xs font-bold">
-                <UploadCloud className="w-4 h-4" />
-                <span>{isEn ? 'Bulk Upload & Auto-Compression' : 'Grupno dodavanje i automatska kompresija'}</span>
-              </div>
-              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#241D19]">
-                {isEn ? 'Add up to 50 photos at once' : 'Dodajte do 50 slika odjednom'}
-              </h3>
-              <p className="text-xs sm:text-sm text-[#241D19]/70 max-w-xl">
-                {isEn 
-                  ? 'Select category, upload up to 50 photos. Names are generated automatically, images are compressed and instantly posted into the gallery.'
-                  : 'Izaberite kategoriju, izaberite do 50 slika. Nisu potrebna imena (automatski se generišu), slike se automatski kompresuju i odmah postavljaju u galeriju.'
-                }
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
-              <select
-                value={uploadTargetCategory}
-                onChange={(e) => setUploadTargetCategory(e.target.value)}
-                className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white border border-[#E8E0D5] text-xs font-semibold text-[#241D19] focus:outline-none focus:ring-2 focus:ring-[#9E3E26]/30 cursor-pointer"
-              >
-                {AVAILABLE_CATEGORIES.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
-
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                disabled={isUploading}
-                className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#9E3E26] hover:bg-[#7F2F1C] text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer disabled:opacity-50"
-              >
-                <UploadCloud className="w-4 h-4" />
-                <span>{isUploading ? (isEn ? 'Compressing & Adding...' : 'Kompresujem i dodajem...') : (isEn ? 'Select Photos (Max 50)' : 'Izaberi slike (Do 50)')}</span>
-              </button>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                multiple
-                className="hidden"
-                onChange={handleFileUpload}
-              />
-            </div>
-          </div>
-        </div>
 
         {/* Filter Tabs */}
         <motion.div 
