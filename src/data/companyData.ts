@@ -345,20 +345,12 @@ export const defaultFactoryProducts: Product[] = [
   },
 ];
 
-// Helper to merge permanent products so all factory products come first with permanent ones appended
+// Helper to merge permanent products so all 47 items are bundled statically
 function mergeProducts(factory: Product[], permanent: Product[]): Product[] {
+  if (!permanent || permanent.length === 0) return factory;
   const map = new Map<string, Product>();
-  // Put factory products first to ensure authentic curated products lead
-  if (factory && Array.isArray(factory)) {
-    factory.forEach(p => map.set(p.id, p));
-  }
-  if (permanent && Array.isArray(permanent)) {
-    permanent.forEach(p => {
-      if (!map.has(p.id)) {
-        map.set(p.id, p);
-      }
-    });
-  }
+  factory.forEach(p => map.set(p.id, p));
+  permanent.forEach(p => map.set(p.id, p));
   return Array.from(map.values());
 }
 

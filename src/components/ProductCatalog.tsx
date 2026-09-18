@@ -11,24 +11,6 @@ import { CurrencySelector } from './CurrencySelector';
 import { ProductCardSkeleton } from './Skeletons';
 import { parseProductImageAttributes } from '../utils/imageSeo';
 
-const getCategoryFallbackImage = (category: string): string => {
-  switch (category) {
-    case 'subare':
-      return '/images/srpska_subara_moderna_1789021862584.jpg';
-    case 'carape':
-      return '/images/vunene_carape_vez_1789021876638.jpg';
-    case 'kosulje':
-      return '/images/vezena_kosulja_1789021895745.jpg';
-    case 'nakit':
-      return '/images/heklani_nakit_1789021909183.jpg';
-    case 'dom-pokloni':
-      return '/images/vezeni_nadstolnjak_lan_1789407278498.jpg';
-    case 'torbice':
-    default:
-      return '/images/etno_unikatna_torba_1789105500674.jpg';
-  }
-};
-
 interface ProductCatalogProps {
   onSelectProduct: (product: Product) => void;
   onOrderProduct: (productName: string) => void;
@@ -95,10 +77,10 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   }, []);
 
   const allProducts = useMemo(() => {
-    // Combine productsData (authentic curated factory products first) + unique custom products
-    const factoryIds = new Set(productsData.map(p => p.id));
-    const uniqueCustoms = customProducts.filter(p => !factoryIds.has(p.id));
-    const combined = [...productsData, ...uniqueCustoms];
+    // Combine custom products (top priority) + default products
+    const customIds = new Set(customProducts.map(p => p.id));
+    const defaults = productsData.filter(p => !customIds.has(p.id));
+    const combined = [...customProducts, ...defaults];
     
     // Apply stock overrides
     const withOverrides = combined.map(p => {
@@ -402,13 +384,6 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                         className="w-full h-full object-cover blur-2xl opacity-40 scale-110"
                         referrerPolicy="no-referrer"
                         loading="lazy"
-                        onError={(e) => {
-                          const target = e.currentTarget as HTMLImageElement;
-                          const fallback = getCategoryFallbackImage(product.category);
-                          if (!target.src.includes(fallback)) {
-                            target.src = fallback;
-                          }
-                        }}
                       />
                       <div className="absolute inset-0 bg-white/30 backdrop-blur-[2px]"></div>
                     </div>
@@ -424,13 +399,6 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                           className="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-[1.03] relative z-10 drop-shadow-sm p-4"
                           referrerPolicy="no-referrer"
                           loading="lazy"
-                          onError={(e) => {
-                            const target = e.currentTarget as HTMLImageElement;
-                            const fallback = getCategoryFallbackImage(product.category);
-                            if (!target.src.includes(fallback)) {
-                              target.src = fallback;
-                            }
-                          }}
                         />
                       );
                     })()}
