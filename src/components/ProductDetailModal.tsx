@@ -48,29 +48,27 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         url &&
         typeof url === 'string' &&
         url.trim().length > 0 &&
+        !url.match(/\/custom_products\/prod_custom-prod-\d+\.jpg$/) &&
         !list.includes(url.trim())
       ) {
         list.push(url.trim());
       }
     };
 
-    // 1. Primary product image
-    addIfValid(product.image);
+    const perm = permanentProductsData.find((p) => p.id === product.id);
 
-    // 2. Secondary gallery images (all additional views)
-    if (Array.isArray(product.images)) {
-      product.images.forEach(addIfValid);
+    // 1. Primary product image
+    if (perm?.image) {
+      addIfValid(perm.image);
+    } else {
+      addIfValid(product.image);
     }
 
-    // 3. Fallback from permanentProductsData if empty
-    if (list.length === 0) {
-      const perm = permanentProductsData.find((p) => p.id === product.id);
-      if (perm) {
-        addIfValid(perm.image);
-        if (Array.isArray(perm.images)) {
-          perm.images.forEach(addIfValid);
-        }
-      }
+    // 2. Secondary gallery images (all additional views)
+    if (perm?.images && perm.images.length > 0) {
+      perm.images.forEach(addIfValid);
+    } else if (Array.isArray(product.images)) {
+      product.images.forEach(addIfValid);
     }
 
     if (list.length === 0) {
@@ -496,8 +494,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     referrerPolicy="no-referrer"
                     onError={(e) => {
                       const target = e.currentTarget;
-                      if (!target.src.endsWith('/logo.jpg')) {
-                        target.src = '/logo.jpg';
+                      if (!target.src.includes('etno_torbica_vez')) {
+                        target.src = '/images/etno_torbica_vez_1789021849429.jpg';
                       }
                     }}
                   />
@@ -548,8 +546,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                         referrerPolicy="no-referrer"
                         onError={(e) => {
                           const target = e.currentTarget;
-                          if (!target.src.endsWith('/logo.jpg')) {
-                            target.src = '/logo.jpg';
+                          if (!target.src.includes('etno_torbica_vez')) {
+                            target.src = '/images/etno_torbica_vez_1789021849429.jpg';
                           }
                         }}
                       />

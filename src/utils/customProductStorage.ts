@@ -21,17 +21,22 @@ function healProductsWithCanonicalData(products: Product[]): Product[] {
   // First map existing products
   const healed: Product[] = products.map((p) => {
     const perm = permMap.get(p.id);
-    const validMain = (p.image && typeof p.image === 'string' && p.image.trim().length > 0)
+    let validMain = (p.image && typeof p.image === 'string' && p.image.trim().length > 0)
       ? p.image.trim()
       : (perm?.image || p.images?.[0] || '');
 
-    // Extract all candidate images, preserving up to all 4 product views
-    const rawImages = (Array.isArray(p.images) && p.images.length > 0)
-      ? p.images
-      : (perm?.images || []);
+    // If validMain is the broken un-suffixed path (prod_custom-prod-12345.jpg) and perm has the real _g0.jpg
+    if (validMain.match(/\/custom_products\/prod_custom-prod-\d+\.jpg$/) && perm?.image) {
+      validMain = perm.image;
+    }
+
+    // Extract all candidate images, prioritizing permanent canonical images if available
+    const rawImages = (perm?.images && perm.images.length > 0)
+      ? perm.images
+      : ((Array.isArray(p.images) && p.images.length > 0) ? p.images : []);
 
     const validImages = rawImages.filter(
-      (img) => typeof img === 'string' && img.trim().length > 0
+      (img) => typeof img === 'string' && img.trim().length > 0 && !img.match(/\/custom_products\/prod_custom-prod-\d+\.jpg$/)
     );
 
     if (validImages.length === 0 && validMain) {

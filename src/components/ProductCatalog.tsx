@@ -84,16 +84,21 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
     const combined = [...customProducts, ...defaults].map(p => {
       const canonical = permMap.get(p.id);
-      const validMain = (p.image && typeof p.image === 'string' && p.image.trim().length > 0)
+      let validMain = (p.image && typeof p.image === 'string' && p.image.trim().length > 0)
         ? p.image.trim()
         : (canonical?.image || p.images?.[0] || '');
 
-      const rawImages = (Array.isArray(p.images) && p.images.length > 0)
-        ? p.images
-        : (canonical?.images || []);
+      // Replace broken un-suffixed path with canonical real photo
+      if (validMain.match(/\/custom_products\/prod_custom-prod-\d+\.jpg$/) && canonical?.image) {
+        validMain = canonical.image;
+      }
+
+      const rawImages = (canonical?.images && canonical.images.length > 0)
+        ? canonical.images
+        : ((Array.isArray(p.images) && p.images.length > 0) ? p.images : []);
 
       const validImages = rawImages.filter(
-        (img) => typeof img === 'string' && img.trim().length > 0
+        (img) => typeof img === 'string' && img.trim().length > 0 && !img.match(/\/custom_products\/prod_custom-prod-\d+\.jpg$/)
       );
 
       if (validImages.length === 0 && validMain) {
@@ -439,7 +444,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                                 return;
                               }
                             }
-                            target.src = '/logo.jpg';
+                            target.src = '/images/etno_torbica_vez_1789021849429.jpg';
                           }}
                         />
                       );
