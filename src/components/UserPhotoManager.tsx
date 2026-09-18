@@ -141,11 +141,6 @@ const cleanAndDeduplicate = (list: GalleryPhoto[]): GalleryPhoto[] => {
     const rawUrl = p.imageUrl.trim();
     if (rawUrl.length === 0) continue;
 
-    // Filter out known broken/auto-generated test pattern URLs
-    if (rawUrl.includes('photo_custom-') || rawUrl.includes('prod_custom-')) {
-      continue;
-    }
-
     // Normalize URL to detect duplicate filenames regardless of domain/protocol/leading slash
     const normalizedUrl = rawUrl
       .replace(/^https?:\/\/[^\/]+/, '')
@@ -571,14 +566,6 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
     return groups;
   }, [cleanedList, localizedCategoryGroups, isEn]);
 
-  const handleImageError = (photoId: string) => {
-    setPhotos((prev) => {
-      const updated = prev.filter((p) => p.id !== photoId);
-      savePhotosToStorage(updated).catch(console.error);
-      return updated;
-    });
-  };
-
   const renderPhotoCard = (photo: GalleryPhoto) => (
     <div
       key={photo.id}
@@ -604,7 +591,13 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
           loading="lazy"
           decoding="async"
           onLoad={() => setLoadedImageIds((prev) => (prev[photo.id] ? prev : { ...prev, [photo.id]: true }))}
-          onError={() => handleImageError(photo.id)}
+          onError={(e) => {
+            const target = e.currentTarget as HTMLImageElement;
+            if (!target.src.endsWith('/images/etno_unikatna_torba_1789105500674.jpg')) {
+              target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
+            }
+            setLoadedImageIds((prev) => ({ ...prev, [photo.id]: true }));
+          }}
           className={`w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-500 ${
             loadedImageIds[photo.id] ? 'opacity-100' : 'opacity-0'
           }`}
@@ -1045,6 +1038,12 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
                             alt={photo.title}
                             className="w-full h-full object-cover rounded"
                             referrerPolicy="no-referrer"
+                            onError={(e) => {
+                              const target = e.currentTarget as HTMLImageElement;
+                              if (!target.src.endsWith('/images/etno_unikatna_torba_1789105500674.jpg')) {
+                                target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
+                              }
+                            }}
                           />
                           <span className="absolute top-2 left-2 bg-black/75 text-white text-[10px] font-bold px-2 py-0.5 rounded">
                             {photo.category}
@@ -1124,6 +1123,12 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
                   title={isEn ? `${selectedPhoto.titleEn || selectedPhoto.title} — Savremeni Koreni` : `${selectedPhoto.title} — Savremeni Koreni`}
                   className="max-h-[70vh] w-auto max-w-full object-contain"
                   referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    const target = e.currentTarget as HTMLImageElement;
+                    if (!target.src.endsWith('/images/etno_unikatna_torba_1789105500674.jpg')) {
+                      target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
+                    }
+                  }}
                 />
 
                 <button

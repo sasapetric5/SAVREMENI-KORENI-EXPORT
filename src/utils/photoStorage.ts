@@ -21,11 +21,6 @@ export function deduplicatePhotos(photos: GalleryPhoto[]): GalleryPhoto[] {
     const rawUrl = p.imageUrl.trim();
     if (rawUrl.length === 0) continue;
 
-    // Filter out known broken/auto-generated test pattern URLs
-    if (rawUrl.includes('photo_custom-') || rawUrl.includes('prod_custom-')) {
-      continue;
-    }
-
     // Normalize URL to detect duplicate filenames regardless of domain/protocol/leading slash
     const normalizedUrl = rawUrl
       .replace(/^https?:\/\/[^\/]+/, '')

@@ -384,6 +384,12 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                         className="w-full h-full object-cover blur-2xl opacity-40 scale-110"
                         referrerPolicy="no-referrer"
                         loading="lazy"
+                        onError={(e) => {
+                          const target = e.currentTarget as HTMLImageElement;
+                          if (!target.src.endsWith('/images/etno_unikatna_torba_1789105500674.jpg')) {
+                            target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
+                          }
+                        }}
                       />
                       <div className="absolute inset-0 bg-white/30 backdrop-blur-[2px]"></div>
                     </div>
@@ -399,6 +405,12 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                           className="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-[1.03] relative z-10 drop-shadow-sm p-4"
                           referrerPolicy="no-referrer"
                           loading="lazy"
+                          onError={(e) => {
+                            const target = e.currentTarget as HTMLImageElement;
+                            if (!target.src.endsWith('/images/etno_unikatna_torba_1789105500674.jpg')) {
+                              target.src = '/images/etno_unikatna_torba_1789105500674.jpg';
+                            }
+                          }}
                         />
                       );
                     })()}

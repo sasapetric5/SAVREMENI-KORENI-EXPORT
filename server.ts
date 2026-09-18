@@ -1026,18 +1026,14 @@ VRATI REZULTAT ISKLJUČIVO U VAŽEĆEM JSON FORMATU (bez dodatnog teksta ili mar
       if (!fs.existsSync(uploadDir)) {
         return res.json([]);
       }
-      const files = fs.readdirSync(uploadDir).filter(f => {
-        if (!/\.(jpg|jpeg|png|webp)$/i.test(f)) return false;
-        // Ignore internal product backups or legacy auto-generated test files
-        if (f.startsWith('prod_') || f.startsWith('photo_custom-') || f.startsWith('prod_custom-')) {
-          return false;
-        }
-        return true;
-      });
+      const files = fs.readdirSync(uploadDir).filter(f => /\.(jpg|jpeg|png|webp)$/i.test(f));
       res.json(files.map((file, idx) => ({
-        id: `upl-${idx + 1}`,
+        id: `upl-${file.replace(/[^a-zA-Z0-9_\-]/g, '_')}`,
         fileName: file,
-        url: `/custom_products/${file}`
+        imageUrl: `/custom_products/${file}`,
+        url: `/custom_products/${file}`,
+        title: `Unikatni rad - Savremeni Koreni (${idx + 1})`,
+        category: 'Radionica'
       })));
     } catch (err) {
       console.error("List photos error:", err);
