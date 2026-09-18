@@ -18,20 +18,49 @@ export function deduplicatePhotos(photos: GalleryPhoto[]): GalleryPhoto[] {
 
   for (const p of photos) {
     if (!p || !p.imageUrl || typeof p.imageUrl !== 'string') continue;
-    const url = p.imageUrl.trim();
-    if (url.length === 0 || seenUrls.has(url) || seenIds.has(p.id)) continue;
+    const rawUrl = p.imageUrl.trim();
+    if (rawUrl.length === 0) continue;
 
-    // Extract photo hash if available e.g. 1789202284189-geqh6y
-    const hashMatch = url.match(/1789\d+-[a-z0-9]+/);
-    const photoHash = hashMatch ? hashMatch[0] : url;
+    // Filter out known broken/auto-generated test pattern URLs
+    if (rawUrl.includes('photo_custom-') || rawUrl.includes('prod_custom-')) {
+      continue;
+    }
 
-    if (seenHashes.has(photoHash)) continue;
+    // Normalize URL to detect duplicate filenames regardless of domain/protocol/leading slash
+    const normalizedUrl = rawUrl
+      .replace(/^https?:\/\/[^\/]+/, '')
+      .replace(/^\/public/, '')
+      .toLowerCase();
 
-    seenUrls.add(url);
+    // Extract core filename/hash (e.g. 1789326187913_1000020290.webp or etno_unikatna_torba_1789105500674.jpg)
+    const fileName = normalizedUrl.split('/').pop()?.split('?')[0] || normalizedUrl;
+    
+    // Check for title + category duplicate
+    const titleKey = `${(p.title || '').trim().toLowerCase()}_${(p.category || '').trim().toLowerCase()}`;
+
+    if (
+      seenUrls.has(normalizedUrl) ||
+      seenIds.has(p.id) ||
+      seenHashes.has(fileName)
+    ) {
+      continue;
+    }
+
+    seenUrls.add(normalizedUrl);
     seenIds.add(p.id);
-    seenHashes.add(photoHash);
-    result.push(p);
+    seenHashes.add(fileName);
+
+    // Standardize object structure
+    result.push({
+      ...p,
+      imageUrl: rawUrl,
+      title: p.title || 'Autentični rad radionice',
+      category: p.category || 'Radionica'
+    });
+
+    if (result.length >= 250) break; // Hard cap at 250 clean images max
   }
+
   return result;
 }
 

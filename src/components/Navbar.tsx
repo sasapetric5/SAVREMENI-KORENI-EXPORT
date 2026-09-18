@@ -455,11 +455,33 @@ export const Navbar: React.FC<NavbarProps> = ({
             <CurrencySelector variant="mobile" />
           </div>
 
-          {/* Targeted Heritage Guides & SEO Landing Pages on Mobile Drawer */}
-          <div className="space-y-1.5 py-1">
-            <span className="text-[10px] uppercase font-bold text-[#9E3E26] dark:text-[#E8D0A9] tracking-wider px-2 flex items-center gap-1.5 mb-1">
-              <Compass className="w-3.5 h-3.5" />
-              <span>{isEn ? 'Featured Heritage Guides (Landing Pages):' : 'Tematske celine i vodiči:'}</span>
+          {/* Complete Navigation Links List FIRST */}
+          <div className="space-y-1 py-1">
+            <span className="text-[10px] uppercase font-bold text-[#9E3E26] dark:text-[#E8D0A9] tracking-wider px-2 block mb-1">
+              {isEn ? '1. Main Site Navigation:' : '1. Glavna navigacija kroz sajt:'}
+            </span>
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-bold transition-all border ${
+                  isDark
+                    ? 'text-[#FAF7F2] bg-[#261F1A] border-[#382C24] hover:bg-[#342922] hover:text-[#C2872A]'
+                    : 'text-[#241D19] bg-white border-[#E8E0D5] hover:bg-[#F4E8E3] hover:text-[#9E3E26]'
+                }`}
+              >
+                <span>{link.label}</span>
+                <span className="text-[#9E3E26] dark:text-[#E8D0A9] text-xs font-mono">→</span>
+              </a>
+            ))}
+          </div>
+
+          {/* Targeted Heritage Guides & SEO Landing Pages SECOND */}
+          <div className="space-y-1.5 pt-2 border-t border-[#E8E0D5] dark:border-[#382C24]">
+            <span className="text-[10px] uppercase font-bold text-[#7F2F1C] dark:text-[#E8D0A9] tracking-wider px-2 flex items-center gap-1.5 mb-1">
+              <Compass className="w-3.5 h-3.5 text-[#C2872A]" />
+              <span>{isEn ? '2. Featured Heritage Guides (Topics):' : '2. Tematske celine, vodiči i blogovi:'}</span>
             </span>
             <div className="grid grid-cols-1 gap-1.5">
               {landingItems.map((item) => (
@@ -484,28 +506,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
               ))}
             </div>
-          </div>
-
-          {/* Complete Navigation Links List */}
-          <div className="space-y-1 py-1">
-            <span className="text-[10px] uppercase font-bold text-[#7F2F1C] dark:text-[#E8D0A9] tracking-wider px-2 block mb-1">
-              {isEn ? 'Navigation Sections:' : 'Navigacija kroz sajt:'}
-            </span>
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-semibold transition-all border ${
-                  isDark
-                    ? 'text-[#FAF7F2] bg-[#261F1A]/60 border-[#382C24] hover:bg-[#342922] hover:text-[#C2872A]'
-                    : 'text-[#241D19] bg-white border-[#E8E0D5] hover:bg-[#F4E8E3] hover:text-[#9E3E26]'
-                }`}
-              >
-                <span>{link.label}</span>
-                <span className="text-[#9E3E26] dark:text-[#E8D0A9] text-xs font-mono">→</span>
-              </a>
-            ))}
           </div>
 
           {/* Custom Order & Gallery & Track Buttons */}

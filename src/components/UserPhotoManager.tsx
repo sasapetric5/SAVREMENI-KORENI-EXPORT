@@ -130,15 +130,54 @@ export const CATEGORY_GROUPS: CategoryGroupDef[] = CATEGORY_GROUPS_BASE.map(g =>
 const AVAILABLE_CATEGORIES = ['Torbice', 'Čarape', 'Šubare', 'Košulje', 'Nakit', 'Radionica'];
 
 const cleanAndDeduplicate = (list: GalleryPhoto[]): GalleryPhoto[] => {
+  if (!Array.isArray(list)) return [];
   const seenUrls = new Set<string>();
   const seenIds = new Set<string>();
-  return list.filter((p) => {
-    if (!p || !p.imageUrl || typeof p.imageUrl !== 'string' || p.imageUrl.trim().length === 0) return false;
-    if (seenUrls.has(p.imageUrl) || seenIds.has(p.id)) return false;
-    seenUrls.add(p.imageUrl);
+  const seenHashes = new Set<string>();
+  const result: GalleryPhoto[] = [];
+
+  for (const p of list) {
+    if (!p || !p.imageUrl || typeof p.imageUrl !== 'string') continue;
+    const rawUrl = p.imageUrl.trim();
+    if (rawUrl.length === 0) continue;
+
+    // Filter out known broken/auto-generated test pattern URLs
+    if (rawUrl.includes('photo_custom-') || rawUrl.includes('prod_custom-')) {
+      continue;
+    }
+
+    // Normalize URL to detect duplicate filenames regardless of domain/protocol/leading slash
+    const normalizedUrl = rawUrl
+      .replace(/^https?:\/\/[^\/]+/, '')
+      .replace(/^\/public/, '')
+      .toLowerCase();
+
+    // Extract core filename/hash (e.g. 1789326187913_1000020290.webp or etno_unikatna_torba_1789105500674.jpg)
+    const fileName = normalizedUrl.split('/').pop()?.split('?')[0] || normalizedUrl;
+
+    if (
+      seenUrls.has(normalizedUrl) ||
+      seenIds.has(p.id) ||
+      seenHashes.has(fileName)
+    ) {
+      continue;
+    }
+
+    seenUrls.add(normalizedUrl);
     seenIds.add(p.id);
-    return true;
-  });
+    seenHashes.add(fileName);
+
+    result.push({
+      ...p,
+      imageUrl: rawUrl,
+      title: p.title || 'Autentični rad radionice',
+      category: p.category || 'Radionica'
+    });
+
+    if (result.length >= 250) break; // Hard cap at 250 clean images max
+  }
+
+  return result;
 };
 
 interface UserPhotoManagerProps {
@@ -237,7 +276,9 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
       if (isMounted) {
         let baseList: GalleryPhoto[] = [];
         if (savedPhotos && savedPhotos.length > 0) {
-          const customPhotos = savedPhotos.filter(p => p.isCustomUploaded);
+          // Clean saved photos to get rid of any old dummy/broken records
+          const cleanSaved = cleanAndDeduplicate(savedPhotos);
+          const customPhotos = cleanSaved.filter(p => p.isCustomUploaded);
           const factoryPhotos = initialGalleryPhotos.filter(fp => !initialDeletedIds.includes(fp.id));
           baseList = [...customPhotos, ...factoryPhotos];
         } else {
@@ -530,6 +571,14 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
     return groups;
   }, [cleanedList, localizedCategoryGroups, isEn]);
 
+  const handleImageError = (photoId: string) => {
+    setPhotos((prev) => {
+      const updated = prev.filter((p) => p.id !== photoId);
+      savePhotosToStorage(updated).catch(console.error);
+      return updated;
+    });
+  };
+
   const renderPhotoCard = (photo: GalleryPhoto) => (
     <div
       key={photo.id}
@@ -555,10 +604,7 @@ export const UserPhotoManager: React.FC<UserPhotoManagerProps> = ({
           loading="lazy"
           decoding="async"
           onLoad={() => setLoadedImageIds((prev) => (prev[photo.id] ? prev : { ...prev, [photo.id]: true }))}
-          onError={(e) => {
-            const target = e.currentTarget as HTMLImageElement;
-            target.style.opacity = '0';
-          }}
+          onError={() => handleImageError(photo.id)}
           className={`w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-500 ${
             loadedImageIds[photo.id] ? 'opacity-100' : 'opacity-0'
           }`}

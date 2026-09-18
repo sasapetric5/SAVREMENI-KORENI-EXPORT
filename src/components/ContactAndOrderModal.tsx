@@ -120,11 +120,11 @@ export const ContactAndOrderModal: React.FC<ContactAndOrderModalProps> = ({
             <CurrencySelector variant="topbar" />
             <button
               onClick={onClose}
-              className="p-2 sm:p-2.5 bg-[#FAF7F2] hover:bg-[#9E3E26] text-[#241D19] hover:text-white rounded-full border border-[#E8E0D5] shadow-2xs hover:shadow-md transition-all cursor-pointer flex items-center justify-center group shrink-0"
+              className="p-2.5 sm:p-3 bg-[#9E3E26] hover:bg-[#7F2F1C] text-white rounded-full border-2 border-white dark:border-[#382C24] shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center justify-center group shrink-0 active:scale-95 z-50"
               aria-label={isEn ? 'Close order form' : 'Zatvori prozor'}
               title={isEn ? 'Close (ESC)' : 'Zatvori (ESC)'}
             >
-              <X className="w-5 h-5 stroke-[2.5] transition-transform group-hover:scale-110" />
+              <X className="w-5.5 h-5.5 stroke-[3] transition-transform group-hover:scale-110" />
             </button>
           </div>
         </div>

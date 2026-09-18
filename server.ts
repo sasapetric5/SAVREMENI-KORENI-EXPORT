@@ -1026,7 +1026,14 @@ VRATI REZULTAT ISKLJUČIVO U VAŽEĆEM JSON FORMATU (bez dodatnog teksta ili mar
       if (!fs.existsSync(uploadDir)) {
         return res.json([]);
       }
-      const files = fs.readdirSync(uploadDir).filter(f => /\.(jpg|jpeg|png|webp)$/i.test(f));
+      const files = fs.readdirSync(uploadDir).filter(f => {
+        if (!/\.(jpg|jpeg|png|webp)$/i.test(f)) return false;
+        // Ignore internal product backups or legacy auto-generated test files
+        if (f.startsWith('prod_') || f.startsWith('photo_custom-') || f.startsWith('prod_custom-')) {
+          return false;
+        }
+        return true;
+      });
       res.json(files.map((file, idx) => ({
         id: `upl-${idx + 1}`,
         fileName: file,

@@ -18,6 +18,7 @@ import { MobileQuickBar } from './components/MobileQuickBar';
 import { Footer } from './components/Footer';
 import { GeoCurrencyNotification } from './components/GeoCurrencyNotification';
 import { SeoLandingPage } from './components/SeoLandingPage';
+import { SeoCategoryLinksSection } from './components/SeoCategoryLinksSection';
 import { seoLandingPages } from './data/seoLandingPagesData';
 import { blogPostsData } from './data/blogData';
 import { TrackOrderModal } from './components/TrackOrderModal';
@@ -254,59 +255,52 @@ function AppContent() {
           />
         ) : (
           <>
-            {/* Hero Section */}
+            {/* 1. Naslov + jasna ponuda (Hero) */}
             <Hero
               onExploreClick={() => scrollToSection('katalog')}
               onOpenOrderModal={() => handleOpenOrder()}
               onOpenGalleryUpload={() => scrollToSection('galerija')}
             />
 
-            {/* Brand Story & Craft Heritage */}
-            <BrandStory />
-
-            {/* Product Catalog */}
+            {/* 2. Kategorije i najvažniji proizvodi (Katalog) */}
             <ProductCatalog
               onSelectProduct={handleSelectProduct}
               onOrderProduct={(name) => handleOpenOrder(name)}
             />
 
-            {/* Custom Bespoke Order Process */}
-            <CustomOrderProcess onOpenOrderModal={() => handleOpenOrder(isEn ? 'Custom Bespoke Piece' : 'Unikat po mojoj meri i želji')} />
+            {/* 3. Priča o Savremenim Korenima (O Nama) */}
+            <BrandStory />
 
-            {/* Bespoke Order Status Tracker Component & Section */}
+            {/* 4. Homolje / Tradicija / Ručni rad & Sertifikati */}
+            <EeatCertificatesSection />
+            <AtelierMapSection />
+            <CompanyVerification />
+            <CustomOrderProcess onOpenOrderModal={() => handleOpenOrder(isEn ? 'Custom Bespoke Piece' : 'Unikat po mojoj meri i želji')} />
             <TrackOrderSection onOpenOrderModal={(name) => handleOpenOrder(name)} />
 
-            {/* Authentic SEO Blog Section (Focusing on VEZ and Traditional Craft) */}
+            {/* 5. Galerija, Blog & Društvene Mreže */}
+            <UserPhotoManager onPhotosUpdated={handlePhotosUpdated} />
             <BlogSection
               onSelectPost={handleSelectBlogPost}
               onOrderProduct={(name) => handleOpenOrder(name)}
             />
-
-            {/* Google AdSense Banner Integration */}
+            <SocialLinksSection />
             <GoogleAdSenseBanner />
 
-            {/* Gallery with "Moje Slike" User Photo Management */}
-            <UserPhotoManager onPhotosUpdated={handlePhotosUpdated} />
+            {/* 6. Jasni linkovi ka svim kategorijama i proizvodima (Interlinking & Index) */}
+            <SeoCategoryLinksSection
+              onNavigateLandingPage={handleNavigateLanding}
+              onSelectCategory={(catId) => {
+                // Scroll to catalog section
+                scrollToSection('katalog');
+              }}
+            />
 
-            {/* 3D Social Media Interactive Section (Instagram x2, Facebook, Pinterest, TikTok) */}
-            <SocialLinksSection />
-
-            {/* Real Legal Business Verification (APR, PIB, MB) */}
-            <CompanyVerification />
-
-            {/* E-E-A-T Authority: Certificates, Fairs & Handcrafted Provenance */}
-            <EeatCertificatesSection />
-
-            {/* Local SEO & Atelier Location with Google Maps in Homolje */}
-            <AtelierMapSection />
-
-            {/* E-E-A-T FAQ & Care Guide Knowledge Base with Dynamic FAQ Schema */}
+            {/* 7. FAQ tek na dnu */}
             <FAQSection onOpenOrderModal={() => handleOpenOrder()} />
 
-            {/* Contact Section */}
+            {/* 8. Kontakt & Performanse */}
             <ContactSection onOpenModal={() => handleOpenOrder()} />
-
-            {/* W3C Web Vitals & Loading Diagnostics Section */}
             <WebVitalsMonitor />
           </>
         )}

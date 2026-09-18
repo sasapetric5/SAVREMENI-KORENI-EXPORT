@@ -110,10 +110,11 @@ export const TrackOrderModal: React.FC<TrackOrderModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-[#E8E0D5] dark:hover:bg-[#3A2F27] text-[#7A6B5D] dark:text-[#A89787] transition-colors cursor-pointer"
-            aria-label="Close"
+            className="p-2.5 sm:p-3 bg-[#9E3E26] hover:bg-[#7F2F1C] text-white rounded-full border-2 border-white dark:border-[#3A2F27] shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center justify-center shrink-0 active:scale-95 z-50"
+            aria-label={isEn ? 'Close modal' : 'Zatvori prozor'}
+            title={isEn ? 'Close' : 'Zatvori'}
           >
-            <X className="w-5 h-5" />
+            <X className="w-5.5 h-5.5 stroke-[3]" />
           </button>
         </div>
 
