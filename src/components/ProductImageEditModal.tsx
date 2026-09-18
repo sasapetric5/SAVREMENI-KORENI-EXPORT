@@ -132,6 +132,18 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
     showToast(`Slot ${index + 1} je postavljen kao Glavna slika (Slot 1)!`);
   };
 
+  const handleSwapWithPrimary = (index: number) => {
+    if (index === 0) return;
+    setSlots(prev => {
+      const updated = [...prev];
+      const temp = updated[0];
+      updated[0] = updated[index];
+      updated[index] = temp;
+      return updated;
+    });
+    showToast(`Glavna slika je uspešno zamenjena sa Slotom ${index + 1}!`);
+  };
+
   const handleSaveChanges = async () => {
     const validSlots = slots.filter((s): s is string => Boolean(s));
     if (validSlots.length === 0) {
@@ -333,15 +345,48 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
                           </button>
 
                           {!isPrimary && (
-                            <button
-                              type="button"
-                              onClick={() => handleSetSlotAsPrimary(index)}
-                              className="px-3 py-1.5 bg-[#C2872A] hover:bg-[#d49635] text-stone-950 rounded-lg text-xs font-bold flex items-center gap-1.5 w-full justify-center transition-colors cursor-pointer shadow"
-                              title="Postavi kao glavnu sliku"
-                            >
-                              <Star className="w-3.5 h-3.5 fill-stone-950" />
-                              <span>Učini Glavnom</span>
-                            </button>
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => handleSetSlotAsPrimary(index)}
+                                className="px-3 py-1.5 bg-[#C2872A] hover:bg-[#d49635] text-stone-950 rounded-lg text-xs font-bold flex items-center gap-1.5 w-full justify-center transition-colors cursor-pointer shadow"
+                                title="Postavi kao glavnu sliku"
+                              >
+                                <Star className="w-3.5 h-3.5 fill-stone-950" />
+                                <span>Učini Glavnom</span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleSwapWithPrimary(index)}
+                                className="px-3 py-1.5 bg-stone-700 hover:bg-stone-600 text-[#E8D0A9] rounded-lg text-xs font-medium flex items-center gap-1.5 w-full justify-center transition-colors cursor-pointer border border-[#C2872A]/40"
+                                title="Zameni mesta sa Glavnom (Slot 1)"
+                              >
+                                <RefreshCw className="w-3.5 h-3.5 text-[#C2872A]" />
+                                <span>Zameni sa Glavnom</span>
+                              </button>
+                            </>
+                          )}
+
+                          {isPrimary && slots.some((s, idx) => idx > 0 && s) && (
+                            <div className="w-full space-y-1 pt-1">
+                              <span className="text-[10px] text-stone-300 font-medium block text-center">Zameni sa:</span>
+                              <div className="grid grid-cols-3 gap-1">
+                                {slots.map((s, idx) => {
+                                  if (idx === 0 || !s) return null;
+                                  return (
+                                    <button
+                                      key={idx}
+                                      type="button"
+                                      onClick={() => handleSwapWithPrimary(idx)}
+                                      className="px-2 py-1 bg-stone-800 hover:bg-stone-700 text-[#E8D0A9] rounded text-[10px] font-bold border border-stone-600 cursor-pointer text-center truncate"
+                                      title={`Zameni sa Slotom ${idx + 1}`}
+                                    >
+                                      Slot {idx + 1}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
                           )}
 
                           <button
