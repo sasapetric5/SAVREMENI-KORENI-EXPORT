@@ -95,10 +95,10 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   }, []);
 
   const allProducts = useMemo(() => {
-    // Combine custom products (top priority) + default products
-    const customIds = new Set(customProducts.map(p => p.id));
-    const defaults = productsData.filter(p => !customIds.has(p.id));
-    const combined = [...customProducts, ...defaults];
+    // Combine productsData (authentic curated factory products first) + unique custom products
+    const factoryIds = new Set(productsData.map(p => p.id));
+    const uniqueCustoms = customProducts.filter(p => !factoryIds.has(p.id));
+    const combined = [...productsData, ...uniqueCustoms];
     
     // Apply stock overrides
     const withOverrides = combined.map(p => {
