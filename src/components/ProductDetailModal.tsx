@@ -32,7 +32,6 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
   const [copiedShare, setCopiedShare] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
-  const [brokenImages, setBrokenImages] = useState<Set<string>>(new Set());
   
   // Magnifying Glass Lens effect state
   const imageContainerRef = useRef<HTMLDivElement>(null);
@@ -40,8 +39,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const [magnifierPos, setMagnifierPos] = useState({ x: 0, y: 0, relX: 0, relY: 0 });
   const [magnifierEnabled, setMagnifierEnabled] = useState(false);
 
-  // Compute candidate images list for the product (supporting all 4 product views)
-  const candidateImages: string[] = React.useMemo(() => {
+  // Compute full 4 images list for the product
+  const allImages: string[] = React.useMemo(() => {
     if (!product) return ['/logo.jpg'];
     const list: string[] = [];
     const addIfValid = (url?: string) => {
@@ -80,26 +79,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     return list;
   }, [product]);
 
-  // Active valid images that haven't failed loading
-  const allImages: string[] = React.useMemo(() => {
-    const valid = candidateImages.filter((img) => !brokenImages.has(img));
-    return valid.length > 0 ? valid : ['/logo.jpg'];
-  }, [candidateImages, brokenImages]);
-
-  const markImageBroken = (url?: string) => {
-    if (!url || url === '/logo.jpg') return;
-    setBrokenImages((prev) => {
-      if (prev.has(url)) return prev;
-      const next = new Set(prev);
-      next.add(url);
-      return next;
-    });
-  };
-
   // Reset states when product changes
   useEffect(() => {
     setActiveImageIdx(0);
-    setBrokenImages(new Set());
     setZoomScale(1);
     setPanOffset({ x: 0, y: 0 });
     setCopiedShare(false);
@@ -512,8 +494,11 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     title={getProductImageTitle(product, isEn)}
                     className="max-w-full max-h-full object-contain object-center drop-shadow-md rounded-lg transition-all"
                     referrerPolicy="no-referrer"
-                    onError={() => {
-                      markImageBroken(currentImageUrl);
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (!target.src.endsWith('/logo.jpg')) {
+                        target.src = '/logo.jpg';
+                      }
                     }}
                   />
                 </div>
@@ -561,8 +546,11 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                         alt={`${displayName} - ${isEn ? 'Handcraft detail view' : 'Detalj ručnog rada'} ${idx + 1}`} 
                         className="w-full h-full object-cover"
                         referrerPolicy="no-referrer"
-                        onError={() => {
-                          markImageBroken(img);
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (!target.src.endsWith('/logo.jpg')) {
+                            target.src = '/logo.jpg';
+                          }
                         }}
                       />
                     </button>
