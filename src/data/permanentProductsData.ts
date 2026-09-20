@@ -23,7 +23,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789203411768_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789203411768.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789203411768_g0.jpg",
       "/custom_products/prod_custom-prod-1789203411768_g1.jpg",
@@ -53,7 +53,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789204073718_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789204073718.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789204073718_g0.jpg",
       "/custom_products/prod_custom-prod-1789204073718_g1.jpg",
@@ -83,7 +83,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789204258030_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789204258030.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789204258030_g0.jpg",
       "/custom_products/prod_custom-prod-1789204258030_g1.jpg",
@@ -113,7 +113,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789205898869_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789205898869.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789205898869_g0.jpg",
       "/custom_products/prod_custom-prod-1789205898869_g1.jpg",
@@ -143,7 +143,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789206703824_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789206703824.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789206703824_g0.jpg",
       "/custom_products/prod_custom-prod-1789206703824_g1.jpg",
@@ -175,7 +175,7 @@ export const permanentProductsData: Product[] = [
       "satenska postava",
       "metalna galanterija"
     ],
-    "image": "/custom_products/prod_custom-prod-1789207252514_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789207252514.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789207252514_g0.jpg",
       "/custom_products/prod_custom-prod-1789207252514_g1.jpg",
@@ -205,7 +205,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789207820042_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789207820042.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789207820042_g0.jpg",
       "/custom_products/prod_custom-prod-1789207820042_g1.jpg",
@@ -235,7 +235,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789208559853_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789208559853.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789208559853_g0.jpg",
       "/custom_products/prod_custom-prod-1789208559853_g1.jpg",
@@ -265,7 +265,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789209800143_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789209800143.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789209800143_g0.jpg",
       "/custom_products/prod_custom-prod-1789209800143_g1.jpg",
@@ -295,7 +295,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789210279779_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789210279779.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789210279779_g0.jpg",
       "/custom_products/prod_custom-prod-1789210279779_g1.jpg",
@@ -325,7 +325,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789210578864_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789210578864.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789210578864_g0.jpg",
       "/custom_products/prod_custom-prod-1789210578864_g1.jpg",
@@ -355,7 +355,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789211182859_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789211182859.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789211182859_g0.jpg",
       "/custom_products/prod_custom-prod-1789211182859_g1.jpg",
@@ -385,7 +385,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789211608744_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789211608744.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789211608744_g0.jpg",
       "/custom_products/prod_custom-prod-1789211608744_g1.jpg",
@@ -415,7 +415,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789211834535_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789211834535.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789211834535_g0.jpg",
       "/custom_products/prod_custom-prod-1789211834535_g1.jpg",
@@ -445,7 +445,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789212070909_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789212070909.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789212070909_g0.jpg",
       "/custom_products/prod_custom-prod-1789212070909_g1.jpg",
@@ -475,7 +475,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789212465315_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789212465315.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789212465315_g0.jpg",
       "/custom_products/prod_custom-prod-1789212465315_g1.jpg",
@@ -505,7 +505,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789212797315_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789212797315.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789212797315_g0.jpg",
       "/custom_products/prod_custom-prod-1789212797315_g1.jpg",
@@ -536,7 +536,7 @@ export const permanentProductsData: Product[] = [
       "postava"
     ],
     "dimensions": "25 cm x 18 cm x 7 cm",
-    "image": "/custom_products/prod_custom-prod-1789213210387_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789213210387.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789213210387_g0.jpg",
       "/custom_products/prod_custom-prod-1789213210387_g1.jpg",
@@ -566,7 +566,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789213437909_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789213437909.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789213437909_g0.jpg",
       "/custom_products/prod_custom-prod-1789213437909_g1.jpg",
@@ -596,7 +596,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789215182204_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789215182204.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789215182204_g0.jpg",
       "/custom_products/prod_custom-prod-1789215182204_g1.jpg",
@@ -626,7 +626,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789215608263_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789215608263.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789215608263_g0.jpg",
       "/custom_products/prod_custom-prod-1789215608263_g1.jpg",
@@ -656,7 +656,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789218686318_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789218686318.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789218686318_g0.jpg",
       "/custom_products/prod_custom-prod-1789218686318_g1.jpg",
@@ -686,7 +686,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789235265047_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789235265047.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789235265047_g0.jpg",
       "/custom_products/prod_custom-prod-1789235265047_g1.jpg",
@@ -716,7 +716,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789280827861_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789280827861.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789280827861_g0.jpg",
       "/custom_products/prod_custom-prod-1789280827861_g1.jpg",
@@ -746,7 +746,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789282255011_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789282255011.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789282255011_g0.jpg",
       "/custom_products/prod_custom-prod-1789282255011_g1.jpg",
@@ -776,7 +776,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789282453042_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789282453042.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789282453042_g0.jpg",
       "/custom_products/prod_custom-prod-1789282453042_g1.jpg",
@@ -806,7 +806,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789285964143_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789285964143.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789285964143_g0.jpg",
       "/custom_products/prod_custom-prod-1789285964143_g1.jpg",
@@ -836,7 +836,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789286171903_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789286171903.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789286171903_g0.jpg",
       "/custom_products/prod_custom-prod-1789286171903_g1.jpg",
@@ -866,7 +866,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789286570316_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789286570316.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789286570316_g0.jpg",
       "/custom_products/prod_custom-prod-1789286570316_g1.jpg",
@@ -896,7 +896,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789286897279_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789286897279.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789286897279_g0.jpg",
       "/custom_products/prod_custom-prod-1789286897279_g1.jpg",
@@ -926,7 +926,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789287135814_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789287135814.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789287135814_g0.jpg",
       "/custom_products/prod_custom-prod-1789287135814_g1.jpg",
@@ -956,7 +956,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789287464927_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789287464927.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789287464927_g0.jpg",
       "/custom_products/prod_custom-prod-1789287464927_g1.jpg",
@@ -986,7 +986,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789287726315_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789287726315.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789287726315_g0.jpg",
       "/custom_products/prod_custom-prod-1789287726315_g1.jpg",
@@ -1016,7 +1016,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789290912081_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789290912081.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789290912081_g0.jpg",
       "/custom_products/prod_custom-prod-1789290912081_g1.jpg",
@@ -1046,7 +1046,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789291435587_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789291435587.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789291435587_g0.jpg",
       "/custom_products/prod_custom-prod-1789291435587_g1.jpg",
@@ -1076,7 +1076,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789291724457_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789291724457.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789291724457_g0.jpg",
       "/custom_products/prod_custom-prod-1789291724457_g1.jpg",
@@ -1106,7 +1106,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789300552461_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789300552461.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789300552461_g0.jpg",
       "/custom_products/prod_custom-prod-1789300552461_g1.jpg",
@@ -1136,7 +1136,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789301322219_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789301322219.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789301322219_g0.jpg",
       "/custom_products/prod_custom-prod-1789301322219_g1.jpg",
@@ -1166,7 +1166,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789301789294_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789301789294.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789301789294_g0.jpg",
       "/custom_products/prod_custom-prod-1789301789294_g1.jpg",
@@ -1196,7 +1196,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789306811877_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789306811877.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789306811877_g0.jpg",
       "/custom_products/prod_custom-prod-1789306811877_g1.jpg",
@@ -1226,7 +1226,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789306914973_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789306914973.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789306914973_g0.jpg",
       "/custom_products/prod_custom-prod-1789306914973_g1.jpg",
@@ -1256,7 +1256,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789307017430_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789307017430.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789307017430_g0.jpg",
       "/custom_products/prod_custom-prod-1789307017430_g1.jpg",
@@ -1286,7 +1286,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789307088691_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789307088691.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789307088691_g0.jpg",
       "/custom_products/prod_custom-prod-1789307088691_g1.jpg",
@@ -1316,7 +1316,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789307337462_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789307337462.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789307337462_g0.jpg",
       "/custom_products/prod_custom-prod-1789307337462_g1.jpg",
@@ -1346,7 +1346,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789307502983_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789307502983.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789307502983_g0.jpg",
       "/custom_products/prod_custom-prod-1789307502983_g1.jpg",
@@ -1376,7 +1376,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789307585814_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789307585814.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789307585814_g0.jpg",
       "/custom_products/prod_custom-prod-1789307585814_g1.jpg",
@@ -1406,7 +1406,7 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789307658216_g0.jpg",
+    "image": "/custom_products/prod_custom-prod-1789307658216.jpg",
     "images": [
       "/custom_products/prod_custom-prod-1789307658216_g0.jpg",
       "/custom_products/prod_custom-prod-1789307658216_g1.jpg",
