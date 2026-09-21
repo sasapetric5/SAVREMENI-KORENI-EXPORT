@@ -84,19 +84,24 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
     const combined = [...customProducts, ...defaults].map(p => {
       const canonical = permMap.get(p.id);
-      let validMain = (p.image && typeof p.image === 'string' && p.image.trim().length > 0)
-        ? p.image.trim()
-        : (canonical?.image || p.images?.[0] || '');
 
-      // Replace broken un-suffixed path with canonical real photo
-      if (validMain.match(/\/custom_products\/prod_custom-prod-\d+\.jpg$/) && canonical?.image) {
-        validMain = canonical.image;
+      // Permanent product data is authoritative for product/gallery images.
+      // Stale IndexedDB/localStorage data must not override the 47 canonical products.
+      if (canonical) {
+        return {
+          ...canonical,
+          ...p,
+          image: canonical.image,
+          images: canonical.images,
+        };
       }
 
-      const rawImages = (Array.isArray(p.images) && p.images.length > 0)
-        ? p.images
-        : ((canonical?.images && canonical.images.length > 0) ? canonical.images : []);
+      // Products created in the future remain fully supported.
+      const validMain = (p.image && typeof p.image === 'string' && p.image.trim().length > 0)
+        ? p.image.trim()
+        : (p.images?.[0] || '');
 
+      const rawImages = Array.isArray(p.images) ? p.images : [];
       const validImages = rawImages.filter(
         (img) => typeof img === 'string' && img.trim().length > 0
       );
@@ -108,13 +113,11 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
       }
 
       return {
-        ...(canonical || {}),
         ...p,
         image: validMain,
         images: validImages,
       };
     });
-    
     // Apply stock overrides
     const withOverrides = combined.map(p => {
       if (inStockOverrides[p.id] !== undefined) {
