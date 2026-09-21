@@ -56,18 +56,16 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
     const perm = permanentProductsData.find((p) => p.id === product.id);
 
-    // 1. Primary product image (prioritize product.image, then perm.image)
-    if (product.image) {
-      addIfValid(product.image);
-    } else if (perm?.image) {
+    // Permanent product images are authoritative for canonical products.
+    if (perm) {
       addIfValid(perm.image);
-    }
-
-    // 2. Secondary gallery images (prioritize product.images, then perm.images)
-    if (Array.isArray(product.images) && product.images.length > 0) {
-      product.images.forEach(addIfValid);
-    } else if (perm?.images && perm.images.length > 0) {
-      perm.images.forEach(addIfValid);
+      perm.images?.forEach(addIfValid);
+    } else {
+      // Future custom products keep their own image/gallery data.
+      addIfValid(product.image);
+      if (Array.isArray(product.images)) {
+        product.images.forEach(addIfValid);
+      }
     }
 
     if (list.length === 0) {
