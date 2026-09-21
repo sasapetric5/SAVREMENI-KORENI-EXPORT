@@ -18,23 +18,25 @@ const LOCAL_STORAGE_KEY = 'savremeni_koreni_custom_products_v1';
 function healProductsWithCanonicalData(products: Product[]): Product[] {
   const permMap = new Map(permanentProductsData.map((p) => [p.id, p]));
   
-  // First map existing products
+  // First map existing products.
+  // Permanent product images/gallery are authoritative for canonical products.
   const healed: Product[] = products.map((p) => {
     const perm = permMap.get(p.id);
-    let validMain = (p.image && typeof p.image === 'string' && p.image.trim().length > 0)
-      ? p.image.trim()
-      : (perm?.image || p.images?.[0] || '');
 
-    // If validMain is the broken un-suffixed path (prod_custom-prod-12345.jpg) and perm has the real _g0.jpg
-    if (validMain.match(/\/custom_products\/prod_custom-prod-\d+\.jpg$/) && perm?.image) {
-      validMain = perm.image;
+    if (perm) {
+      return {
+        ...perm,
+        ...p,
+        image: perm.image,
+        images: perm.images,
+      };
     }
 
-    // Extract all candidate images, prioritizing user product images if available, then permanent canonical images
-    const rawImages = (Array.isArray(p.images) && p.images.length > 0)
-      ? p.images
-      : ((perm?.images && perm.images.length > 0) ? perm.images : []);
-
+    // Future custom products remain fully editable.
+    const validMain = (p.image && typeof p.image === 'string' && p.image.trim().length > 0)
+      ? p.image.trim()
+      : (p.images?.[0] || '');
+    const rawImages = Array.isArray(p.images) ? p.images : [];
     const validImages = rawImages.filter(
       (img) => typeof img === 'string' && img.trim().length > 0
     );
@@ -46,13 +48,11 @@ function healProductsWithCanonicalData(products: Product[]): Product[] {
     }
 
     return {
-      ...(perm || {}),
       ...p,
       image: validMain,
       images: validImages,
     };
   });
-
   // Ensure any permanent products not present in the local list are included
   const existingIds = new Set(healed.map((p) => p.id));
   for (const perm of permanentProductsData) {
