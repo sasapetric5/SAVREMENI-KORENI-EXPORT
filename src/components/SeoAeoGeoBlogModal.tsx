@@ -110,7 +110,7 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
   const [topic, setTopic] = useState('');
   const [keyword, setKeyword] = useState('');
   const [writingStyle, setWritingStyle] = useState<'artisan' | 'premium' | 'editorial' | 'informational' | 'educational' | 'storytelling' | 'sales' | 'traditional'>('artisan');
-  const [wordCount, setWordCount] = useState<300 | 500 | 750 | 1000 | 1500 | 2000 | 2500>(1000);
+  const [wordCount, setWordCount] = useState<300 | 500 | 750 | 1000 | 1500 | 2000 | 2500 | 3000 | 3500 | 4000>(1000);
   const [seoEnabled, setSeoEnabled] = useState(true);
   const [aeoEnabled, setAeoEnabled] = useState(true);
   const [geoEnabled, setGeoEnabled] = useState(true);
@@ -203,7 +203,7 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
         };
         const res = await generateSeoAeoGeoArticle(params);
         setGeneratedBlogResult(res);
-        showToast("✨ SEO Blog članak je uspešno generisan sa 100% ljudskim zanatskim tonom!");
+        showToast("✨ Super Cool tekst je generisan — people-first kontrola i SEO/AEO/GEO parametri su primenjeni.");
       } catch (err: any) {
         console.error("Greška pri generisanju:", err);
         showToast("Došlo je do greške pri generisanju bloga.");
@@ -268,18 +268,18 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
             <div>
               <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-base sm:text-lg font-serif text-[#E8D0A9]">
-                  SEO + AEO + GEO Maker (Ljudski Stil)
+                  SUPER COOL TEXT GENERATOR
                 </h2>
                 <span className="bg-emerald-500/20 text-emerald-300 text-[10px] px-2 py-0.5 rounded border border-emerald-500/30 flex items-center gap-1 font-medium">
                   <UserCheck className="w-3 h-3" />
-                  Natural / editorial stil
+                  People-first / editorial
                 </span>
                 <span className="bg-amber-500/20 text-amber-300 text-[10px] px-2 py-0.5 rounded border border-amber-500/30 flex items-center gap-1 font-mono">
                   {geminiModel}
                 </span>
               </div>
               <p className="text-xs text-stone-400">
-                Tekstovi sa dušom majstora, AEO direktnim odgovorima za Google AI i Perplexity, i GEO optimizacijom za generativne pretrage.
+                Prirodan, koristan i originalan sadržaj do 4.000 reči — SR + EN, uz SEO, AEO i Generative Engine Optimization kontrole.
               </p>
             </div>
           </div>
@@ -307,7 +307,7 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
             }`}
           >
             <FileText className="w-4 h-4 text-[#C2872A]" />
-            <span>📝 SEO Blog Članak</span>
+            <span>📝 Super Cool tekst generator</span>
           </button>
 
           <button
@@ -350,7 +350,7 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
               <div>
                 <label className="block text-[11px] uppercase tracking-wider text-stone-400 mb-1">Ciljna dužina</label>
                 <select value={wordCount} onChange={e => setWordCount(Number(e.target.value) as typeof wordCount)} className="w-full bg-[#120E0C] border border-stone-700 rounded-xl px-3 py-2 text-xs text-white">
-                  {[300,500,750,1000,1500,2000,2500].map(n => <option key={n} value={n}>{n} reči (±10%)</option>)}
+                  {[300,500,750,1000,1500,2000,2500,3000,3500,4000].map(n => <option key={n} value={n}>{n} reči (±10%)</option>)}
                 </select>
               </div>
             </div>
@@ -378,7 +378,7 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
                     </span>
                   </div>
                   <p className="text-[11px] text-stone-400">
-                    {useGemini ? 'Aktiviran je Google Gemini režim uz Anti-AI filtere.' : 'Koristi se ugrađeni klijentski zanatski rečnik.'}
+                    {useGemini ? 'Aktiviran je Google Gemini režim uz people-first pravila.' : 'Koristi se ugrađeni klijentski zanatski rečnik.'}
                   </p>
                 </div>
               </div>
