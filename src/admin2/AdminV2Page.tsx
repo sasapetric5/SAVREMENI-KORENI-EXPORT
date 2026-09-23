@@ -49,6 +49,32 @@ export function AdminV2Page() {
   }, []);
 
   const auditProblems = slotAudit.filter(x => x.status !== 'OK');
+
+  const altAudit = useMemo(() => {
+    const rows: { productId: string; productName: string; slot: Slot; path: string; sr: string; en: string; status: 'OK' | 'MISSING_SR' | 'MISSING_EN' | 'MISSING_BOTH' }[] = [];
+    (permanentProductsData as any[]).forEach(p => {
+      const slots = slotPaths(p);
+      const alts = Array.isArray(p.imageAlts) ? p.imageAlts : [];
+      (Object.keys(slots) as Slot[]).forEach((slot, index) => {
+        const path = slots[slot];
+        const alt = alts[index] || {};
+        const hasSr = Boolean(String(alt.alt || '').trim());
+        const hasEn = Boolean(String(alt.altEn || '').trim());
+        rows.push({
+          productId: p.id,
+          productName: p.name,
+          slot,
+          path,
+          sr: String(alt.alt || ''),
+          en: String(alt.altEn || ''),
+          status: hasSr && hasEn ? 'OK' : !hasSr && !hasEn ? 'MISSING_BOTH' : !hasSr ? 'MISSING_SR' : 'MISSING_EN'
+        });
+      });
+    });
+    return rows;
+  }, []);
+
+  const altProblems = altAudit.filter(x => x.status !== 'OK');
   const mediaIndex = useMemo(() => {
     const result = new Map<string, { productId: string; productName: string; slot: Slot }[]>();
     (permanentProductsData as any[]).forEach(p => {
@@ -130,6 +156,44 @@ export function AdminV2Page() {
             </table>
           </div>
           {auditProblems.length > 0 && <div className="mt-4 p-3 rounded-xl bg-red-50 border border-red-200"><div className="font-bold text-red-800 mb-2">Problemi za ručnu proveru</div>{auditProblems.map(x => <div key={x.productId + x.slot} className="text-xs text-red-800">{x.productName} — {x.slot} — {x.status} — {x.path || 'nema putanje'}</div>)}</div>}
+        </div>
+
+        <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
+          <div className="flex flex-wrap justify-between items-end gap-3 mb-4">
+            <div>
+              <h2 className="font-bold text-lg">ALT Audit — svih 188 fotografskih slotova</h2>
+              <p className="text-xs text-gray-500 mt-1">READ ONLY • analiza postojećih imageAlts • nema automatskog upisa</p>
+            </div>
+            <div className="text-sm font-semibold">OK: {altAudit.filter(x => x.status === 'OK').length} / 188 • Za doradu: {altProblems.length}</div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+            {(['MAIN','G0','G1','G2'] as Slot[]).map(slot => {
+              const list = altAudit.filter(x => x.slot === slot);
+              const ok = list.filter(x => x.status === 'OK').length;
+              return <div key={slot} className="rounded-xl border border-[#e8e0d5] p-3">
+                <div className="font-bold">{slot}</div>
+                <div className="text-xs mt-1">{ok}/47 imaju SR + EN ALT</div>
+                <div className={ok === 47 ? 'text-xs text-green-700 font-semibold' : 'text-xs text-amber-700 font-semibold'}>{ok === 47 ? 'POTPUNO' : (47-ok) + ' za proveru'}</div>
+              </div>;
+            })}
+          </div>
+          <div className="max-h-[360px] overflow-auto border rounded-xl">
+            <table className="w-full text-xs">
+              <thead className="sticky top-0 bg-[#f1ebe3]"><tr><th className="p-2 text-left">Proizvod</th><th className="p-2">Slot</th><th className="p-2 text-left">SR ALT</th><th className="p-2 text-left">EN ALT</th><th className="p-2">Status</th></tr></thead>
+              <tbody>{altAudit.map(row => (
+                <tr key={row.productId + row.slot} className="border-t border-[#eee7df]">
+                  <td className="p-2 font-semibold">{row.productName}</td>
+                  <td className="p-2 font-bold">{row.slot}</td>
+                  <td className="p-2 max-w-[260px] truncate" title={row.sr}>{row.sr || '—'}</td>
+                  <td className="p-2 max-w-[260px] truncate" title={row.en}>{row.en || '—'}</td>
+                  <td className={row.status === 'OK' ? 'p-2 text-green-700 font-bold' : 'p-2 text-amber-700 font-bold'}>{row.status}</td>
+                </tr>
+              ))}</tbody>
+            </table>
+          </div>
+          {altProblems.length > 0 && <div className="mt-4 p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900">
+            ALT audit je samo dijagnostika. Sledeći korak može biti generisanje predloga po fotografiji, ali nijedan ALT se ovde ne upisuje automatski.
+          </div>}
         </div>
 
         <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
