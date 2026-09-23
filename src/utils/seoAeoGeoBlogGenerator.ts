@@ -37,6 +37,11 @@ export interface BlogGeneratorParams {
   topic: string;
   keyword?: string;
   tone?: 'artisan' | 'history' | 'buyers_guide' | 'heritage_diaspora';
+  writingStyle?: 'artisan' | 'premium' | 'editorial' | 'informational' | 'educational' | 'storytelling' | 'sales' | 'traditional';
+  wordCount?: 300 | 500 | 750 | 1000 | 1500 | 2000 | 2500;
+  seoEnabled?: boolean;
+  aeoEnabled?: boolean;
+  geoEnabled?: boolean;
   geoRegion?: 'all' | 'homolje' | 'zlatibor' | 'pirot' | 'pester' | 'sumadija';
   geminiApiKey?: string;
   geminiModel?: 'gemini-2.5-flash' | 'gemini-2.5-pro';
@@ -46,6 +51,11 @@ export interface LandingPageGeneratorParams {
   topic: string;
   keyword?: string;
   targetAudience?: 'general' | 'folklore' | 'diaspora' | 'slava_gifts' | 'collectors';
+  writingStyle?: 'artisan' | 'premium' | 'editorial' | 'informational' | 'educational' | 'storytelling' | 'sales' | 'traditional';
+  wordCount?: 500 | 750 | 1000 | 1500 | 2000 | 2500;
+  seoEnabled?: boolean;
+  aeoEnabled?: boolean;
+  geoEnabled?: boolean;
   geoRegion?: 'all' | 'homolje' | 'zlatibor' | 'pirot' | 'pester' | 'sumadija';
   productCategory?: 'subare' | 'nosnje' | 'carape' | 'pokloni' | 'torbice' | 'nakit' | 'kosulje' | 'dom-pokloni';
   geminiApiKey?: string;
@@ -619,7 +629,7 @@ ${tmpl.en.faq.map(f => `**Question: ${f.q}**
  * Gemini poziv za Blog Članke sa Anti-AI detector instrukcijama
  */
 async function generateBlogWithGemini(params: BlogGeneratorParams): Promise<GeneratedBlogPostResult | null> {
-  const { topic, keyword, tone, geoRegion, geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
+  const { topic, keyword, tone, writingStyle, wordCount, seoEnabled = true, aeoEnabled = true, geoEnabled = true, geoRegion, geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
   if (!geminiApiKey) return null;
 
   const prompt = `
@@ -709,7 +719,7 @@ VRATI REZULTAT ISKLJUČIVO U ČISTOM JSON FORMATU (bez markdown backtick oznaka 
  * Gemini poziv za CILJANE LANDING STRANICE (Kompletan Page Builder sa AEO/GEO/SEO)
  */
 async function generateLandingWithGemini(params: LandingPageGeneratorParams): Promise<GeneratedLandingPageResult | null> {
-  const { topic, keyword, targetAudience, geoRegion, productCategory, geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
+  const { topic, keyword, targetAudience, writingStyle, wordCount, seoEnabled = true, aeoEnabled = true, geoEnabled = true, geoRegion, productCategory, geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
   if (!geminiApiKey) return null;
 
   const prompt = `
