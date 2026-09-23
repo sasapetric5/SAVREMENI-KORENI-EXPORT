@@ -22,6 +22,7 @@ export function AdminV2Page() {
   const [altDrafts, setAltDrafts] = useState<Record<string, { alt: string; altEn: string }>>({});
   const [altApproved, setAltApproved] = useState<Record<string, boolean>>({});
   const [altSaving, setAltSaving] = useState(false);
+  const [schemaPreview, setSchemaPreview] = useState<string | null>(null);
 
   const validation = useMemo(() => {
     const products = permanentProductsData as any[];
@@ -106,7 +107,30 @@ export function AdminV2Page() {
     }
   };
 
-  const handleSaveApprovedAlts = async () => {
+
+
+  const buildProductSchema = (product: any) => ({
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    '@id': `https://savremenikoreni.com/#product-${product.id}`,
+    name: product.name,
+    alternateName: product.nameEn || undefined,
+    description: product.descriptionSr || product.description || undefined,
+    image: Array.isArray(product.images) ? product.images.slice(0, 4) : [product.image].filter(Boolean),
+    category: product.category,
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'RSD',
+      price: product.priceRsd,
+      availability: product.inStock === false ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
+      url: `https://savremenikoreni.com/#product-${product.id}`
+    },
+    brand: { '@type': 'Brand', name: 'Savremeni Koreni' }
+  });
+
+  const handleSchemaPreview = (product: any) => {
+    setSchemaPreview(JSON.stringify(buildProductSchema(product), null, 2));
+  };  const handleSaveApprovedAlts = async () => {
     const approvedKeys = Object.keys(altApproved).filter(key => altApproved[key] && altDrafts[key]);
     if (!approvedKeys.length) return;
     setAltSaving(true);
@@ -318,6 +342,24 @@ export function AdminV2Page() {
               </button>;
             })}
           </div>
+        </div>
+
+        <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
+          <div className="flex flex-wrap justify-between items-end gap-3 mb-3">
+            <div><h2 className="font-bold text-lg">Schema Generator — Product</h2><p className="text-xs text-gray-500 mt-1">Preview only • JSON-LD se ne upisuje automatski</p></div>
+            <span className="text-xs font-semibold text-amber-700">VALIDACIJA PRE UPISA</span>
+          </div>
+          <div className="grid md:grid-cols-3 gap-2">
+            {(permanentProductsData as any[]).slice(0, 47).map(p => (
+              <button key={p.id} onClick={() => handleSchemaPreview(p)} className="text-left px-3 py-2 rounded-xl border border-[#d8cec1] hover:bg-[#f7f3ed] text-xs">
+                <b>{p.name}</b><div className="text-gray-500">{p.id} • {p.category}</div>
+              </button>
+            ))}
+          </div>
+          {schemaPreview && <div className="mt-4">
+            <pre className="max-h-[320px] overflow-auto p-4 rounded-xl bg-[#17120f] text-green-200 text-[10px] whitespace-pre-wrap">{schemaPreview}</pre>
+            <p className="mt-2 text-[10px] text-gray-500">Schema je generisan iz postojećih podataka proizvoda. Nema izmene product/image podataka.</p>
+          </div>}
         </div>
 
         <div className="rounded-2xl bg-white border border-[#e8e0d5] overflow-hidden">
