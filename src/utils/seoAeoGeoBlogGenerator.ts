@@ -45,6 +45,10 @@ export interface BlogGeneratorParams {
   geoRegion?: 'all' | 'homolje' | 'zlatibor' | 'pirot' | 'pester' | 'sumadija';
   geminiApiKey?: string;
   geminiModel?: 'gemini-2.5-flash' | 'gemini-2.5-pro';
+  /** Optional real product from permanentProductsData used as verified content source. */
+  productId?: string;
+  sourceFacts?: ContentSourceFact[];
+  forbidUnverifiedClaims?: boolean;
 }
 
 export interface LandingPageGeneratorParams {
@@ -177,6 +181,36 @@ export function validateSourceFacts(
     ok: missing.length === 0,
     detail: missing.length ? 'Obavezne činjenice nisu pronađene u tekstu: ' + missing.map(f => f.label).join(', ') : 'Obavezne prosleđene činjenice su zastupljene'
   };
+}
+
+export function buildProductSourceFacts(product: import('../types').Product): ContentSourceFact[] {
+  const imagePaths = [product.image, ...(product.images || [])].filter(Boolean);
+  const imageRoles = ['MAIN', 'CLOSE-UP', 'INTERIOR', 'MODEL'];
+  const facts: ContentSourceFact[] = [
+    { label: 'Product ID', value: product.id, source: 'product', required: true },
+    { label: 'Naziv proizvoda (SR)', value: product.name, source: 'product', required: true },
+    { label: 'Product name (EN)', value: product.nameEn || product.name, source: 'product', required: false },
+    { label: 'Kategorija', value: product.category, source: 'product', required: true },
+    { label: 'Cena RSD', value: String(product.priceRsd), source: 'product', required: true },
+    { label: 'Cena EUR', value: product.priceEur != null ? String(product.priceEur) : '', source: 'product', required: false },
+    { label: 'Opis SR', value: product.descriptionSr || product.description || '', source: 'product', required: false },
+    { label: 'Opis EN', value: product.descriptionEn || '', source: 'product', required: false },
+    { label: 'Materijali SR', value: (product.materials || []).join(', '), source: 'product', required: false },
+    { label: 'Materijali EN', value: (product.materialsEn || []).join(', '), source: 'product', required: false },
+    { label: 'Tehnike SR', value: (product.craftTechniques || []).join(', '), source: 'product', required: false },
+    { label: 'Tehnike EN', value: (product.craftTechniquesEn || []).join(', '), source: 'product', required: false },
+    { label: 'ALT SR', value: product.alt || '', source: 'product', required: false },
+    { label: 'ALT EN', value: product.altEn || '', source: 'product', required: false },
+  ];
+  imagePaths.forEach((path, index) => {
+    facts.push({
+      label: `Slika ${index + 1} — ${imageRoles[index] || 'GALLERY'}`,
+      value: path,
+      source: 'product',
+      required: false
+    });
+  });
+  return facts.filter(f => f.value.trim());
 }
 
 export interface ContentValidationItem { key: string; label: string; ok: boolean; detail: string; }
@@ -546,6 +580,7 @@ const PRESET_LANDING_TEMPLATES: Record<string, SeoLandingPageData> = {
 // -------------------------------------------------------------------
 export async function generateSeoAeoGeoArticle(params: BlogGeneratorParams): Promise<GeneratedBlogPostResult> {
   const { topic, keyword, tone = 'artisan', geoRegion = 'all', geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
+  const sourceFacts = params.sourceFacts || [];
 
   // 1. Ako postoji uneti Gemini API ključ, pozivamo Gemini sa Anti-AI instrukcijama
   if (geminiApiKey && geminiApiKey.trim().length > 10) {
@@ -562,7 +597,7 @@ export async function generateSeoAeoGeoArticle(params: BlogGeneratorParams): Pro
     const serverResp = await fetch('/api/generate-blog', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ topic, keyword, tone, geoRegion, geminiModel })
+      body: JSON.stringify({ topic, keyword, tone, geoRegion, geminiModel, sourceFacts, forbidUnverifiedClaims: params.forbidUnverifiedClaims !== false })
     });
     if (serverResp.ok) {
       const data = await serverResp.json();
@@ -738,13 +773,20 @@ ${tmpl.en.faq.map(f => `**Question: ${f.q}**
  */
 async function generateBlogWithGemini(params: BlogGeneratorParams): Promise<GeneratedBlogPostResult | null> {
   const { topic, keyword, tone, writingStyle = 'artisan', wordCount = 1000, seoEnabled = true, aeoEnabled = true, geoEnabled = true, geoRegion, geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
+  const sourceBrief = buildPeopleFirstBrief(topic, keyword, params.sourceFacts || []);
   if (!geminiApiKey) return null;
 
+  const sourceBrief = buildPeopleFirstBrief(topic, keyword, params.sourceFacts || []);
   const prompt = `
+SOURCE OF TRUTH — PROVERENI PODACI:\n${sourceBrief}
+
 Ti si stari, iskusni srpski majstor-zanatlija i osnivač etno radionice "Savremeni Koreni" (Srbija).
 Tvoj zadatak je da napišeš VRHUNSKI SEO, AEO i GEO blog članak na temu: "${topic}".
 Fokusna ključna reč: "${keyword || topic}".
 Ciljani geografski region: "${geoRegion || 'Srbija i dijaspora'}".
+
+PROVERENI IZVORNI PODACI — SMEŠ KORISTITI SAMO OVO KAO ČINJENIČNU OSNOVU:
+${sourceBrief}
 
 STRIKTNA PRAVILA ZA PEOPLE-FIRST / HUMAN-CRAFTED STIL (NE POKUŠAVAJ DA ZAOBIĐEŠ AI DETEKTORE):
 1. Ne koristi generičke uvodne i zaključne klišee. Tekst mora zvučati kao originalan urednički rad, a ne kao šablon. Ne pokušavaj da "prevariš" AI detektore; cilj je prirodan, koristan i proverljiv tekst.\n   Izbegavaj fraze poput:
