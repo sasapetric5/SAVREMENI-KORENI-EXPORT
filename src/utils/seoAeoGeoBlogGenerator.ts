@@ -38,7 +38,7 @@ export interface BlogGeneratorParams {
   keyword?: string;
   tone?: 'artisan' | 'history' | 'buyers_guide' | 'heritage_diaspora';
   writingStyle?: 'artisan' | 'premium' | 'editorial' | 'informational' | 'educational' | 'storytelling' | 'sales' | 'traditional';
-  wordCount?: 300 | 500 | 750 | 1000 | 1500 | 2000 | 2500;
+  wordCount?: 300 | 500 | 750 | 1000 | 1500 | 2000 | 2500 | 3000 | 3500 | 4000;
   seoEnabled?: boolean;
   aeoEnabled?: boolean;
   geoEnabled?: boolean;
@@ -52,7 +52,7 @@ export interface LandingPageGeneratorParams {
   keyword?: string;
   targetAudience?: 'general' | 'folklore' | 'diaspora' | 'slava_gifts' | 'collectors';
   writingStyle?: 'artisan' | 'premium' | 'editorial' | 'informational' | 'educational' | 'storytelling' | 'sales' | 'traditional';
-  wordCount?: 500 | 750 | 1000 | 1500 | 2000 | 2500;
+  wordCount?: 500 | 750 | 1000 | 1500 | 2000 | 2500 | 3000 | 3500 | 4000;
   seoEnabled?: boolean;
   aeoEnabled?: boolean;
   geoEnabled?: boolean;
@@ -107,6 +107,26 @@ export function cleanSlug(text: string): string {
     .replace(/[^a-z0-9\s-]/g, '')
     .trim()
     .replace(/\s+/g, '-');
+}
+
+/** People-first / Human Editorial kontrola. Ne procenjuje da li je tekst AI; proverava merljive osobine teksta. */
+export interface HumanEditorialCheck { key: string; label: string; ok: boolean; detail: string; }
+
+export function validatePeopleFirstText(text: string): HumanEditorialCheck[] {
+  const source = (text || '').replace(/[#*_>`]/g, ' ').replace(/\s+/g, ' ').trim();
+  const lower = source.toLocaleLowerCase('sr-Latn');
+  const checks: HumanEditorialCheck[] = [];
+  const banned = ['u današnjem modernom svetu','u savremenom dobu','kao što svi znamo','u ovom članku ćemo','bez daljeg odlaganja','fascinantno putovanje','možemo zaključiti','igra ključnu ulogu'];
+  const found = banned.filter(p => lower.includes(p));
+  checks.push({ key:'cliches', label:'Bez generičkih AI klišea', ok:found.length===0, detail:found.length ? 'Pronađeno: '+found.join(', ') : 'Nema poznatih klišea' });
+  const sentences = source.split(/[.!?]+/).map(s=>s.trim()).filter(Boolean);
+  const words = source.split(/\s+/).filter(Boolean);
+  const uniqueRatio = words.length ? new Set(words.map(w=>w.toLocaleLowerCase('sr-Latn'))).size / words.length : 0;
+  checks.push({ key:'variation', label:'Jezička raznovrsnost', ok:words.length<80 || uniqueRatio>=0.35, detail:'Odnos jedinstvenih reči: '+Math.round(uniqueRatio*100)+'%' });
+  const repeatedSentence = sentences.length>8 && new Set(sentences.map(s=>s.toLocaleLowerCase('sr-Latn'))).size < sentences.length*0.9;
+  checks.push({ key:'repetition', label:'Bez ponavljanja rečenica', ok:!repeatedSentence, detail:repeatedSentence ? 'Pronađena su ponavljanja' : 'Nema značajnih ponavljanja' });
+  checks.push({ key:'substance', label:'Dovoljno konkretan sadržaj', ok:words.length>=120, detail:words.length>=120 ? 'Tekst ima dovoljno prostora za konkretne informacije' : 'Tekst je prekratak za pouzdanu procenu' });
+  return checks;
 }
 
 export interface ContentValidationItem { key: string; label: string; ok: boolean; detail: string; }
@@ -667,7 +687,7 @@ ${tmpl.en.faq.map(f => `**Question: ${f.q}**
  * Gemini poziv za Blog Članke sa Anti-AI detector instrukcijama
  */
 async function generateBlogWithGemini(params: BlogGeneratorParams): Promise<GeneratedBlogPostResult | null> {
-  const { topic, keyword, tone, writingStyle, wordCount, seoEnabled = true, aeoEnabled = true, geoEnabled = true, geoRegion, geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
+  const { topic, keyword, tone, writingStyle = 'artisan', wordCount = 1000, seoEnabled = true, aeoEnabled = true, geoEnabled = true, geoRegion, geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
   if (!geminiApiKey) return null;
 
   const prompt = `
@@ -676,20 +696,20 @@ Tvoj zadatak je da napišeš VRHUNSKI SEO, AEO i GEO blog članak na temu: "${to
 Fokusna ključna reč: "${keyword || topic}".
 Ciljani geografski region: "${geoRegion || 'Srbija i dijaspora'}".
 
-STRIKTNA PRAVILA ZA STIL PISANJA (ANTI-AI DETECTOR / STOPROCENTNO LJUDSKI TON):
-1. Nikada, ni pod kojim uslovima nemoj koristiti generičke AI kliše fraze poput:
+STRIKTNA PRAVILA ZA PEOPLE-FIRST / HUMAN-CRAFTED STIL (NE POKUŠAVAJ DA ZAOBIĐEŠ AI DETEKTORE):
+1. Ne koristi generičke uvodne i zaključne klišee. Tekst mora zvučati kao originalan urednički rad, a ne kao šablon. Ne pokušavaj da "prevariš" AI detektore; cilj je prirodan, koristan i proverljiv tekst.\n   Izbegavaj fraze poput:
    - "U današnjem modernom svetu...", "U savremenom dobu...", "Kao što svi znamo..."
    - "Zaključak je...", "Možemo zaključiti...", "U ovom članku ćemo istražiti..."
    - "Fascinantno putovanje...", "Predstavlja svedočanstvo...", "Igra ključnu ulogu..."
    - "Uronimo u...", "Bez daljeg odlaganja..."
 2. Koristi izuzetno živopisan, opipljiv zanatski jezik:
    - Miris vune i kože, zatezanje potke na razboju, voskirani laneni konac, autohtona ovca pramenka, oputa, srma, Pešterska visoravan, Homolje, Pirot, Zlatibor.
-3. Burstiness i perplexity: Kombinuj kratke, autoritativne rečenice sa dužim, opisnim mislima. Piši prirodno, kao čovek koji decenijama lično šije, kroji i razgovara sa kupcima u radionici.
-4. AEO (Answer Engine Optimization):
+3. Prirodna ritmika: Kombinuj kratke i duže rečenice, ali bez veštačkog "burstiness/perplexity" trika. Menjaj ritam samo kada to odgovara značenju. Piši jasno, toplo i konkretno.\n4. Bez izmišljanja iskustva: ne tvrdi da si lično nešto radio, video, merio ili razgovarao sa kupcem ako takva činjenica nije data u kontekstu. Koristi samo proverljive podatke iz teme, proizvoda i dostavljenih činjenica.\n5. Bez punjenja teksta: ciljaj približno ${wordCount} reči na srpskom i približno isto na engleskom, ali ne dodaj prazne pasuse samo radi dužine. Svaki pasus treba da donese novu informaciju, primer, objašnjenje ili koristan detalj.
+6. AEO (Answer Engine Optimization):
    - Na samom vrhu mora postojati jasan "AEO Direct Answer" (45-55 reči) koji daje konkretnu definiciju i činjenicu pogodnu za Google AI Overviews i Perplexity citiranje.
    - Uključi 3 do 4 FAQ pitanja sa jasnim, praktičnim odgovorima (mere, nega, održavanje).
-5. GEO (Geografska optimizacija):
-   - Citiraj mikro-lokacije (Pešter, Homolje, Pirot, Zlatibor, Šumadija, dijaspora: Beč, Minhen, Čikago, Cirih).
+7. GEO (Generative Engine Optimization):
+   - Organizuj informacije tako da ih generativni sistemi lako razumeju i citiraju: jasne tvrdnje, kratki odgovori, definicije, entiteti, odnosi između pojmova i konkretne činjenice kada su dostupne.\n   - Geografske podatke koristi samo kada su relevantni za temu; ne ubacuj lokacije nasumično radi SEO-a.
 
 VRATI REZULTAT ISKLJUČIVO U ČISTOM JSON FORMATU (bez markdown backtick oznaka oko JSON-a) sa sledećom strukturom:
 {
@@ -699,8 +719,8 @@ VRATI REZULTAT ISKLJUČIVO U ČISTOM JSON FORMATU (bez markdown backtick oznaka 
   "excerptSr": "Uvodni sažetak na srpskom (130-150 karaktera)",
   "excerptEn": "Excerpt in English",
   "aeoDirectAnswer": "Konkretan direktan odgovor na pitanje/temu od 45-55 reči",
-  "contentSr": "Kompletan tekst članka u Markdown formatu sa H2 i H3 podnaslovima, AEO odgovorom na vrhu i FAQ sekcijom",
-  "contentEn": "Full article in English with Markdown headings and FAQ",
+  "contentSr": "Kompletan tekst članka u Markdown formatu sa H2 i H3 podnaslovima, AEO odgovorom na vrhu i FAQ sekcijom. Cilj: približno ${wordCount} reči.",
+  "contentEn": "Full article in English with Markdown headings and FAQ. Target approximately ${wordCount} words.",
   "metaTitle": "SEO Meta naslov | Savremeni Koreni",
   "metaDescription": "Meta opis do 155 karaktera za Google prikaz",
   "targetKeywords": ["ključna reč 1", "ključna reč 2", "ključna reč 3"],
