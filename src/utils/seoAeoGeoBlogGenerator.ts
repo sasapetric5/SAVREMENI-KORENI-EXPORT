@@ -223,21 +223,29 @@ function countWords(text: string): number {
 /** Deterministička validacija rezultata pre prihvatanja u Admin 2.0. */
 export function validateGeneratedBlogResult(
   result: GeneratedBlogPostResult,
-  options: Pick<BlogGeneratorParams, 'keyword' | 'wordCount' | 'seoEnabled' | 'aeoEnabled' | 'geoEnabled'>
+  options: Pick<BlogGeneratorParams, 'keyword' | 'wordCount' | 'seoEnabled' | 'aeoEnabled' | 'geoEnabled'> & {
+    sourceFacts?: ContentSourceFact[];
+    forbidUnverifiedClaims?: boolean;
+  }
 ): ContentValidationResult {
-  const body = result.contentSr || '';
-  const words = countWords(body);
+  const bodySr = result.contentSr || '';
+  const bodyEn = result.contentEn || '';
+  const wordsSr = countWords(bodySr);
+  const wordsEn = countWords(bodyEn);
   const target = options.wordCount || 1000;
   const tolerance = target * 0.10;
   const keyword = (options.keyword || '').trim().toLocaleLowerCase('sr-Latn');
-  const haystack = (result.titleSr + ' ' + result.excerptSr + ' ' + body).toLocaleLowerCase('sr-Latn');
+  const haystack = (result.titleSr + ' ' + result.excerptSr + ' ' + bodySr).toLocaleLowerCase('sr-Latn');
   const items: ContentValidationItem[] = [];
   const add = (key: string, label: string, ok: boolean, detail: string) => items.push({ key, label, ok, detail });
-  add('title', 'Naslov', Boolean(result.titleSr?.trim()), result.titleSr ? 'Prisutan' : 'Nedostaje');
+
+  add('title', 'Naslov SR', Boolean(result.titleSr?.trim()), result.titleSr ? 'Prisutan' : 'Nedostaje');
   add('slug', 'Slug', Boolean(result.slug?.trim()) && !/\s/.test(result.slug), result.slug || 'Nedostaje ili sadrži razmake');
-  add('length', 'Dužina sadržaja', words >= target - tolerance && words <= target + tolerance, `${words} reči / cilj ${target} ±10%`);
-  add('keyword', 'Primarna ključna reč', !keyword || haystack.includes(keyword), keyword ? (haystack.includes(keyword) ? 'Pronađena u sadržaju' : 'Nije pronađena') : 'Nije zadato');
-  add('excerpt', 'Excerpt', Boolean(result.excerptSr?.trim()), result.excerptSr ? 'Prisutan' : 'Nedostaje');
+  add('length-sr', 'Dužina SR sadržaja', wordsSr >= target - tolerance && wordsSr <= target + tolerance, `${wordsSr} reči / cilj ${target} ±10%`);
+  add('length-en', 'Dužina EN sadržaja', wordsEn >= target - tolerance && wordsEn <= target + tolerance, `${wordsEn} words / target ${target} ±10%`);
+  add('keyword', 'Primarna ključna reč', !keyword || haystack.includes(keyword), keyword ? (haystack.includes(keyword) ? 'Pronađena u SR sadržaju' : 'Nije pronađena') : 'Nije zadato');
+  add('excerpt', 'Excerpt SR', Boolean(result.excerptSr?.trim()), result.excerptSr ? 'Prisutan' : 'Nedostaje');
+
   if (options.seoEnabled !== false) {
     add('meta-title', 'SEO Meta title', Boolean(result.metaTitle?.trim()) && result.metaTitle.length <= 65, `${result.metaTitle?.length || 0}/65 karaktera`);
     add('meta-description', 'SEO Meta description', Boolean(result.metaDescription?.trim()) && result.metaDescription.length <= 170, `${result.metaDescription?.length || 0}/170 karaktera`);
@@ -247,6 +255,14 @@ export function validateGeneratedBlogResult(
     add('faq', 'AEO FAQ', Array.isArray(result.faqList) && result.faqList.length > 0, `${Array.isArray(result.faqList) ? result.faqList.length : 0} pitanja`);
   }
   if (options.geoEnabled !== false) add('geo', 'GEO podaci', Array.isArray(result.targetKeywords) && result.targetKeywords.length > 0, `${result.targetKeywords?.length || 0} ciljanih pojmova`);
+
+  if (options.sourceFacts?.length) {
+    add('facts-sr', 'Proverene činjenice SR', validateSourceFacts(bodySr, options.sourceFacts, options.forbidUnverifiedClaims !== false).ok,
+      'Generator je dobio proverene podatke iz izvora proizvoda');
+    add('people-first', 'People-first kontrola SR', validatePeopleFirstText(bodySr).every(check => check.ok),
+      validatePeopleFirstText(bodySr).filter(check => !check.ok).map(check => check.label).join(', ') || 'Kontrole prošle');
+  }
+
   const passed = items.filter(i => i.ok).length;
   return { ok: items.length > 0 && passed === items.length, score: Math.round((passed / Math.max(items.length, 1)) * 100), items };
 }
@@ -775,8 +791,6 @@ async function generateBlogWithGemini(params: BlogGeneratorParams): Promise<Gene
   const { topic, keyword, tone, writingStyle = 'artisan', wordCount = 1000, seoEnabled = true, aeoEnabled = true, geoEnabled = true, geoRegion, geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
   const sourceBrief = buildPeopleFirstBrief(topic, keyword, params.sourceFacts || []);
   if (!geminiApiKey) return null;
-
-  const sourceBrief = buildPeopleFirstBrief(topic, keyword, params.sourceFacts || []);
   const prompt = `
 SOURCE OF TRUTH — PROVERENI PODACI:\n${sourceBrief}
 
