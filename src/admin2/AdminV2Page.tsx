@@ -21,6 +21,7 @@ export function AdminV2Page() {
   const [altGenerating, setAltGenerating] = useState<string | null>(null);
   const [altDrafts, setAltDrafts] = useState<Record<string, { alt: string; altEn: string }>>({});
   const [altApproved, setAltApproved] = useState<Record<string, boolean>>({});
+  const [altSaving, setAltSaving] = useState(false);
 
   const validation = useMemo(() => {
     const products = permanentProductsData as any[];
@@ -102,6 +103,41 @@ export function AdminV2Page() {
       console.error('ALT audit suggestion error:', error);
     } finally {
       setAltGenerating(null);
+    }
+  };
+
+  const handleSaveApprovedAlts = async () => {
+    const approvedKeys = Object.keys(altApproved).filter(key => altApproved[key] && altDrafts[key]);
+    if (!approvedKeys.length) return;
+    setAltSaving(true);
+    try {
+      const byProduct = new Map<string, Record<number, { alt: string; altEn: string }>>();
+      approvedKeys.forEach(key => {
+        const [productId, slot] = key.split(':');
+        const slotIndex: Record<Slot, number> = { MAIN: 0, G0: 1, G1: 2, G2: 3 };
+        const index = slotIndex[slot as Slot];
+        const current = byProduct.get(productId) || {};
+        current[index] = altDrafts[key];
+        byProduct.set(productId, current);
+      });
+
+      for (const [productId, changes] of byProduct) {
+        const product = (permanentProductsData as any[]).find(p => p.id === productId);
+        if (!product) continue;
+        const nextAlts = Array.isArray(product.imageAlts) ? product.imageAlts.map((a: any) => ({ alt: a?.alt || '', altEn: a?.altEn || '' })) : [];
+        while (nextAlts.length < 4) nextAlts.push({ alt: '', altEn: '' });
+        Object.entries(changes).forEach(([index, value]) => {
+          nextAlts[Number(index)] = value;
+        });
+        const updated = { ...product, imageAlts: nextAlts.slice(0, 4) };
+        const { saveCustomProduct } = await import('../utils/customProductStorage');
+        await saveCustomProduct(updated);
+      }
+      window.dispatchEvent(new CustomEvent('custom-products-updated'));
+    } catch (error) {
+      console.error('ALT save error:', error);
+    } finally {
+      setAltSaving(false);
     }
   };
   const mediaIndex = useMemo(() => {
@@ -244,6 +280,14 @@ export function AdminV2Page() {
                   <div className="text-[10px] opacity-70">Izvor: {result.source === 'vision' ? 'analiza stvarne fotografije' : 'sigurni fallback'} • Predlog nije upisan u proizvod.</div>
                 </div>
               ))}
+            </div>
+          )}
+          {Object.values(altApproved).some(Boolean) && (
+            <div className="mt-4 flex items-center justify-between gap-3 p-3 rounded-xl bg-[#f7f3ed] border border-[#d8cec1]">
+              <div className="text-xs"><b>{Object.values(altApproved).filter(Boolean).length}</b> ALT predloga je odobreno i spremno za upis.</div>
+              <button onClick={handleSaveApprovedAlts} disabled={altSaving} className="px-4 py-2 rounded-xl bg-[#241d19] text-white text-xs font-bold disabled:opacity-50">
+                {altSaving ? 'Čuvanje...' : 'Sačuvaj samo odobrene ALT-ove'}
+              </button>
             </div>
           )}
           {altProblems.length > 0 && <div className="mt-4 p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900">
