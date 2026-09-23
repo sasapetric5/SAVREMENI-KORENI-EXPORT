@@ -31,8 +31,10 @@ import {
   GeneratedBlogPostResult, 
   GeneratedLandingPageResult,
   BlogGeneratorParams,
-  LandingPageGeneratorParams
+  LandingPageGeneratorParams,
+  buildProductSourceFacts
 } from '../utils/seoAeoGeoBlogGenerator';
+import { permanentProductsData } from '../data/permanentProductsData';
 
 interface SeoAeoGeoBlogModalProps {
   isOpen: boolean;
@@ -109,6 +111,8 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
   // General Inputs
   const [topic, setTopic] = useState('');
   const [keyword, setKeyword] = useState('');
+  const [selectedProductId, setSelectedProductId] = useState('');
+  const selectedProduct = permanentProductsData.find(p => p.id === selectedProductId);
   const [writingStyle, setWritingStyle] = useState<'artisan' | 'premium' | 'editorial' | 'informational' | 'educational' | 'storytelling' | 'sales' | 'traditional'>('artisan');
   const [wordCount, setWordCount] = useState<300 | 500 | 750 | 1000 | 1500 | 2000 | 2500 | 3000 | 3500 | 4000>(1000);
   const [seoEnabled, setSeoEnabled] = useState(true);
@@ -199,7 +203,10 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
           geoEnabled,
           geoRegion,
           geminiApiKey: useGemini ? geminiApiKey.trim() : undefined,
-          geminiModel
+          geminiModel,
+          productId: selectedProduct?.id,
+          sourceFacts: selectedProduct ? buildProductSourceFacts(selectedProduct) : undefined,
+          forbidUnverifiedClaims: true
         };
         const res = await generateSeoAeoGeoArticle(params);
         setGeneratedBlogResult(res);
