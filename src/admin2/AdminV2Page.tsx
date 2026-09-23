@@ -23,6 +23,7 @@ export function AdminV2Page() {
   const [altApproved, setAltApproved] = useState<Record<string, boolean>>({});
   const [altSaving, setAltSaving] = useState(false);
   const [schemaPreview, setSchemaPreview] = useState<string | null>(null);
+  const [schemaType, setSchemaType] = useState<'Organization' | 'Article' | 'BreadcrumbList'>('Organization');
 
   const validation = useMemo(() => {
     const products = permanentProductsData as any[];
@@ -130,6 +131,34 @@ export function AdminV2Page() {
 
   const handleSchemaPreview = (product: any) => {
     setSchemaPreview(JSON.stringify(buildProductSchema(product), null, 2));
+  };
+
+  const buildSiteSchema = () => {
+    if (schemaType === 'Organization') return {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      '@id': 'https://savremenikoreni.com/#organization',
+      name: 'Savremeni Koreni',
+      url: 'https://savremenikoreni.com/'
+    };
+    if (schemaType === 'Article') return {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      '@id': 'https://savremenikoreni.com/#article-preview',
+      headline: 'PREVIEW — naslov članka',
+      description: 'PREVIEW — opis članka',
+      author: { '@type': 'Organization', '@id': 'https://savremenikoreni.com/#organization' },
+      publisher: { '@type': 'Organization', '@id': 'https://savremenikoreni.com/#organization' },
+      mainEntityOfPage: 'https://savremenikoreni.com/'
+    };
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Početna', item: 'https://savremenikoreni.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Kolekcije', item: 'https://savremenikoreni.com/kolekcije' }
+      ]
+    };
   };  const handleSaveApprovedAlts = async () => {
     const approvedKeys = Object.keys(altApproved).filter(key => altApproved[key] && altDrafts[key]);
     if (!approvedKeys.length) return;
@@ -348,6 +377,13 @@ export function AdminV2Page() {
           <div className="flex flex-wrap justify-between items-end gap-3 mb-3">
             <div><h2 className="font-bold text-lg">Schema Generator — Product</h2><p className="text-xs text-gray-500 mt-1">Preview only • JSON-LD se ne upisuje automatski</p></div>
             <span className="text-xs font-semibold text-amber-700">VALIDACIJA PRE UPISA</span>
+          </div>
+          <div className="flex flex-wrap gap-2 mb-3">
+            {(['Organization','Article','BreadcrumbList'] as const).map(type => (
+              <button key={type} onClick={() => { setSchemaType(type); setSchemaPreview(JSON.stringify(buildSiteSchema(), null, 2)); }} className={schemaType === type ? "px-3 py-1.5 rounded-lg bg-[#241d19] text-white text-xs font-bold" : "px-3 py-1.5 rounded-lg border border-[#d8cec1] text-xs"}>
+                {type}
+              </button>
+            ))}
           </div>
           <div className="grid md:grid-cols-3 gap-2">
             {(permanentProductsData as any[]).slice(0, 47).map(p => (
