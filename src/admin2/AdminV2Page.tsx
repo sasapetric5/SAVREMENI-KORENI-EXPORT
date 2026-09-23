@@ -271,6 +271,18 @@ export function AdminV2Page() {
             <div><h2 className="font-bold text-lg">Internal Linking Engine</h2><p className="text-xs text-gray-500 mt-1">Predlozi veza između proizvoda • bez automatskog upisa</p></div>
             <button onClick={() => setLinkingPreview(buildInternalLinkSuggestions())} className="px-4 py-2 rounded-xl bg-[#241d19] text-white text-xs font-bold">Analiziraj veze</button>
           </div>
+          <div className="mb-4">
+            <div className="text-xs font-bold mb-2">LINK TYPES</div>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-2 text-[11px]">
+              {[
+                ['HOME→COLLECTION','Početna → Kolekcija'],
+                ['COLLECTION→PRODUCT','Kolekcija → Proizvod'],
+                ['PRODUCT→PRODUCT','Proizvod → Proizvod'],
+                ['BLOG→PRODUCT','Blog → Proizvod'],
+                ['BLOG→BLOG','Blog → Blog']
+              ].map(([key,label]) => <div key={key} className="p-2 rounded-lg bg-[#f7f3ed] border border-[#e8e0d5]">{label}</div>)}
+            </div>
+          </div>
           <div className="grid grid-cols-3 gap-2 mb-3 text-center text-xs">
             <div className="p-2 rounded-lg bg-[#f7f3ed]"><b>Izvor</b><div>proizvodi</div></div>
             <div className="p-2 rounded-lg bg-[#f7f3ed]"><b>Kriterijum</b><div>semantika + kategorija</div></div>
