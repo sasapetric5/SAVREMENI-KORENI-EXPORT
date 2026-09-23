@@ -19,6 +19,8 @@ export function AdminV2Page() {
   const [selectedMedia, setSelectedMedia] = useState<any | null>(null);
   const [altSuggestions, setAltSuggestions] = useState<Record<string, AiImageAltResult>>({});
   const [altGenerating, setAltGenerating] = useState<string | null>(null);
+  const [altDrafts, setAltDrafts] = useState<Record<string, { alt: string; altEn: string }>>({});
+  const [altApproved, setAltApproved] = useState<Record<string, boolean>>({});
 
   const validation = useMemo(() => {
     const products = permanentProductsData as any[];
@@ -95,6 +97,7 @@ export function AdminV2Page() {
         apiKey
       });
       setAltSuggestions(prev => ({ ...prev, [key]: result }));
+      setAltDrafts(prev => ({ ...prev, [key]: { alt: result.altSr, altEn: result.altEn } }));
     } catch (error) {
       console.error('ALT audit suggestion error:', error);
     } finally {
@@ -224,13 +227,21 @@ export function AdminV2Page() {
           </div>
           {Object.entries(altSuggestions).length > 0 && (
             <div className="mt-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900">
-              <div className="font-bold mb-2">AI PREDLOZI — samo pregled, bez automatskog upisa</div>
+              <div className="font-bold mb-2">AI PREDLOZI — pregled i ručno odobravanje</div>
               {Object.entries(altSuggestions).map(([key, result]) => (
-                <div key={key} className="border-t border-emerald-200 pt-2 mt-2">
+                <div key={key} className="border-t border-emerald-200 pt-3 mt-3 space-y-2">
                   <div className="font-semibold">{key}</div>
-                  <div><b>SR:</b> {result.altSr}</div>
-                  <div><b>EN:</b> {result.altEn}</div>
-                  <div className="text-[10px] opacity-70 mt-1">Izvor: {result.source === 'vision' ? 'analiza stvarne fotografije' : 'sigurni fallback'}</div>
+                  <label className="block"><span className="font-semibold">SR ALT</span>
+                    <input value={altDrafts[key]?.alt || ''} onChange={e => setAltDrafts(prev => ({...prev, [key]: {...prev[key], alt: e.target.value}}))} className="mt-1 w-full px-2 py-1.5 rounded border border-emerald-200 bg-white" />
+                  </label>
+                  <label className="block"><span className="font-semibold">EN ALT</span>
+                    <input value={altDrafts[key]?.altEn || ''} onChange={e => setAltDrafts(prev => ({...prev, [key]: {...prev[key], altEn: e.target.value}}))} className="mt-1 w-full px-2 py-1.5 rounded border border-emerald-200 bg-white" />
+                  </label>
+                  <div className="flex gap-2 items-center">
+                    <button onClick={() => setAltApproved(prev => ({...prev, [key]: true}))} className={altApproved[key] ? "px-3 py-1.5 rounded-lg bg-green-700 text-white font-bold" : "px-3 py-1.5 rounded-lg bg-[#241d19] text-white font-bold"}>{altApproved[key] ? '✓ ODOBRENO' : 'Odobri ALT'}</button>
+                    {altApproved[key] && <span className="text-green-700 font-semibold">Spremno za sledeći korak čuvanja.</span>}
+                  </div>
+                  <div className="text-[10px] opacity-70">Izvor: {result.source === 'vision' ? 'analiza stvarne fotografije' : 'sigurni fallback'} • Predlog nije upisan u proizvod.</div>
                 </div>
               ))}
             </div>
