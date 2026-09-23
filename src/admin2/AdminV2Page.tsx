@@ -33,7 +33,8 @@ export function AdminV2Page() {
     return (permanentProductsData as any[]).filter(p => (p.name + ' ' + p.nameEn + ' ' + p.category + ' ' + p.id).toLowerCase().includes(q));
   }, [query]);
 
-  const selectedProduct = (permanentProductsData as any[]).find(p => p.id === selected);\n  const slotAudit = useMemo(() => {
+  const selectedProduct = (permanentProductsData as any[]).find(p => p.id === selected);
+  const slotAudit = useMemo(() => {
     const products = permanentProductsData as any[];
     const rows: { productId: string; productName: string; slot: Slot; path: string; status: 'OK' | 'MISSING' | 'DUPLICATE'; }[] = [];
     products.forEach(p => {
