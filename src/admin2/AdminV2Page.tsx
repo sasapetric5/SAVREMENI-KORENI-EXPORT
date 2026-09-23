@@ -24,6 +24,7 @@ export function AdminV2Page() {
   const [altSaving, setAltSaving] = useState(false);
   const [schemaPreview, setSchemaPreview] = useState<string | null>(null);
   const [schemaType, setSchemaType] = useState<'Organization' | 'Article' | 'BreadcrumbList'>('Organization');
+  const [linkingPreview, setLinkingPreview] = useState<Array<{from:string;to:string;reason:string;score:number}>>([]);
 
   const validation = useMemo(() => {
     const products = permanentProductsData as any[];
@@ -133,6 +134,32 @@ export function AdminV2Page() {
     setSchemaPreview(JSON.stringify(buildProductSchema(product), null, 2));
   };
 
+  const buildInternalLinkSuggestions = () => {
+    const products = permanentProductsData as any[];
+    const suggestions: Array<{from:string;to:string;reason:string;score:number}> = [];
+    const normalized = (v: any) => String(v || '').toLocaleLowerCase('sr-Latn');
+    const tokens = (v: any) => normalized(v).split(/[^\p{L}\p{N}]+/u).filter(x => x.length >= 4);
+    products.forEach((from, i) => {
+      const fromTokens = new Set([...tokens(from.name), ...tokens(from.category), ...tokens(from.materials), ...tokens(from.craftTechniques)]);
+      products.forEach((to, j) => {
+        if (i === j) return;
+        const toTokens = new Set([...tokens(to.name), ...tokens(to.category), ...tokens(to.materials), ...tokens(to.craftTechniques)]);
+        const overlap = [...fromTokens].filter(t => toTokens.has(t)).length;
+        const sameCategory = normalized(from.category) && normalized(from.category) === normalized(to.category);
+        const score = overlap * 15 + (sameCategory ? 25 : 0);
+        if (score >= 25) {
+          suggestions.push({
+            from: from.name,
+            to: to.name,
+            reason: sameCategory ? 'ista kategorija + zajednički pojmovi' : 'zajednički sadržajni pojmovi',
+            score
+          });
+        }
+      });
+    });
+    return suggestions.sort((a,b) => b.score-a.score).slice(0, 80);
+  };
+
   const buildSiteSchema = () => {
     if (schemaType === 'Organization') return {
       '@context': 'https://schema.org',
@@ -235,6 +262,22 @@ export function AdminV2Page() {
           <Card label="SLOT REFERENCI" value={validation.assignments} target="188" ok={validation.assignments === 188} />
           <Card label="NEDOSTAJUĆE PUTANJE" value={validation.missing.length} target="0" ok={validation.missing.length === 0} />
           <Card label="NEISPRAVNI PROIZVODI" value={validation.invalid.length} target="0" ok={validation.invalid.length === 0} />
+        </div>
+
+        <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
+          <div className="flex flex-wrap items-end justify-between gap-3 mb-3">
+            <div><h2 className="font-bold text-lg">Internal Linking Engine</h2><p className="text-xs text-gray-500 mt-1">Predlozi veza između proizvoda • bez automatskog upisa</p></div>
+            <button onClick={() => setLinkingPreview(buildInternalLinkSuggestions())} className="px-4 py-2 rounded-xl bg-[#241d19] text-white text-xs font-bold">Analiziraj veze</button>
+          </div>
+          <div className="grid grid-cols-3 gap-2 mb-3 text-center text-xs">
+            <div className="p-2 rounded-lg bg-[#f7f3ed]"><b>Izvor</b><div>proizvodi</div></div>
+            <div className="p-2 rounded-lg bg-[#f7f3ed]"><b>Kriterijum</b><div>semantika + kategorija</div></div>
+            <div className="p-2 rounded-lg bg-[#f7f3ed]"><b>Status</b><div>PREVIEW</div></div>
+          </div>
+          {linkingPreview.length > 0 && <div className="max-h-[360px] overflow-auto border rounded-xl">
+            <table className="w-full text-xs"><thead className="sticky top-0 bg-[#f1ebe3]"><tr><th className="p-2 text-left">Od</th><th className="p-2 text-left">Ka</th><th className="p-2 text-left">Razlog</th><th className="p-2">Score</th></tr></thead>
+            <tbody>{linkingPreview.map((x,i) => <tr key={i} className="border-t border-[#eee7df]"><td className="p-2 font-semibold">{x.from}</td><td className="p-2">{x.to}</td><td className="p-2">{x.reason}</td><td className="p-2 font-bold">{x.score}</td></tr>)}</tbody></table>
+          </div>}
         </div>
 
         <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
