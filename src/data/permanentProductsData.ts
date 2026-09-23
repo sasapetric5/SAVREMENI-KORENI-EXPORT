@@ -23,11 +23,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789203411768.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789203411768.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789203411768_g2.jpg`",
-      "`/custom_products/prod_custom-prod-1789203411768_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789203411768_g0.jpg`"
+      "/custom_products/prod_custom-prod-1789203411768_g2.jpg",
+      "/custom_products/prod_custom-prod-1789203411768_g1.jpg",
+      "/custom_products/prod_custom-prod-1789203411768_g0.jpg"
     ],
     "priceEur": 55,
     "inStock": true,
@@ -53,11 +53,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789204073718.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789204073718.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789204073718_g2.jpg`",
-      "`/custom_products/prod_custom-prod-1789204073718_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789204073718_g0.jpg`"
+      "/custom_products/prod_custom-prod-1789204073718_g2.jpg",
+      "/custom_products/prod_custom-prod-1789204073718_g1.jpg",
+      "/custom_products/prod_custom-prod-1789204073718_g0.jpg"
     ],
     "priceEur": 38,
     "inStock": false,
@@ -83,11 +83,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789204258030.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789204258030.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789204258030_g2.jpg`",
-      "`/custom_products/prod_custom-prod-1789204258030_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789204258030_g0.jpg`"
+      "/custom_products/prod_custom-prod-1789204258030_g2.jpg",
+      "/custom_products/prod_custom-prod-1789204258030_g1.jpg",
+      "/custom_products/prod_custom-prod-1789204258030_g0.jpg"
     ],
     "priceEur": 38,
     "inStock": true,
@@ -113,11 +113,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789205898869.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789205898869.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789205898869_g2.jpg`",
-      "`/custom_products/prod_custom-prod-1789205898869_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789205898869_g0.jpg`"
+      "/custom_products/prod_custom-prod-1789205898869_g2.jpg",
+      "/custom_products/prod_custom-prod-1789205898869_g1.jpg",
+      "/custom_products/prod_custom-prod-1789205898869_g0.jpg"
     ],
     "priceEur": 38,
     "inStock": true,
@@ -143,11 +143,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789206703824.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789206703824.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789206703824_g2.jpg`",
-      "`/custom_products/prod_custom-prod-1789206703824_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789206703824_g0.jpg`"
+      "/custom_products/prod_custom-prod-1789206703824_g2.jpg",
+      "/custom_products/prod_custom-prod-1789206703824_g1.jpg",
+      "/custom_products/prod_custom-prod-1789206703824_g0.jpg"
     ],
     "priceEur": 41,
     "inStock": true,
@@ -175,11 +175,11 @@ export const permanentProductsData: Product[] = [
       "satenska postava",
       "metalna galanterija"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789207252514.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789207252514.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789207252514_g2.jpg`",
-      "`/custom_products/prod_custom-prod-1789207252514_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789207252514_g0.jpg`"
+      "/custom_products/prod_custom-prod-1789207252514_g2.jpg",
+      "/custom_products/prod_custom-prod-1789207252514_g1.jpg",
+      "/custom_products/prod_custom-prod-1789207252514_g0.jpg"
     ],
     "priceEur": 38,
     "inStock": true,
@@ -205,11 +205,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789207820042_g0.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789207820042_g0.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789207820042.jpg`",
-      "`/custom_products/prod_custom-prod-1789207820042_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789207820042_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789207820042.jpg",
+      "/custom_products/prod_custom-prod-1789207820042_g1.jpg",
+      "/custom_products/prod_custom-prod-1789207820042_g2.jpg"
     ],
     "priceEur": 41,
     "inStock": true,
@@ -235,11 +235,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789208559853.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789208559853.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789208559853_g0.jpg`",
-      "`/custom_products/prod_custom-prod-1789208559853_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789208559853_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789208559853_g0.jpg",
+      "/custom_products/prod_custom-prod-1789208559853_g1.jpg",
+      "/custom_products/prod_custom-prod-1789208559853_g2.jpg"
     ],
     "priceEur": 67,
     "inStock": false,
@@ -265,11 +265,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789209800143.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789209800143.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789209800143_g0.jpg`",
-      "`/custom_products/prod_custom-prod-1789209800143_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789209800143_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789209800143_g0.jpg",
+      "/custom_products/prod_custom-prod-1789209800143_g1.jpg",
+      "/custom_products/prod_custom-prod-1789209800143_g2.jpg"
     ],
     "priceEur": 32,
     "inStock": true,
@@ -295,11 +295,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789210279779.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789210279779.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789210279779_g0.jpg`",
-      "`/custom_products/prod_custom-prod-1789210279779_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789210279779_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789210279779_g0.jpg",
+      "/custom_products/prod_custom-prod-1789210279779_g1.jpg",
+      "/custom_products/prod_custom-prod-1789210279779_g2.jpg"
     ],
     "priceEur": 27,
     "inStock": true,
@@ -325,11 +325,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789210578864.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789210578864.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789210578864_g0.jpg`",
-      "`/custom_products/prod_custom-prod-1789210578864_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789210578864_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789210578864_g0.jpg",
+      "/custom_products/prod_custom-prod-1789210578864_g1.jpg",
+      "/custom_products/prod_custom-prod-1789210578864_g2.jpg"
     ],
     "priceEur": 32,
     "inStock": true,
@@ -355,11 +355,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/crochet_rose_bag.jpg`",
+    "image": "/custom_products/crochet_rose_bag.jpg",
     "images": [
-      "`/custom_products/crochet_rose_macro_1.jpg`",
-      "`/custom_products/crochet_rose_bag_open.jpg`",
-      "`/custom_products/paris_rose_bag_editorial_1.jpg`"
+      "/custom_products/crochet_rose_macro_1.jpg",
+      "/custom_products/crochet_rose_bag_open.jpg",
+      "/custom_products/paris_rose_bag_editorial_1.jpg"
     ],
     "priceEur": 41,
     "inStock": true,
@@ -385,11 +385,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/luxury_woven_clutch.jpg`",
+    "image": "/custom_products/luxury_woven_clutch.jpg",
     "images": [
-      "`/custom_products/gold_clasp_macro_2.jpg`",
-      "`/custom_products/woven_clutch_interior.jpg`",
-      "`/custom_products/prod_custom-prod-1789211608744_g2.jpg`"
+      "/custom_products/gold_clasp_macro_2.jpg",
+      "/custom_products/woven_clutch_interior.jpg",
+      "/custom_products/prod_custom-prod-1789211608744_g2.jpg"
     ],
     "priceEur": 32,
     "inStock": true,
@@ -415,11 +415,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/red_crochet_bag_studio.jpg`",
+    "image": "/custom_products/red_crochet_bag_studio.jpg",
     "images": [
-      "`/custom_products/red_crochet_pearl_macro.jpg`",
-      "`/custom_products/red_crochet_bag_interior.jpg`",
-      "`/custom_products/prod_custom-prod-1789211834535_g2.jpg`"
+      "/custom_products/red_crochet_pearl_macro.jpg",
+      "/custom_products/red_crochet_bag_interior.jpg",
+      "/custom_products/prod_custom-prod-1789211834535_g2.jpg"
     ],
     "priceEur": 41,
     "inStock": true,
@@ -445,11 +445,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/luxury_crochet_bag_editorial.jpg`",
+    "image": "/custom_products/luxury_crochet_bag_editorial.jpg",
     "images": [
-      "`/custom_products/macro_bead_crochet.jpg`",
-      "`/custom_products/black_crochet_bag_interior.jpg`",
-      "`/custom_products/prod_custom-prod-1789212070909_g2.jpg`"
+      "/custom_products/macro_bead_crochet.jpg",
+      "/custom_products/black_crochet_bag_interior.jpg",
+      "/custom_products/prod_custom-prod-1789212070909_g2.jpg"
     ],
     "priceEur": 32,
     "inStock": true,
@@ -475,11 +475,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/brown_crochet_bag_luxury_studio.jpg`",
+    "image": "/custom_products/brown_crochet_bag_luxury_studio.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789212465315.jpg`",
-      "`/custom_products/prod_custom-prod-1789212465315_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789212465315_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789212465315.jpg",
+      "/custom_products/prod_custom-prod-1789212465315_g1.jpg",
+      "/custom_products/prod_custom-prod-1789212465315_g2.jpg"
     ],
     "priceEur": 34,
     "inStock": true,
@@ -505,11 +505,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789212797315.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789212797315.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789212797315_g0.jpg`",
-      "`/custom_products/prod_custom-prod-1789212797315_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789212797315_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789212797315_g0.jpg",
+      "/custom_products/prod_custom-prod-1789212797315_g1.jpg",
+      "/custom_products/prod_custom-prod-1789212797315_g2.jpg"
     ],
     "priceEur": 67,
     "inStock": false,
@@ -536,11 +536,11 @@ export const permanentProductsData: Product[] = [
       "postava"
     ],
     "dimensions": "25 cm x 18 cm x 7 cm",
-    "image": "`/custom_products/final_black_crochet_handbag.jpg`",
+    "image": "/custom_products/final_black_crochet_handbag.jpg",
     "images": [
-      "`/custom_products/macro_crochet_clasp.jpg`",
-      "`/custom_products/final_black_crochet_bubble_handbag_open_interior_top_d.jpg`",
-      "`/custom_products/prod_custom-prod-1789213210387_g2.jpg`"
+      "/custom_products/macro_crochet_clasp.jpg",
+      "/custom_products/final_black_crochet_bubble_handbag_open_interior_top_d.jpg",
+      "/custom_products/prod_custom-prod-1789213210387_g2.jpg"
     ],
     "priceEur": 27,
     "inStock": true,
@@ -566,11 +566,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789213437909.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789213437909.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789213437909_g0.jpg`",
-      "`/custom_products/prod_custom-prod-1789213437909_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789213437909_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789213437909_g0.jpg",
+      "/custom_products/prod_custom-prod-1789213437909_g1.jpg",
+      "/custom_products/prod_custom-prod-1789213437909_g2.jpg"
     ],
     "priceEur": 38,
     "inStock": true,
@@ -596,11 +596,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789215182204.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789215182204.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789215182204_g0.jpg`",
-      "`/custom_products/prod_custom-prod-1789215182204_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789215182204_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789215182204_g0.jpg",
+      "/custom_products/prod_custom-prod-1789215182204_g1.jpg",
+      "/custom_products/prod_custom-prod-1789215182204_g2.jpg"
     ],
     "priceEur": 68,
     "inStock": false,
@@ -626,11 +626,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/luxury_crochet_handbag_studio.jpg`",
+    "image": "/custom_products/luxury_crochet_handbag_studio.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789215608263_g0.jpg`",
-      "`/custom_products/prod_custom-prod-1789215608263_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789215608263_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789215608263_g0.jpg",
+      "/custom_products/prod_custom-prod-1789215608263_g1.jpg",
+      "/custom_products/prod_custom-prod-1789215608263_g2.jpg"
     ],
     "priceEur": 41,
     "inStock": true,
@@ -656,11 +656,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/single_handle_crochet_bag.jpg`",
+    "image": "/custom_products/single_handle_crochet_bag.jpg",
     "images": [
-      "`/custom_products/gold_clasp_macro_3.jpg`",
-      "`/custom_products/woven_bag_open_interior.jpg`",
-      "`/custom_products/prod_custom-prod-1789218686318_g2.jpg`"
+      "/custom_products/gold_clasp_macro_3.jpg",
+      "/custom_products/woven_bag_open_interior.jpg",
+      "/custom_products/prod_custom-prod-1789218686318_g2.jpg"
     ],
     "priceEur": 41,
     "inStock": true,
@@ -686,11 +686,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789235265047.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789235265047.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789235265047_g0.jpg`",
-      "`/custom_products/prod_custom-prod-1789235265047_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789235265047_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789235265047_g0.jpg",
+      "/custom_products/prod_custom-prod-1789235265047_g1.jpg",
+      "/custom_products/prod_custom-prod-1789235265047_g2.jpg"
     ],
     "priceEur": 27,
     "inStock": true,
@@ -716,11 +716,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/black_crochet_handbag_luxury_studio.jpg`",
+    "image": "/custom_products/black_crochet_handbag_luxury_studio.jpg",
     "images": [
-      "`/custom_products/final_black_crochet_handbag_macro.jpg`",
-      "`/custom_products/black_crochet_bag_open.jpg`",
-      "`/custom_products/1x1_NOIR_BLOOM_model_final.jpg`"
+      "/custom_products/final_black_crochet_handbag_macro.jpg",
+      "/custom_products/black_crochet_bag_open.jpg",
+      "/custom_products/1x1_NOIR_BLOOM_model_final.jpg"
     ],
     "priceEur": 30,
     "inStock": true,
@@ -746,11 +746,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/FULLBLEED_1_main.jpg`",
+    "image": "/custom_products/FULLBLEED_1_main.jpg",
     "images": [
-      "`/custom_products/FULLBLEED_2_macro.jpg`",
-      "`/custom_products/FULLBLEED_3_interior.jpg`",
-      "`/custom_products/FULLBLEED_4_model.jpg`"
+      "/custom_products/FULLBLEED_2_macro.jpg",
+      "/custom_products/FULLBLEED_3_interior.jpg",
+      "/custom_products/FULLBLEED_4_model.jpg"
     ],
     "priceEur": 46,
     "inStock": true,
@@ -776,11 +776,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/final_fuchsia_main2.jpg`",
+    "image": "/custom_products/final_fuchsia_main2.jpg",
     "images": [
-      "`/custom_products/final_fuchsia_macro2.jpg`",
-      "`/custom_products/final_fuchsia_interior2.jpg`",
-      "`/custom_products/final_fuchsia_model_2.jpg`"
+      "/custom_products/final_fuchsia_macro2.jpg",
+      "/custom_products/final_fuchsia_interior2.jpg",
+      "/custom_products/final_fuchsia_model_2.jpg"
     ],
     "priceEur": 41,
     "inStock": true,
@@ -806,11 +806,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789285964143_g0.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789285964143_g0.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789285964143.jpg`",
-      "`/custom_products/prod_custom-prod-1789285964143_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789285964143_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789285964143.jpg",
+      "/custom_products/prod_custom-prod-1789285964143_g1.jpg",
+      "/custom_products/prod_custom-prod-1789285964143_g2.jpg"
     ],
     "priceEur": 30,
     "inStock": true,
@@ -836,11 +836,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/final_fuchsia_main.jpg`",
+    "image": "/custom_products/final_fuchsia_main.jpg",
     "images": [
-      "`/custom_products/final_fuchsia_macro.jpg`",
-      "`/custom_products/final_fuchsia_interior.jpg`",
-      "`/custom_products/final_fuchsia_model_1.jpg`"
+      "/custom_products/final_fuchsia_macro.jpg",
+      "/custom_products/final_fuchsia_interior.jpg",
+      "/custom_products/final_fuchsia_model_1.jpg"
     ],
     "priceEur": 30,
     "inStock": true,
@@ -866,11 +866,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/mint_crochet_bag_product.jpg`",
+    "image": "/custom_products/mint_crochet_bag_product.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789286570316_g0.jpg`",
-      "`/custom_products/prod_custom-prod-1789286570316_g1.jpg`",
-      "`/custom_products/girl_crochet_bag.jpg`"
+      "/custom_products/prod_custom-prod-1789286570316_g0.jpg",
+      "/custom_products/prod_custom-prod-1789286570316_g1.jpg",
+      "/custom_products/girl_crochet_bag.jpg"
     ],
     "priceEur": 30,
     "inStock": true,
@@ -896,11 +896,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/crochet_bow_handbag_studio.jpg`",
+    "image": "/custom_products/crochet_bow_handbag_studio.jpg",
     "images": [
-      "`/custom_products/crochet_bow_macro.jpg`",
-      "`/custom_products/prod_custom-prod-1789286897279_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789286897279_g2.jpg`"
+      "/custom_products/crochet_bow_macro.jpg",
+      "/custom_products/prod_custom-prod-1789286897279_g1.jpg",
+      "/custom_products/prod_custom-prod-1789286897279_g2.jpg"
     ],
     "priceEur": 36,
     "inStock": true,
@@ -926,11 +926,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/hot_pink_knit_clutch.jpg`",
+    "image": "/custom_products/hot_pink_knit_clutch.jpg",
     "images": [
-      "`/custom_products/hot_pink_crochet_bow_macro.jpg`",
-      "`/custom_products/prod_custom-prod-1789287135814_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789287135814_g2.jpg`"
+      "/custom_products/hot_pink_crochet_bow_macro.jpg",
+      "/custom_products/prod_custom-prod-1789287135814_g1.jpg",
+      "/custom_products/prod_custom-prod-1789287135814_g2.jpg"
     ],
     "priceEur": 36,
     "inStock": true,
@@ -956,11 +956,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/crochet_handbag_studio_6.jpg`",
+    "image": "/custom_products/crochet_handbag_studio_6.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789287464927_g0.jpg`",
-      "`/custom_products/prod_custom-prod-1789287464927_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789287464927_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789287464927_g0.jpg",
+      "/custom_products/prod_custom-prod-1789287464927_g1.jpg",
+      "/custom_products/prod_custom-prod-1789287464927_g2.jpg"
     ],
     "priceEur": 38,
     "inStock": true,
@@ -986,11 +986,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/crochet_bag_studio_1.jpg`",
+    "image": "/custom_products/crochet_bag_studio_1.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789287726315.jpg`",
-      "`/custom_products/crochet_bucket_bag_interior.jpg`",
-      "`/custom_products/prod_custom-prod-1789287726315_g0.jpg`"
+      "/custom_products/prod_custom-prod-1789287726315.jpg",
+      "/custom_products/crochet_bucket_bag_interior.jpg",
+      "/custom_products/prod_custom-prod-1789287726315_g0.jpg"
     ],
     "priceEur": 30,
     "inStock": true,
@@ -1016,11 +1016,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/vlaska_bela_subara_1789032431671.jpg`",
+    "image": "/custom_products/vlaska_bela_subara_1789032431671.jpg",
     "images": [
-      "`/custom_products/cream_wool_macro.jpg`",
-      "`/custom_products/cream_wool_hat_interior.jpg`",
-      "`/custom_products/vlach_fashion_editorial.jpg`"
+      "/custom_products/cream_wool_macro.jpg",
+      "/custom_products/cream_wool_hat_interior.jpg",
+      "/custom_products/vlach_fashion_editorial.jpg"
     ],
     "priceEur": 51,
     "inStock": true,
@@ -1046,11 +1046,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/black_subara_hat.jpg`",
+    "image": "/custom_products/black_subara_hat.jpg",
     "images": [
-      "`/custom_products/black_fur_macro.jpg`",
-      "`/custom_products/black_fur_hat_interior.jpg`",
-      "`/custom_products/prod_custom-prod-1789291435587_g2.jpg`"
+      "/custom_products/black_fur_macro.jpg",
+      "/custom_products/black_fur_hat_interior.jpg",
+      "/custom_products/prod_custom-prod-1789291435587_g2.jpg"
     ],
     "priceEur": 51,
     "inStock": true,
@@ -1076,11 +1076,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/child_subara_hat.jpg`",
+    "image": "/custom_products/child_subara_hat.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789291724457.jpg`",
-      "`/custom_products/prod_custom-prod-1789291724457_g1.jpg`",
-      "`/custom_products/prod_custom-prod-1789291724457_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789291724457.jpg",
+      "/custom_products/prod_custom-prod-1789291724457_g1.jpg",
+      "/custom_products/prod_custom-prod-1789291724457_g2.jpg"
     ],
     "priceEur": 49,
     "inStock": true,
@@ -1090,7 +1090,7 @@ export const permanentProductsData: Product[] = [
   },
   {
     "id": "custom-prod-1789300552461",
-    "name": "MUŠKE ČARAPE FOLKLOR #1",
+    "name": "MUŠKE ČARAPE  FOLKLOR",
     "nameEn": "MEN'S FOLKLORE SOCKS",
     "category": "carape",
     "priceRsd": 3800,
@@ -1106,11 +1106,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/black_woolen_socks_pair.jpg`",
+    "image": "/custom_products/black_woolen_socks_pair.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789300552461.jpg`",
-      "`/custom_products/wool_socks_interior_exterior.jpg`",
-      "`/custom_products/prod_custom-prod-1789300552461_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789300552461.jpg",
+      "/custom_products/wool_socks_interior_exterior.jpg",
+      "/custom_products/prod_custom-prod-1789300552461_g2.jpg"
     ],
     "priceEur": 32,
     "inStock": true,
@@ -1136,11 +1136,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/children_socks_linen.jpg`",
+    "image": "/custom_products/children_socks_linen.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789301322219.jpg`",
-      "`/custom_products/wool_socks_interior_exterior.jpg`",
-      "`/custom_products/prod_custom-prod-1789301322219_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789301322219.jpg",
+      "/custom_products/wool_socks_interior_exterior.jpg",
+      "/custom_products/prod_custom-prod-1789301322219_g2.jpg"
     ],
     "priceEur": 30,
     "inStock": true,
@@ -1150,7 +1150,7 @@ export const permanentProductsData: Product[] = [
   },
   {
     "id": "custom-prod-1789301789294",
-    "name": "MUŠKE ČARAPE FOLKLOR #2",
+    "name": "MUŠKE  ČARAPE FOLKLOR",
     "nameEn": "MEN'S FOLKLORE SOCKS",
     "category": "carape",
     "priceRsd": 3800,
@@ -1166,11 +1166,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/luxury_embroidered_socks.jpg`",
+    "image": "/custom_products/luxury_embroidered_socks.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789301789294.jpg`",
-      "`/custom_products/wool_socks_interior_exterior.jpg`",
-      "`/custom_products/prod_custom-prod-1789301789294_g2.jpg`"
+      "/custom_products/prod_custom-prod-1789301789294.jpg",
+      "/custom_products/wool_socks_interior_exterior.jpg",
+      "/custom_products/prod_custom-prod-1789301789294_g2.jpg"
     ],
     "priceEur": 32,
     "inStock": true,
@@ -1180,7 +1180,7 @@ export const permanentProductsData: Product[] = [
   },
   {
     "id": "custom-prod-1789306811877",
-    "name": "RUČNO HEKLANE NARUKVICE #1",
+    "name": "RUČNO HEKLANE NARUKVICE",
     "nameEn": "HAND CROCHETED BRACELETS",
     "category": "nakit",
     "priceRsd": 800,
@@ -1196,11 +1196,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789306811877_g2.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789306811877_g2.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789306811877.jpg`",
-      "`/custom_products/prod_custom-prod-1789306811877_g0.jpg`",
-      "`/custom_products/prod_custom-prod-1789306811877_g1.jpg`"
+      "/custom_products/prod_custom-prod-1789306811877.jpg",
+      "/custom_products/prod_custom-prod-1789306811877_g0.jpg",
+      "/custom_products/prod_custom-prod-1789306811877_g1.jpg"
     ],
     "priceEur": 7,
     "inStock": true,
@@ -1210,7 +1210,7 @@ export const permanentProductsData: Product[] = [
   },
   {
     "id": "custom-prod-1789306914973",
-    "name": "RUČNO HEKLANE NARUKVICE #2",
+    "name": "RUČNO HEKLANE NARUKVICE",
     "nameEn": "HAND CROCHETED BRACELETS",
     "category": "nakit",
     "priceRsd": 800,
@@ -1226,11 +1226,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/mint_crochet_bangle.jpg`",
+    "image": "/custom_products/mint_crochet_bangle.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789306914973.jpg`",
-      "`/custom_products/prod_custom-prod-1789306914973_g2.jpg`",
-      "`/custom_products/prod_custom-prod-1789306914973_g1.jpg`"
+      "/custom_products/prod_custom-prod-1789306914973.jpg",
+      "/custom_products/prod_custom-prod-1789306914973_g2.jpg",
+      "/custom_products/prod_custom-prod-1789306914973_g1.jpg"
     ],
     "priceEur": 7,
     "inStock": true,
@@ -1240,7 +1240,7 @@ export const permanentProductsData: Product[] = [
   },
   {
     "id": "custom-prod-1789307017430",
-    "name": "RUČNO HEKLANE NARUKVICE #3",
+    "name": "RUČNO HEKLANE NARUKVICE",
     "nameEn": "HAND CROCHETED BRACELETS",
     "category": "nakit",
     "priceRsd": 800,
@@ -1256,11 +1256,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/red_crochet_bangle.jpg`",
+    "image": "/custom_products/red_crochet_bangle.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789307017430.jpg`",
-      "`/custom_products/prod_custom-prod-1789307017430_g2.jpg`",
-      "`/custom_products/prod_custom-prod-1789307017430_g1.jpg`"
+      "/custom_products/prod_custom-prod-1789307017430.jpg",
+      "/custom_products/prod_custom-prod-1789307017430_g2.jpg",
+      "/custom_products/prod_custom-prod-1789307017430_g1.jpg"
     ],
     "priceEur": 7,
     "inStock": true,
@@ -1270,7 +1270,7 @@ export const permanentProductsData: Product[] = [
   },
   {
     "id": "custom-prod-1789307088691",
-    "name": "RUČNO HEKLANE NARUKVICE #4",
+    "name": "RUČNO HEKLANE NARUKVICE",
     "nameEn": "HAND CROCHETED BRACELETS",
     "category": "nakit",
     "priceRsd": 800,
@@ -1286,11 +1286,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/pink_crochet_bangle.jpg`",
+    "image": "/custom_products/pink_crochet_bangle.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789307088691.jpg`",
-      "`/custom_products/prod_custom-prod-1789307088691_g2.jpg`",
-      "`/custom_products/prod_custom-prod-1789307088691_g1.jpg`"
+      "/custom_products/prod_custom-prod-1789307088691.jpg",
+      "/custom_products/prod_custom-prod-1789307088691_g2.jpg",
+      "/custom_products/prod_custom-prod-1789307088691_g1.jpg"
     ],
     "priceEur": 7,
     "inStock": true,
@@ -1300,7 +1300,7 @@ export const permanentProductsData: Product[] = [
   },
   {
     "id": "custom-prod-1789307337462",
-    "name": "SPIRALNE MINĐUŠE #1",
+    "name": "RUČNO HEKLANE SPIRALNE MINĐUŠE",
     "nameEn": "HAND CROCHETED SPIRAL EARRINGS",
     "category": "nakit",
     "priceRsd": 800,
@@ -1316,11 +1316,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/black_cream_crochet_earrings.jpg`",
+    "image": "/custom_products/black_cream_crochet_earrings.jpg",
     "images": [
-      "`/custom_products/prod_custom-prod-1789307337462.jpg`",
-      "`/custom_products/prod_custom-prod-1789307337462_g2.jpg`",
-      "`/custom_products/prod_custom-prod-1789307337462_g1.jpg`"
+      "/custom_products/prod_custom-prod-1789307337462.jpg",
+      "/custom_products/prod_custom-prod-1789307337462_g2.jpg",
+      "/custom_products/prod_custom-prod-1789307337462_g1.jpg"
     ],
     "priceEur": 7,
     "inStock": true,
@@ -1330,7 +1330,7 @@ export const permanentProductsData: Product[] = [
   },
   {
     "id": "custom-prod-1789307502983",
-    "name": "SPIRALNE MINĐUŠE #2",
+    "name": "RUČNO HEKLANE SPIRALNE MINĐUŠE",
     "nameEn": "HAND CROCHETED SPIRAL EARRINGS",
     "category": "nakit",
     "priceRsd": 800,
@@ -1346,11 +1346,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789307502983_g0.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789307502983_g0.jpg",
     "images": [
-      "`/custom_products/crochet_earrings_macro_4.jpg`",
-      "`/custom_products/prod_custom-prod-1789307502983_g2.jpg`",
-      "`/custom_products/prod_custom-prod-1789307502983_g1.jpg`"
+      "/custom_products/crochet_earrings_macro_4.jpg",
+      "/custom_products/prod_custom-prod-1789307502983_g2.jpg",
+      "/custom_products/prod_custom-prod-1789307502983_g1.jpg"
     ],
     "priceEur": 7,
     "inStock": true,
@@ -1360,7 +1360,7 @@ export const permanentProductsData: Product[] = [
   },
   {
     "id": "custom-prod-1789307585814",
-    "name": "SPIRALNE MINĐUŠE #3",
+    "name": "RUČNO HEKLANE SPIRALNE MINĐUŠE",
     "nameEn": "HAND CROCHETED SPIRAL EARRINGS",
     "category": "nakit",
     "priceRsd": 800,
@@ -1376,11 +1376,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789307585814_g0.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789307585814_g0.jpg",
     "images": [
-      "`/custom_products/crochet_earrings_macro_2.jpg`",
-      "`/custom_products/prod_custom-prod-1789307585814_g2.jpg`",
-      "`/custom_products/prod_custom-prod-1789307585814_g1.jpg`"
+      "/custom_products/crochet_earrings_macro_2.jpg",
+      "/custom_products/prod_custom-prod-1789307585814_g2.jpg",
+      "/custom_products/prod_custom-prod-1789307585814_g1.jpg"
     ],
     "priceEur": 7,
     "inStock": true,
@@ -1390,7 +1390,7 @@ export const permanentProductsData: Product[] = [
   },
   {
     "id": "custom-prod-1789307658216",
-    "name": "SPIRALNE MINĐUŠE #4",
+    "name": "RUČNO HEKLANE SPIRALNE MINĐUŠE",
     "nameEn": "HAND CROCHETED SPIRAL EARRINGS",
     "category": "nakit",
     "priceRsd": 800,
@@ -1406,11 +1406,11 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "`/custom_products/prod_custom-prod-1789307658216_g0.jpg`",
+    "image": "/custom_products/prod_custom-prod-1789307658216_g0.jpg",
     "images": [
-      "`/custom_products/dusty_rose_crochet_earrings.jpg`",
-      "`/custom_products/prod_custom-prod-1789307658216_g2.jpg`",
-      "`/custom_products/prod_custom-prod-1789307658216_g1.jpg`"
+      "/custom_products/dusty_rose_crochet_earrings.jpg",
+      "/custom_products/prod_custom-prod-1789307658216_g2.jpg",
+      "/custom_products/prod_custom-prod-1789307658216_g1.jpg"
     ],
     "priceEur": 7,
     "inStock": true,
