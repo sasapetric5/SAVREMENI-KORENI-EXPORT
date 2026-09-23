@@ -26,6 +26,7 @@ export function AdminV2Page() {
   const [schemaType, setSchemaType] = useState<'Organization' | 'Article' | 'BreadcrumbList'>('Organization');
   const [linkingPreview, setLinkingPreview] = useState<Array<{from:string;to:string;anchor:string;type:string;reason:string;score:number}>>([]);
   const [approvedLinks, setApprovedLinks] = useState<Record<string, boolean>>({});
+  const [maxLinksPerPage, setMaxLinksPerPage] = useState(8);
 
   const validation = useMemo(() => {
     const products = permanentProductsData as any[];
@@ -138,12 +139,15 @@ export function AdminV2Page() {
   const buildInternalLinkSuggestions = () => {
     const products = permanentProductsData as any[];
     const suggestions: Array<{from:string;to:string;anchor:string;type:string;reason:string;score:number}> = [];
-    const norm = (v: any) => String(v || '').toLocaleLowerCase('sr-Latn');
+    const norm = (v: any) => String(v || '').toLocaleLowerCase('sr-Latn').trim();
     const toks = (v: any) => norm(v).split(/[^\p{L}\p{N}]+/u).filter(x => x.length >= 4);
+    const seen = new Set<string>();
     products.forEach((from, i) => {
       const fromTokens = new Set([...toks(from.name), ...toks(from.category), ...toks(from.materials), ...toks(from.craftTechniques)]);
       products.forEach((to, j) => {
         if (i === j) return;
+        const key = from.id + '→' + to.id;
+        if (seen.has(key)) return;
         const toTokens = new Set([...toks(to.name), ...toks(to.category), ...toks(to.materials), ...toks(to.craftTechniques)]);
         const overlap = [...fromTokens].filter(t => toTokens.has(t)).length;
         const sameCategory = norm(from.category) && norm(from.category) === norm(to.category);
@@ -151,10 +155,11 @@ export function AdminV2Page() {
         if (score >= 25) {
           const anchor = sameCategory ? String(to.name) : String(to.category || to.name);
           suggestions.push({from: from.name,to: to.name,anchor,type:'product→product',reason:sameCategory ? 'ista kategorija + zajednički pojmovi' : 'zajednički sadržajni pojmovi',score});
+          seen.add(key);
         }
       });
     });
-    return suggestions.sort((a,b) => b.score-a.score).slice(0, 80);
+    return suggestions.sort((a,b) => b.score-a.score).slice(0, maxLinksPerPage);
   };
 
   const buildSiteSchema = () => {
