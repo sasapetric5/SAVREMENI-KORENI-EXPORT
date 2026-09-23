@@ -109,6 +109,11 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
   // General Inputs
   const [topic, setTopic] = useState('');
   const [keyword, setKeyword] = useState('');
+  const [writingStyle, setWritingStyle] = useState<'artisan' | 'premium' | 'editorial' | 'informational' | 'educational' | 'storytelling' | 'sales' | 'traditional'>('artisan');
+  const [wordCount, setWordCount] = useState<300 | 500 | 750 | 1000 | 1500 | 2000 | 2500>(1000);
+  const [seoEnabled, setSeoEnabled] = useState(true);
+  const [aeoEnabled, setAeoEnabled] = useState(true);
+  const [geoEnabled, setGeoEnabled] = useState(true);
   const [geoRegion, setGeoRegion] = useState<'all' | 'homolje' | 'zlatibor' | 'pirot' | 'pester' | 'sumadija'>('all');
 
   // Blog-specific
@@ -187,6 +192,11 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
           topic: topic.trim(),
           keyword: keyword.trim() || undefined,
           tone,
+          writingStyle,
+          wordCount,
+          seoEnabled,
+          aeoEnabled,
+          geoEnabled,
           geoRegion,
           geminiApiKey: useGemini ? geminiApiKey.trim() : undefined,
           geminiModel
@@ -207,6 +217,11 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
           topic: topic.trim(),
           keyword: keyword.trim() || undefined,
           targetAudience,
+          writingStyle,
+          wordCount,
+          seoEnabled,
+          aeoEnabled,
+          geoEnabled,
           geoRegion,
           productCategory,
           geminiApiKey: useGemini ? geminiApiKey.trim() : undefined,
@@ -315,6 +330,50 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
 
         {/* Scrollable Body */}
         <div className="p-6 overflow-y-auto space-y-6 text-xs sm:text-sm text-stone-300">
+
+          {/* CONTENT CONTROLS — Phase 1 */}
+          <div className="p-4 bg-[#15100D] border border-[#C2872A]/30 rounded-2xl space-y-4">
+            <div className="flex items-center gap-2">
+              <Sliders className="w-4 h-4 text-[#C2872A]" />
+              <span className="text-xs font-bold uppercase tracking-wider text-[#E8D0A9]">Kontrole sadržaja</span>
+              <span className="text-[10px] text-stone-500">Podešavanja se šalju generatoru pri svakom generisanju.</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[11px] uppercase tracking-wider text-stone-400 mb-1">Stil pisanja</label>
+                <select value={writingStyle} onChange={e => setWritingStyle(e.target.value as typeof writingStyle)} className="w-full bg-[#120E0C] border border-stone-700 rounded-xl px-3 py-2 text-xs text-white">
+                  <option value="artisan">Zanatski / prirodan</option>
+                  <option value="premium">Premium</option>
+                  <option value="editorial">Editorial</option>
+                  <option value="informational">Informativni</option>
+                  <option value="educational">Edukativni</option>
+                  <option value="storytelling">Storytelling</option>
+                  <option value="sales">Prodajni</option>
+                  <option value="traditional">Tradicionalni / etno</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-[11px] uppercase tracking-wider text-stone-400 mb-1">Ciljna dužina</label>
+                <select value={wordCount} onChange={e => setWordCount(Number(e.target.value) as typeof wordCount)} className="w-full bg-[#120E0C] border border-stone-700 rounded-xl px-3 py-2 text-xs text-white">
+                  {[300,500,750,1000,1500,2000,2500].map(n => <option key={n} value={n}>{n} reči (±10%)</option>)}
+                </select>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <label className="p-3 rounded-xl border border-white/10 bg-black/20 cursor-pointer">
+                <div className="flex items-center justify-between"><span className="font-bold text-xs text-stone-200">SEO</span><input type="checkbox" checked={seoEnabled} onChange={e => setSeoEnabled(e.target.checked)} /></div>
+                <div className="text-[10px] text-stone-500 mt-1">Klasična pretraga</div>
+              </label>
+              <label className="p-3 rounded-xl border border-white/10 bg-black/20 cursor-pointer">
+                <div className="flex items-center justify-between"><span className="font-bold text-xs text-stone-200">AEO</span><input type="checkbox" checked={aeoEnabled} onChange={e => setAeoEnabled(e.target.checked)} /></div>
+                <div className="text-[10px] text-stone-500 mt-1">Direktni odgovori i FAQ</div>
+              </label>
+              <label className="p-3 rounded-xl border border-white/10 bg-black/20 cursor-pointer">
+                <div className="flex items-center justify-between"><span className="font-bold text-xs text-stone-200">GEO</span><input type="checkbox" checked={geoEnabled} onChange={e => setGeoEnabled(e.target.checked)} /></div>
+                <div className="text-[10px] text-stone-500 mt-1">Generative Engine Optimization</div>
+              </label>
+            </div>
+          </div>
 
           {/* GEMINI API KEY & MODEL SETTINGS (Za kompleksnije zadatke) */}
           <div className="p-4 bg-gradient-to-r from-[#241D19] to-[#1a1411] border border-[#C2872A]/30 rounded-2xl space-y-3 shadow-inner">
