@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { generateProductImageAlt, AiImageAltResult } from '../utils/imageSeo';
 import { permanentProductsData } from '../data/permanentProductsData';
 import { permanentGalleryPhotosData } from '../data/permanentGalleryPhotosData';
+import WorkflowPreviewPanel, { WorkflowPreviewChange } from './WorkflowPreviewPanel';
 
 type Slot = 'MAIN' | 'G0' | 'G1' | 'G2';
 const slotPaths = (p: any): Record<Slot, string> => ({
@@ -29,6 +30,8 @@ export function AdminV2Page() {
   const [maxLinksPerPage, setMaxLinksPerPage] = useState(8);
   const [workflowStage, setWorkflowStage] = useState<'DRAFT' | 'VALIDATE' | 'PREVIEW' | 'APPROVED' | 'PUBLISHED'>('DRAFT');
   const [publishResult, setPublishResult] = useState<string>('');
+  const [workflowPreviewOpen, setWorkflowPreviewOpen] = useState(false);
+  const [previewReviewed, setPreviewReviewed] = useState(false);
 
   const validation = useMemo(() => {
     const products = permanentProductsData as any[];
@@ -64,6 +67,25 @@ export function AdminV2Page() {
   const auditProblems = slotAudit.filter(x => x.status !== 'OK');
   const approvedAltCount = Object.values(altApproved).filter(Boolean).length;
   const workflowValidationOk = validation.productCount === 47 && validation.mediaCount === 504 && validation.assignments === 188 && validation.missing.length === 0 && validation.invalid.length === 0;
+
+  const workflowPreviewChanges = useMemo<WorkflowPreviewChange[]>(() => {
+    const slotIndex: Record<Slot, number> = { MAIN: 0, G0: 1, G1: 2, G2: 3 };
+    return Object.entries(altDrafts).map(([key, draft]) => {
+      const [productId, slotValue] = key.split(':');
+      const slot = slotValue as Slot;
+      const product = (permanentProductsData as any[]).find(p => p.id === productId);
+      const current = Array.isArray(product?.imageAlts) ? product.imageAlts[slotIndex[slot]] || {} : {};
+      const suggestion = altSuggestions[key];
+      return {
+        key, productId, productName: product?.name || productId, slot,
+        path: product ? slotPaths(product)[slot] : '',
+        oldSr: String(current.alt || ''), oldEn: String(current.altEn || ''),
+        newSr: String(draft?.alt || ''), newEn: String(draft?.altEn || ''),
+        source: suggestion?.source === 'vision' ? 'Vision — stvarna fotografija' : suggestion?.source === 'fallback' ? 'fallback' : String(suggestion?.source || 'nije naveden'),
+        valid: Boolean(draft?.alt?.trim() && draft?.altEn?.trim() && suggestion),
+      };
+    });
+  }, [altDrafts, altSuggestions]);
 
   const altAudit = useMemo(() => {
     const rows: { productId: string; productName: string; slot: Slot; path: string; sr: string; en: string; status: 'OK' | 'MISSING_SR' | 'MISSING_EN' | 'MISSING_BOTH' }[] = [];
@@ -315,8 +337,8 @@ export function AdminV2Page() {
           </div>
           <div className="flex flex-wrap gap-2">
             <button onClick={() => { setWorkflowStage('VALIDATE'); setPublishResult(workflowValidationOk ? 'VALIDATE PASS: osnovni integritet je potvrđen.' : 'VALIDATE BLOCKED: pronađen je problem u osnovnom integritetu.'); }} className="px-4 py-2 rounded-xl border border-[#cdbfb0] text-xs font-bold">1. VALIDATE</button>
-            <button disabled={workflowStage !== 'VALIDATE' || !workflowValidationOk} onClick={() => { setWorkflowStage('PREVIEW'); setPublishResult('PREVIEW spreman: pregledajte odobrene ALT izmene pre publish-a.'); }} className="px-4 py-2 rounded-xl border border-[#cdbfb0] text-xs font-bold disabled:opacity-40">2. PREVIEW</button>
-            <button disabled={workflowStage !== 'PREVIEW' || approvedAltCount === 0} onClick={() => { setWorkflowStage('APPROVED'); setPublishResult('APPROVE potvrđen: publish je sada dozvoljen samo za prethodno odobrene ALT izmene.'); }} className="px-4 py-2 rounded-xl bg-[#241d19] text-white text-xs font-bold disabled:opacity-40">3. APPROVE</button>
+            <button disabled={workflowStage !== 'VALIDATE' || !workflowValidationOk || approvedAltCount === 0} onClick={() => { setWorkflowStage('PREVIEW'); setPreviewReviewed(false); setWorkflowPreviewOpen(true); setPublishResult('PREVIEW otvoren: pregledajte stare i nove vrednosti pre APPROVE.'); }} className="px-4 py-2 rounded-xl border border-[#cdbfb0] text-xs font-bold disabled:opacity-40">2. PREVIEW</button>
+            <button disabled={workflowStage !== 'PREVIEW' || approvedAltCount === 0 || !previewReviewed} onClick={() => { setWorkflowStage('APPROVED'); setWorkflowPreviewOpen(false); setPublishResult('APPROVE potvrđen: publish je sada dozvoljen samo za prethodno odobrene ALT izmene.'); }} className="px-4 py-2 rounded-xl bg-[#241d19] text-white text-xs font-bold disabled:opacity-40">3. APPROVE</button>
             <button disabled={workflowStage !== 'APPROVED' || approvedAltCount === 0 || !workflowValidationOk || altSaving} onClick={handleSaveApprovedAlts} className="px-4 py-2 rounded-xl bg-green-700 text-white text-xs font-bold disabled:opacity-40">{altSaving ? 'PUBLISH...' : '4. PUBLISH'}</button>
           </div>
           {publishResult && <div className="mt-4 p-3 rounded-xl bg-[#f7f3ed] border border-[#d8cec1] text-xs font-semibold">{publishResult}</div>}
@@ -536,7 +558,9 @@ export function AdminV2Page() {
           </div>
         </div>
 
-        <div className="mt-5 text-xs text-gray-500">Izvor: permanentProductsData.ts + permanentGalleryPhotosData.ts. Ova faza samo čita stanje. Ne menja proizvode, slike, localStorage, IndexedDB, GitHub niti Cloudflare.</div>
+          <WorkflowPreviewPanel open={workflowPreviewOpen} changes={workflowPreviewChanges} approvedCount={approvedAltCount} reviewed={previewReviewed} onReviewedChange={setPreviewReviewed} onClose={() => setWorkflowPreviewOpen(false)} onApprove={() => { setPreviewReviewed(true); setWorkflowStage('APPROVED'); setWorkflowPreviewOpen(false); setPublishResult('APPROVE potvrđen iz Preview ekrana. Publish je zaključan do sledećeg koraka.'); }} />
+
+    <div className="mt-5 text-xs text-gray-500">Izvor: permanentProductsData.ts + permanentGalleryPhotosData.ts. Ova faza samo čita stanje. Ne menja proizvode, slike, localStorage, IndexedDB, GitHub niti Cloudflare.</div>
       </div>
 
       {selectedMedia && <div className="fixed inset-0 z-[60] bg-black/70 p-4 flex items-center justify-center" onClick={() => setSelectedMedia(null)}>
