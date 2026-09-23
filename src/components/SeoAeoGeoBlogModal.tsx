@@ -32,7 +32,8 @@ import {
   GeneratedLandingPageResult,
   BlogGeneratorParams,
   LandingPageGeneratorParams,
-  buildProductSourceFacts
+  buildProductSourceFacts,
+  validateGeneratedBlogResult
 } from '../utils/seoAeoGeoBlogGenerator';
 import { permanentProductsData } from '../data/permanentProductsData';
 
@@ -210,7 +211,20 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
         };
         const res = await generateSeoAeoGeoArticle(params);
         setGeneratedBlogResult(res);
-        showToast("✨ Super Cool tekst je generisan — people-first kontrola i SEO/AEO/GEO parametri su primenjeni.");
+        const validation = validateGeneratedBlogResult(res, {
+          keyword: params.keyword,
+          wordCount: params.wordCount,
+          seoEnabled: params.seoEnabled,
+          aeoEnabled: params.aeoEnabled,
+          geoEnabled: params.geoEnabled,
+          sourceFacts: params.sourceFacts,
+          forbidUnverifiedClaims: true
+        });
+        showToast(
+          validation.ok
+            ? `✨ Super Cool tekst je generisan i prošao validaciju: ${validation.score}/100 — SR+EN, People-first, SEO/AEO/GEO.`
+            : `⚠️ Tekst je generisan, ali validacija traži doradu: ${validation.score}/100. Pregledajte rezultat pre uvoza.`
+        );
       } catch (err: any) {
         console.error("Greška pri generisanju:", err);
         showToast("Došlo je do greške pri generisanju bloga.");
