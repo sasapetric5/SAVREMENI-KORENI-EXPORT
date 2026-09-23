@@ -27,6 +27,8 @@ export function AdminV2Page() {
   const [linkingPreview, setLinkingPreview] = useState<Array<{from:string;to:string;anchor:string;type:string;reason:string;score:number}>>([]);
   const [approvedLinks, setApprovedLinks] = useState<Record<string, boolean>>({});
   const [maxLinksPerPage, setMaxLinksPerPage] = useState(8);
+  const [workflowStage, setWorkflowStage] = useState<'DRAFT' | 'VALIDATE' | 'PREVIEW' | 'APPROVED' | 'PUBLISHED'>('DRAFT');
+  const [publishResult, setPublishResult] = useState<string>('');
 
   const validation = useMemo(() => {
     const products = permanentProductsData as any[];
@@ -60,6 +62,8 @@ export function AdminV2Page() {
   }, []);
 
   const auditProblems = slotAudit.filter(x => x.status !== 'OK');
+  const approvedAltCount = Object.values(altApproved).filter(Boolean).length;
+  const workflowValidationOk = validation.productCount === 47 && validation.mediaCount === 504 && validation.assignments === 188 && validation.missing.length === 0 && validation.invalid.length === 0;
 
   const altAudit = useMemo(() => {
     const rows: { productId: string; productName: string; slot: Slot; path: string; sr: string; en: string; status: 'OK' | 'MISSING_SR' | 'MISSING_EN' | 'MISSING_BOTH' }[] = [];
@@ -189,6 +193,10 @@ export function AdminV2Page() {
       ]
     };
   };  const handleSaveApprovedAlts = async () => {
+    if (workflowStage !== 'APPROVED') {
+      setPublishResult('PUBLISH BLOKIRAN: prvo mora postojati VALIDATE → PREVIEW → APPROVE.');
+      return;
+    }
     const approvedKeys = Object.keys(altApproved).filter(key => altApproved[key] && altDrafts[key]);
     if (!approvedKeys.length) return;
     setAltSaving(true);
@@ -216,6 +224,8 @@ export function AdminV2Page() {
         await saveCustomProduct(updated);
       }
       window.dispatchEvent(new CustomEvent('custom-products-updated'));
+      setWorkflowStage('PUBLISHED');
+      setPublishResult(`PUBLISHED: ${approvedKeys.length} odobrenih ALT izmena je upisano u Admin storage. GitHub/Cloudflare nisu menjani ovim korakom.`);
     } catch (error) {
       console.error('ALT save error:', error);
     } finally {
@@ -264,6 +274,53 @@ export function AdminV2Page() {
           <Card label="SLOT REFERENCI" value={validation.assignments} target="188" ok={validation.assignments === 188} />
           <Card label="NEDOSTAJUĆE PUTANJE" value={validation.missing.length} target="0" ok={validation.missing.length === 0} />
           <Card label="NEISPRAVNI PROIZVODI" value={validation.invalid.length} target="0" ok={validation.invalid.length === 0} />
+        </div>
+
+        <div className="rounded-2xl bg-white border-2 border-[#9e3e26] shadow-sm p-5 mb-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div>
+              <div className="text-[10px] tracking-[0.18em] font-bold text-[#9e3e26]">CENTRALNI WORKFLOW</div>
+              <h2 className="font-bold text-xl mt-1">DRAFT → VALIDATE → PREVIEW → APPROVE → PUBLISH</h2>
+              <p className="text-xs text-gray-500 mt-1">Nijedna izmena ne prelazi u publish bez eksplicitnog odobrenja.</p>
+            </div>
+            <div className={workflowStage === 'PUBLISHED' ? 'px-4 py-2 rounded-full bg-green-100 border border-green-300 text-green-800 text-xs font-bold' : 'px-4 py-2 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold'}>
+              STATUS: {workflowStage}
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-4">
+            {(['DRAFT','VALIDATE','PREVIEW','APPROVED','PUBLISHED'] as const).map((stage, i) => {
+              const active = workflowStage === stage;
+              const reached = (['DRAFT','VALIDATE','PREVIEW','APPROVED','PUBLISHED'] as const).indexOf(workflowStage) >= i;
+              return <div key={stage} className={active ? 'p-3 rounded-xl border-2 border-[#9e3e26] bg-[#f7f3ed]' : 'p-3 rounded-xl border border-[#e8e0d5] bg-white'}>
+                <div className={reached ? 'text-green-700 font-bold text-xs' : 'text-gray-400 font-bold text-xs'}>{reached ? '✓' : '○'} {stage}</div>
+              </div>;
+            })}
+          </div>
+          <div className="grid md:grid-cols-3 gap-3 mb-4">
+            <div className="p-3 rounded-xl bg-[#f7f3ed] border border-[#e8e0d5]">
+              <div className="text-[10px] text-gray-500 font-bold">VALIDACIJA</div>
+              <div className={workflowValidationOk ? 'text-green-700 font-bold mt-1' : 'text-red-700 font-bold mt-1'}>{workflowValidationOk ? 'PASS' : 'BLOCKED'}</div>
+              <div className="text-[10px] text-gray-500 mt-1">47 proizvoda • 504 media • 188 slotova</div>
+            </div>
+            <div className="p-3 rounded-xl bg-[#f7f3ed] border border-[#e8e0d5]">
+              <div className="text-[10px] text-gray-500 font-bold">DRAFT</div>
+              <div className="font-bold mt-1">{approvedAltCount} odobrenih ALT predloga</div>
+              <div className="text-[10px] text-gray-500 mt-1">Ništa nije publish-ovano dok se ne odobri.</div>
+            </div>
+            <div className="p-3 rounded-xl bg-[#f7f3ed] border border-[#e8e0d5]">
+              <div className="text-[10px] text-gray-500 font-bold">OPSEG</div>
+              <div className="font-bold mt-1">SAMO ALT izmene</div>
+              <div className="text-[10px] text-gray-500 mt-1">Proizvodi/slike/putanje se ne menjaju.</div>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button onClick={() => { setWorkflowStage('VALIDATE'); setPublishResult(workflowValidationOk ? 'VALIDATE PASS: osnovni integritet je potvrđen.' : 'VALIDATE BLOCKED: pronađen je problem u osnovnom integritetu.'); }} className="px-4 py-2 rounded-xl border border-[#cdbfb0] text-xs font-bold">1. VALIDATE</button>
+            <button disabled={workflowStage !== 'VALIDATE' || !workflowValidationOk} onClick={() => { setWorkflowStage('PREVIEW'); setPublishResult('PREVIEW spreman: pregledajte odobrene ALT izmene pre publish-a.'); }} className="px-4 py-2 rounded-xl border border-[#cdbfb0] text-xs font-bold disabled:opacity-40">2. PREVIEW</button>
+            <button disabled={workflowStage !== 'PREVIEW' || approvedAltCount === 0} onClick={() => { setWorkflowStage('APPROVED'); setPublishResult('APPROVE potvrđen: publish je sada dozvoljen samo za prethodno odobrene ALT izmene.'); }} className="px-4 py-2 rounded-xl bg-[#241d19] text-white text-xs font-bold disabled:opacity-40">3. APPROVE</button>
+            <button disabled={workflowStage !== 'APPROVED' || approvedAltCount === 0 || !workflowValidationOk || altSaving} onClick={handleSaveApprovedAlts} className="px-4 py-2 rounded-xl bg-green-700 text-white text-xs font-bold disabled:opacity-40">{altSaving ? 'PUBLISH...' : '4. PUBLISH'}</button>
+          </div>
+          {publishResult && <div className="mt-4 p-3 rounded-xl bg-[#f7f3ed] border border-[#d8cec1] text-xs font-semibold">{publishResult}</div>}
+          <div className="mt-3 text-[10px] text-gray-500">VAŽNO: ovaj korak trenutno ne radi GitHub commit/push niti Cloudflare deployment. To će biti poseban, proverljiv korak nakon lokalnog publish-a.</div>
         </div>
 
         <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
