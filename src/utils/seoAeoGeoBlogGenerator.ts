@@ -129,6 +129,56 @@ export function validatePeopleFirstText(text: string): HumanEditorialCheck[] {
   return checks;
 }
 
+export interface ContentSourceFact {
+  label: string;
+  value: string;
+  source: 'product' | 'site' | 'user' | 'verified';
+  required?: boolean;
+}
+
+export interface SuperCoolGeneratorOptions {
+  sourceFacts?: ContentSourceFact[];
+  forbidUnverifiedClaims?: boolean;
+  requireEditorialReview?: boolean;
+}
+
+export function buildPeopleFirstBrief(
+  topic: string,
+  keyword?: string,
+  sourceFacts: ContentSourceFact[] = []
+): string {
+  const verified = sourceFacts
+    .filter(f => f.value.trim())
+    .map(f => `- ${f.label}: ${f.value} [${f.source}]`)
+    .join('\n');
+  return [
+    'CONTENT BRIEF — PEOPLE-FIRST / SUPER COOL',
+    `Tema: ${topic}`,
+    `Primarna ključna reč: ${keyword || 'nije zadato'}`,
+    verified ? 'Proverene činjenice koje smeš koristiti:\n' + verified : 'Nema dodatih proverених činjenica.',
+    'Pravilo: ne izmišljaj poreklo, materijale, mere, postupke, iskustva kupaca, rokove, sertifikate ili druge činjenice koje nisu potvrđene.',
+    'Tekst treba da bude koristan čoveku i razumljiv pretraživačima i generativnim sistemima; SEO/AEO/GEO služe sadržaju, ne obrnuto.'
+  ].join('\n');
+}
+
+export function validateSourceFacts(
+  text: string,
+  sourceFacts: ContentSourceFact[] = [],
+  forbidUnverifiedClaims = true
+): ContentValidationItem {
+  if (!forbidUnverifiedClaims || sourceFacts.length === 0) {
+    return { key: 'facts', label: 'Činjenična osnova', ok: true, detail: sourceFacts.length ? `${sourceFacts.length} činjenica prosleđeno generatoru` : 'Nema obaveznih činjenica za proveru' };
+  }
+  const body = text.toLocaleLowerCase('sr-Latn');
+  const missing = sourceFacts.filter(f => f.required && f.value.trim() && !body.includes(f.value.toLocaleLowerCase('sr-Latn')));
+  return {
+    key: 'facts',
+    label: 'Činjenična osnova',
+    ok: missing.length === 0,
+    detail: missing.length ? 'Obavezne činjenice nisu pronađene u tekstu: ' + missing.map(f => f.label).join(', ') : 'Obavezne prosleđene činjenice su zastupljene'
+  };
+}
+
 export interface ContentValidationItem { key: string; label: string; ok: boolean; detail: string; }
 export interface ContentValidationResult { ok: boolean; score: number; items: ContentValidationItem[]; }
 
