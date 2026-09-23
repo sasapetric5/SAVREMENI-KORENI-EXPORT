@@ -13,6 +13,9 @@ const slotPaths = (p: any): Record<Slot, string> => ({
 export function AdminV2Page() {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<string | null>(null);
+  const [mediaQuery, setMediaQuery] = useState('');
+  const [mediaFilter, setMediaFilter] = useState<'all' | 'assigned' | 'unassigned'>('all');
+  const [selectedMedia, setSelectedMedia] = useState<any | null>(null);
 
   const validation = useMemo(() => {
     const products = permanentProductsData as any[];
@@ -31,6 +34,33 @@ export function AdminV2Page() {
   }, [query]);
 
   const selectedProduct = (permanentProductsData as any[]).find(p => p.id === selected);
+  const mediaIndex = useMemo(() => {
+    const result = new Map<string, { productId: string; productName: string; slot: Slot }[]>();
+    (permanentProductsData as any[]).forEach(p => {
+      const slots = slotPaths(p);
+      (Object.keys(slots) as Slot[]).forEach(slot => {
+        const path = slots[slot];
+        if (!path) return;
+        const list = result.get(path) || [];
+        list.push({ productId: p.id, productName: p.name, slot });
+        result.set(path, list);
+      });
+    });
+    return result;
+  }, []);
+
+  const filteredMedia = useMemo(() => {
+    const q = mediaQuery.trim().toLowerCase();
+    return (permanentGalleryPhotosData as any[]).filter(m => {
+      const links = mediaIndex.get(m.imageUrl) || [];
+      const matchesFilter = mediaFilter === 'all' || (mediaFilter === 'assigned' ? links.length > 0 : links.length === 0);
+      const haystack = [m.id, m.title, m.category, m.imageUrl, ...(links.map(x => x.productName + ' ' + x.slot))].join(' ').toLowerCase();
+      return matchesFilter && (!q || haystack.includes(q));
+    });
+  }, [mediaQuery, mediaFilter, mediaIndex]);
+
+  const assignedMediaCount = useMemo(() => (permanentGalleryPhotosData as any[]).filter(m => (mediaIndex.get(m.imageUrl) || []).length > 0).length, [mediaIndex]);
+  const unassignedMediaCount = permanentGalleryPhotosData.length - assignedMediaCount;
 
   return (
     <div className="min-h-screen bg-[#f7f3ed] text-[#241d19] p-4 md:p-8">
@@ -66,6 +96,31 @@ export function AdminV2Page() {
           <button onClick={() => window.location.href = '/'} className="px-5 py-3 rounded-xl bg-[#241d19] text-white font-semibold">← Nazad na sajt</button>
         </div>
 
+        <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
+          <div className="flex flex-wrap items-end justify-between gap-3 mb-4">
+            <div><h2 className="font-bold text-lg">Media Library — 504 fotografije</h2><p className="text-xs text-gray-500 mt-1">READ ONLY • svaka fotografija ostaje fizički nezavisna od proizvoda</p></div>
+            <div className="text-xs font-semibold">Povezane: {assignedMediaCount} • Nepovezane: {unassignedMediaCount}</div>
+          </div>
+          <div className="flex flex-col md:flex-row gap-2 mb-4">
+            <input value={mediaQuery} onChange={e => setMediaQuery(e.target.value)} placeholder="Pretraži 504 fotografije, naziv, kategoriju ili proizvod..." className="flex-1 px-4 py-3 rounded-xl border border-[#d8cec1] bg-white" />
+            {(['all','assigned','unassigned'] as const).map(f => (
+              <button key={f} onClick={() => setMediaFilter(f)} className={mediaFilter === f ? 'px-4 py-2 rounded-xl bg-[#241d19] text-white font-semibold' : 'px-4 py-2 rounded-xl border border-[#d8cec1] bg-white'}>
+                {f === 'all' ? 'Sve' : f === 'assigned' ? 'Povezane' : 'Nepovezane'}
+              </button>
+            ))}
+          </div>
+          <div className="text-xs text-gray-500 mb-3">Prikaz: {filteredMedia.length} / {permanentGalleryPhotosData.length}</div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-3">
+            {filteredMedia.map((m: any) => {
+              const links = mediaIndex.get(m.imageUrl) || [];
+              return <button key={m.id + m.imageUrl} onClick={() => setSelectedMedia(m)} className="text-left rounded-xl border border-[#e8e0d5] bg-white overflow-hidden hover:shadow-md">
+                <div className="aspect-square bg-gray-100"><img src={m.imageUrl} alt={m.title || m.id} className="w-full h-full object-cover" loading="lazy" /></div>
+                <div className="p-2"><div className="text-[10px] font-bold truncate">{m.id}</div><div className="text-[9px] text-gray-500 truncate">{m.title || 'Bez naslova'}</div><div className="mt-1 text-[9px]">{links.length ? links.map(x => x.slot).join(' • ') : 'NIJE DODELJENA'}</div></div>
+              </button>;
+            })}
+          </div>
+        </div>
+
         <div className="rounded-2xl bg-white border border-[#e8e0d5] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -87,6 +142,13 @@ export function AdminV2Page() {
         <div className="mt-5 text-xs text-gray-500">Izvor: permanentProductsData.ts + permanentGalleryPhotosData.ts. Ova faza samo čita stanje. Ne menja proizvode, slike, localStorage, IndexedDB, GitHub niti Cloudflare.</div>
       </div>
 
+      {selectedMedia && <div className="fixed inset-0 z-[60] bg-black/70 p-4 flex items-center justify-center" onClick={() => setSelectedMedia(null)}>
+        <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-auto p-5" onClick={e => e.stopPropagation()}>
+          <div className="flex justify-between items-start gap-3 mb-4"><div><h2 className="text-xl font-bold">{selectedMedia.title || selectedMedia.id}</h2><div className="text-xs text-gray-500 break-all">{selectedMedia.imageUrl}</div></div><button onClick={() => setSelectedMedia(null)} className="px-3 py-1 rounded-lg bg-gray-100">Zatvori</button></div>
+          <img src={selectedMedia.imageUrl} alt={selectedMedia.title || selectedMedia.id} className="w-full max-h-[65vh] object-contain rounded-xl bg-gray-100" />
+          <div className="mt-4 p-3 rounded-xl bg-[#f7f3ed]"><div className="text-xs font-bold mb-2">TRENUTNE VEZE</div>{(mediaIndex.get(selectedMedia.imageUrl) || []).length ? (mediaIndex.get(selectedMedia.imageUrl) || []).map(x => <div key={x.productId + x.slot} className="text-sm">{x.productName} — <b>{x.slot}</b></div>) : <div className="text-sm text-gray-600">Nije dodeljena nijednom proizvodu.</div>}</div>
+        </div>
+      </div>}
       {selectedProduct && <div className="fixed inset-0 z-50 bg-black/60 p-4 flex items-center justify-center" onClick={() => setSelected(null)}>
         <div className="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-auto p-5" onClick={e => e.stopPropagation()}>
           <div className="flex justify-between items-center mb-4"><h2 className="text-xl font-bold">{selectedProduct.name}</h2><button onClick={() => setSelected(null)} className="px-3 py-1 rounded-lg bg-gray-100">Zatvori</button></div>
