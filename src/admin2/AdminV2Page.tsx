@@ -33,7 +33,21 @@ export function AdminV2Page() {
     return (permanentProductsData as any[]).filter(p => (p.name + ' ' + p.nameEn + ' ' + p.category + ' ' + p.id).toLowerCase().includes(q));
   }, [query]);
 
-  const selectedProduct = (permanentProductsData as any[]).find(p => p.id === selected);
+  const selectedProduct = (permanentProductsData as any[]).find(p => p.id === selected);\n  const slotAudit = useMemo(() => {
+    const products = permanentProductsData as any[];
+    const rows: { productId: string; productName: string; slot: Slot; path: string; status: 'OK' | 'MISSING' | 'DUPLICATE'; }[] = [];
+    products.forEach(p => {
+      const slots = slotPaths(p);
+      (Object.keys(slots) as Slot[]).forEach(slot => {
+        const path = slots[slot];
+        const owners = products.filter(x => slotPaths(x)[slot] === path && path);
+        rows.push({ productId: p.id, productName: p.name, slot, path, status: !path ? 'MISSING' : owners.length > 1 ? 'DUPLICATE' : 'OK' });
+      });
+    });
+    return rows;
+  }, []);
+
+  const auditProblems = slotAudit.filter(x => x.status !== 'OK');
   const mediaIndex = useMemo(() => {
     const result = new Map<string, { productId: string; productName: string; slot: Slot }[]>();
     (permanentProductsData as any[]).forEach(p => {
@@ -94,6 +108,27 @@ export function AdminV2Page() {
         <div className="flex flex-col md:flex-row gap-3 mb-4">
           <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Pretraga proizvoda, kategorije ili ID..." className="flex-1 px-4 py-3 rounded-xl border border-[#d8cec1] bg-white outline-none focus:ring-2 focus:ring-[#9e3e26]" />
           <button onClick={() => window.location.href = '/'} className="px-5 py-3 rounded-xl bg-[#241d19] text-white font-semibold">← Nazad na sajt</button>
+        </div>
+
+        <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
+          <div className="flex flex-wrap justify-between items-end gap-3 mb-4">
+            <div><h2 className="font-bold text-lg">Faza 2C — kontrola 188 slotova</h2><p className="text-xs text-gray-500 mt-1">Samo kontrola. Nema automatske izmene.</p></div>
+            <div className="text-sm font-semibold">OK: {slotAudit.filter(x => x.status === 'OK').length} / 188 • Problemi: {auditProblems.length}</div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+            {(['MAIN','G0','G1','G2'] as Slot[]).map(slot => {
+              const list = slotAudit.filter(x => x.slot === slot);
+              const bad = list.filter(x => x.status !== 'OK').length;
+              return <div key={slot} className="rounded-xl border border-[#e8e0d5] p-3"><div className="font-bold">{slot}</div><div className="text-xs mt-1">{list.length - bad}/47 OK</div><div className={bad ? 'text-xs text-red-700 font-semibold' : 'text-xs text-green-700 font-semibold'}>{bad ? bad + ' problem' + (bad === 1 ? '' : 'a') : 'BEZ PROBLEMA'}</div></div>;
+            })}
+          </div>
+          <div className="max-h-[420px] overflow-auto border rounded-xl">
+            <table className="w-full text-xs">
+              <thead className="sticky top-0 bg-[#f1ebe3]"><tr><th className="p-2 text-left">Proizvod</th><th className="p-2">Slot</th><th className="p-2 text-left">Fajl</th><th className="p-2">Status</th></tr></thead>
+              <tbody>{slotAudit.map(row => <tr key={row.productId + row.slot} className="border-t border-[#eee7df]"><td className="p-2 font-semibold">{row.productName}</td><td className="p-2 font-bold">{row.slot}</td><td className="p-2 break-all">{row.path || '—'}</td><td className={row.status === 'OK' ? 'p-2 text-green-700 font-bold' : 'p-2 text-red-700 font-bold'}>{row.status}</td></tr>)}</tbody>
+            </table>
+          </div>
+          {auditProblems.length > 0 && <div className="mt-4 p-3 rounded-xl bg-red-50 border border-red-200"><div className="font-bold text-red-800 mb-2">Problemi za ručnu proveru</div>{auditProblems.map(x => <div key={x.productId + x.slot} className="text-xs text-red-800">{x.productName} — {x.slot} — {x.status} — {x.path || 'nema putanje'}</div>)}</div>}
         </div>
 
         <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
