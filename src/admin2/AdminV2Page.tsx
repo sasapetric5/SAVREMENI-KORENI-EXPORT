@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { generateProductImageAlt, AiImageAltResult } from '../utils/imageSeo';
 import { permanentProductsData } from '../data/permanentProductsData';
 import { permanentGalleryPhotosData } from '../data/permanentGalleryPhotosData';
 
@@ -16,6 +17,8 @@ export function AdminV2Page() {
   const [mediaQuery, setMediaQuery] = useState('');
   const [mediaFilter, setMediaFilter] = useState<'all' | 'assigned' | 'unassigned'>('all');
   const [selectedMedia, setSelectedMedia] = useState<any | null>(null);
+  const [altSuggestions, setAltSuggestions] = useState<Record<string, AiImageAltResult>>({});
+  const [altGenerating, setAltGenerating] = useState<string | null>(null);
 
   const validation = useMemo(() => {
     const products = permanentProductsData as any[];
@@ -75,6 +78,29 @@ export function AdminV2Page() {
   }, []);
 
   const altProblems = altAudit.filter(x => x.status !== 'OK');
+
+  const handleGenerateAltSuggestion = async (row: typeof altAudit[number]) => {
+    if (!row.path) return;
+    const key = row.productId + ':' + row.slot;
+    setAltGenerating(key);
+    try {
+      const product = (permanentProductsData as any[]).find(p => p.id === row.productId);
+      const apiKey = localStorage.getItem('koreni_gemini_api_key') || '';
+      const result = await generateProductImageAlt({
+        imageUrl: row.path,
+        productNameSr: product?.name || row.productName,
+        productNameEn: product?.nameEn || row.productName,
+        keywords: [product?.category, ...(product?.materials || []), ...(product?.craftTechniques || [])].filter(Boolean),
+        imageRole: row.slot === 'MAIN' ? 'main' : row.slot === 'G0' ? 'closeup' : row.slot === 'G1' ? 'interior' : 'model',
+        apiKey
+      });
+      setAltSuggestions(prev => ({ ...prev, [key]: result }));
+    } catch (error) {
+      console.error('ALT audit suggestion error:', error);
+    } finally {
+      setAltGenerating(null);
+    }
+  };
   const mediaIndex = useMemo(() => {
     const result = new Map<string, { productId: string; productName: string; slot: Slot }[]>();
     (permanentProductsData as any[]).forEach(p => {
@@ -151,7 +177,7 @@ export function AdminV2Page() {
           </div>
           <div className="max-h-[420px] overflow-auto border rounded-xl">
             <table className="w-full text-xs">
-              <thead className="sticky top-0 bg-[#f1ebe3]"><tr><th className="p-2 text-left">Proizvod</th><th className="p-2">Slot</th><th className="p-2 text-left">Fajl</th><th className="p-2">Status</th></tr></thead>
+              <thead className="sticky top-0 bg-[#f1ebe3]"><tr><th className="p-2 text-left">Proizvod</th><th className="p-2">Slot</th><th className="p-2 text-left">Fajl</th><th className="p-2">Status</th><th className="p-2">AI</th></tr></thead>
               <tbody>{slotAudit.map(row => <tr key={row.productId + row.slot} className="border-t border-[#eee7df]"><td className="p-2 font-semibold">{row.productName}</td><td className="p-2 font-bold">{row.slot}</td><td className="p-2 break-all">{row.path || '—'}</td><td className={row.status === 'OK' ? 'p-2 text-green-700 font-bold' : 'p-2 text-red-700 font-bold'}>{row.status}</td></tr>)}</tbody>
             </table>
           </div>
@@ -187,12 +213,30 @@ export function AdminV2Page() {
                   <td className="p-2 max-w-[260px] truncate" title={row.sr}>{row.sr || '—'}</td>
                   <td className="p-2 max-w-[260px] truncate" title={row.en}>{row.en || '—'}</td>
                   <td className={row.status === 'OK' ? 'p-2 text-green-700 font-bold' : 'p-2 text-amber-700 font-bold'}>{row.status}</td>
+                  <td className="p-2">
+                    {row.path && <button onClick={() => handleGenerateAltSuggestion(row)} disabled={altGenerating === row.productId + ':' + row.slot} className="px-2 py-1 rounded-lg border border-[#cdbfb0] text-[10px] font-semibold disabled:opacity-50">
+                      {altGenerating === row.productId + ':' + row.slot ? 'Analiza...' : 'Predlog ALT'}
+                    </button>}
+                  </td>
                 </tr>
               ))}</tbody>
             </table>
           </div>
+          {Object.entries(altSuggestions).length > 0 && (
+            <div className="mt-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900">
+              <div className="font-bold mb-2">AI PREDLOZI — samo pregled, bez automatskog upisa</div>
+              {Object.entries(altSuggestions).map(([key, result]) => (
+                <div key={key} className="border-t border-emerald-200 pt-2 mt-2">
+                  <div className="font-semibold">{key}</div>
+                  <div><b>SR:</b> {result.altSr}</div>
+                  <div><b>EN:</b> {result.altEn}</div>
+                  <div className="text-[10px] opacity-70 mt-1">Izvor: {result.source === 'vision' ? 'analiza stvarne fotografije' : 'sigurni fallback'}</div>
+                </div>
+              ))}
+            </div>
+          )}
           {altProblems.length > 0 && <div className="mt-4 p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900">
-            ALT audit je samo dijagnostika. Sledeći korak može biti generisanje predloga po fotografiji, ali nijedan ALT se ovde ne upisuje automatski.
+            ALT audit je dijagnostika. AI predlog se prikazuje samo za pregled; nijedan ALT se ovde ne upisuje automatski.
           </div>}
         </div>
 
