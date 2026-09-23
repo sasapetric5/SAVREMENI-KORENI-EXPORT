@@ -37,6 +37,11 @@ export interface BlogGeneratorParams {
   topic: string;
   keyword?: string;
   tone?: 'artisan' | 'history' | 'buyers_guide' | 'heritage_diaspora';
+  writingStyle?: 'artisan' | 'premium' | 'editorial' | 'informational' | 'educational' | 'storytelling' | 'sales' | 'traditional';
+  wordCount?: 300 | 500 | 750 | 1000 | 1500 | 2000 | 2500;
+  seoEnabled?: boolean;
+  aeoEnabled?: boolean;
+  geoEnabled?: boolean;
   geoRegion?: 'all' | 'homolje' | 'zlatibor' | 'pirot' | 'pester' | 'sumadija';
   geminiApiKey?: string;
   geminiModel?: 'gemini-2.5-flash' | 'gemini-2.5-pro';
@@ -46,6 +51,11 @@ export interface LandingPageGeneratorParams {
   topic: string;
   keyword?: string;
   targetAudience?: 'general' | 'folklore' | 'diaspora' | 'slava_gifts' | 'collectors';
+  writingStyle?: 'artisan' | 'premium' | 'editorial' | 'informational' | 'educational' | 'storytelling' | 'sales' | 'traditional';
+  wordCount?: 500 | 750 | 1000 | 1500 | 2000 | 2500;
+  seoEnabled?: boolean;
+  aeoEnabled?: boolean;
+  geoEnabled?: boolean;
   geoRegion?: 'all' | 'homolje' | 'zlatibor' | 'pirot' | 'pester' | 'sumadija';
   productCategory?: 'subare' | 'nosnje' | 'carape' | 'pokloni' | 'torbice' | 'nakit' | 'kosulje' | 'dom-pokloni';
   geminiApiKey?: string;
@@ -619,14 +629,17 @@ ${tmpl.en.faq.map(f => `**Question: ${f.q}**
  * Gemini poziv za Blog Članke sa Anti-AI detector instrukcijama
  */
 async function generateBlogWithGemini(params: BlogGeneratorParams): Promise<GeneratedBlogPostResult | null> {
-  const { topic, keyword, tone, geoRegion, geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
+  const { topic, keyword, tone, writingStyle, wordCount, seoEnabled = true, aeoEnabled = true, geoEnabled = true, geoRegion, geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
   if (!geminiApiKey) return null;
 
   const prompt = `
 Ti si stari, iskusni srpski majstor-zanatlija i osnivač etno radionice "Savremeni Koreni" (Srbija).
 Tvoj zadatak je da napišeš VRHUNSKI SEO, AEO i GEO blog članak na temu: "${topic}".
 Fokusna ključna reč: "${keyword || topic}".
-Ciljani geografski region: "${geoRegion || 'Srbija i dijaspora'}".
+Traženi stil pisanja: "${writingStyle || tone || 'artisan'}".
+Tražena dužina: ${wordCount ? `${wordCount} reči (±10%)` : 'nije posebno zadato'}.
+SEO: ${seoEnabled ? 'UKLJUČEN' : 'ISKLJUČEN'}. AEO: ${aeoEnabled ? 'UKLJUČEN' : 'ISKLJUČEN'}. GEO (Generative Engine Optimization): ${geoEnabled ? 'UKLJUČEN' : 'ISKLJUČEN'}.
+Geografski/local SEO kontekst: "${geoRegion || 'samo ako je relevantno'}".
 
 STRIKTNA PRAVILA ZA STIL PISANJA (ANTI-AI DETECTOR / STOPROCENTNO LJUDSKI TON):
 1. Nikada, ni pod kojim uslovima nemoj koristiti generičke AI kliše fraze poput:
@@ -709,7 +722,7 @@ VRATI REZULTAT ISKLJUČIVO U ČISTOM JSON FORMATU (bez markdown backtick oznaka 
  * Gemini poziv za CILJANE LANDING STRANICE (Kompletan Page Builder sa AEO/GEO/SEO)
  */
 async function generateLandingWithGemini(params: LandingPageGeneratorParams): Promise<GeneratedLandingPageResult | null> {
-  const { topic, keyword, targetAudience, geoRegion, productCategory, geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
+  const { topic, keyword, targetAudience, writingStyle, wordCount, seoEnabled = true, aeoEnabled = true, geoEnabled = true, geoRegion, productCategory, geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
   if (!geminiApiKey) return null;
 
   const prompt = `
@@ -717,7 +730,10 @@ Ti si vodeći stručnjak za SEO/AEO/GEO optimizaciju i stari majstor etno radion
 Tvoj zadatak je da kreiraš KOMPLETNU, BOGATU CILJANU LANDING STRANICU (SEO Landing Page) za temu: "${topic}".
 Fokusna ključna reč: "${keyword || topic}".
 Ciljana publika: "${targetAudience || 'Ljubitelji tradicije, folklor i dijaspora'}".
-Geografska regija: "${geoRegion || 'Srbija, Homolje, Pešter, Zlatibor, dijaspora'}".
+Stil pisanja: "${writingStyle || 'artisan'}".
+Ciljna dužina: ${wordCount ? `${wordCount} reči (±10%)` : 'nije posebno zadato'}.
+SEO: ${seoEnabled ? 'UKLJUČEN' : 'ISKLJUČEN'}. AEO: ${aeoEnabled ? 'UKLJUČEN' : 'ISKLJUČEN'}. GEO = Generative Engine Optimization: ${geoEnabled ? 'UKLJUČEN' : 'ISKLJUČEN'}.
+Geografski/local SEO kontekst: "${geoRegion || 'samo ako je relevantno'}".
 
 STRIKTNI ZAHTEVI (ANTI-AI DETECTOR / 100% LJUDSKI TON):
 1. Izbegavaj sve veštačke klišee. Piši autentično sa mirisom vune, kože, drveta i tradicije.
