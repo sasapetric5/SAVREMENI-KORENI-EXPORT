@@ -146,6 +146,7 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedBlogResult, setGeneratedBlogResult] = useState<GeneratedBlogPostResult | null>(null);
   const [generatedLandingResult, setGeneratedLandingResult] = useState<GeneratedLandingPageResult | null>(null);
+  const [blogValidation, setBlogValidation] = useState<ReturnType<typeof validateGeneratedBlogResult> | null>(null);
 
   if (!isOpen) return null;
 
@@ -192,6 +193,7 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
     setIsGenerating(true);
     if (activeMode === 'blog') {
       setGeneratedBlogResult(null);
+      setBlogValidation(null);
       try {
         const params: BlogGeneratorParams = {
           topic: topic.trim(),
@@ -220,6 +222,7 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
           sourceFacts: params.sourceFacts,
           forbidUnverifiedClaims: true
         });
+        setBlogValidation(validation);
         showToast(
           validation.ok
             ? `✨ Super Cool tekst je generisan i prošao validaciju: ${validation.score}/100 — SR+EN, People-first, SEO/AEO/GEO.`
@@ -262,6 +265,10 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
 
   const handleApplyBlog = () => {
     if (!generatedBlogResult || !onApplyArticle) return;
+    if (blogValidation && !blogValidation.ok) {
+      showToast('⚠️ Uvoz je blokiran: Content Quality Check nije prošao. Doradite tekst pa pokušajte ponovo.');
+      return;
+    }
     onApplyArticle(generatedBlogResult);
     onClose();
   };
@@ -719,6 +726,28 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
                   </button>
                 </div>
               </div>
+
+              {/* CONTENT QUALITY CHECK */}
+              {blogValidation && (
+                <div className={`p-4 rounded-2xl border ${blogValidation.ok ? 'bg-emerald-950/30 border-emerald-500/40' : 'bg-red-950/20 border-red-500/40'}`}>
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    <div className="flex items-center gap-2">
+                      {blogValidation.ok ? <CheckCircle2 className="w-5 h-5 text-emerald-400" /> : <AlertCircle className="w-5 h-5 text-red-400" />}
+                      <span className="text-sm font-bold text-stone-100">CONTENT QUALITY CHECK</span>
+                    </div>
+                    <span className={`text-lg font-bold ${blogValidation.ok ? 'text-emerald-300' : 'text-red-300'}`}>{blogValidation.score}/100</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {blogValidation.items.map(item => (
+                      <div key={item.key} className="flex items-start gap-2 p-2.5 bg-black/25 rounded-lg border border-white/5">
+                        {item.ok ? <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" /> : <AlertCircle className="w-4 h-4 text-red-400 mt-0.5 shrink-0" />}
+                        <div className="min-w-0"><div className="text-xs font-semibold text-stone-200">{item.label}</div><div className="text-[11px] text-stone-400 break-words">{item.detail}</div></div>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-3 text-[11px] text-stone-400">Uvoz u formu je dozvoljen samo kada sve obavezne kontrole prođu.</p>
+                </div>
+              )}
 
               {/* Meta & Slug kartica */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
