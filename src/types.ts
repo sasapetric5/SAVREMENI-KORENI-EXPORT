@@ -54,6 +54,8 @@ export interface Product {
   dimensions?: string;
   image: string;
   images?: string[];
+  /** Per-image ALT metadata aligned 1:1 with images[]: MAIN, CLOSE-UP, INTERIOR, MODEL. */
+  imageAlts?: Array<{ alt: string; altEn?: string }>;
   alt?: string;
   altEn?: string;
   inStock: boolean;
