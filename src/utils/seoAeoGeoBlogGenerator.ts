@@ -187,11 +187,11 @@ export function buildProductSourceFacts(product: import('../types').Product): Co
   const imagePaths = [product.image, ...(product.images || [])].filter(Boolean);
   const imageRoles = ['MAIN', 'CLOSE-UP', 'INTERIOR', 'MODEL'];
   const facts: ContentSourceFact[] = [
-    { label: 'Product ID', value: product.id, source: 'product', required: true },
+    { label: 'Product ID', value: product.id, source: 'product', required: false },
     { label: 'Naziv proizvoda (SR)', value: product.name, source: 'product', required: true },
     { label: 'Product name (EN)', value: product.nameEn || product.name, source: 'product', required: false },
-    { label: 'Kategorija', value: product.category, source: 'product', required: true },
-    { label: 'Cena RSD', value: String(product.priceRsd), source: 'product', required: true },
+    { label: 'Kategorija', value: product.category, source: 'product', required: false },
+    { label: 'Cena RSD', value: String(product.priceRsd), source: 'product', required: false },
     { label: 'Cena EUR', value: product.priceEur != null ? String(product.priceEur) : '', source: 'product', required: false },
     { label: 'Opis SR', value: product.descriptionSr || product.description || '', source: 'product', required: false },
     { label: 'Opis EN', value: product.descriptionEn || '', source: 'product', required: false },
