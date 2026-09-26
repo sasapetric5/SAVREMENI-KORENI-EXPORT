@@ -46,7 +46,25 @@ export function AdminProductImageManagerPage() {
 
   const media = useMemo(() => {
     const q = mediaQuery.trim().toLocaleLowerCase('sr-Latn');
-    return (permanentGalleryPhotosData as any[]).filter(m =>
+    const byPath = new Map<string, any>();
+    (permanentGalleryPhotosData as any[]).forEach(m => byPath.set(String(m.imageUrl), m));
+    // Include every image referenced by the canonical 47 products, even when
+    // the legacy gallery index omitted that file.
+    (permanentProductsData as any[]).forEach(p => {
+      const paths = [p.image, ...(Array.isArray(p.images) ? p.images : [])].filter(Boolean).map(String);
+      paths.forEach(path => {
+        if (!byPath.has(path)) {
+          byPath.set(path, {
+            id: 'repo:' + path,
+            title: p.name + ' — proizvodna fotografija',
+            titleEn: p.nameEn || p.name,
+            category: p.category || 'Proizvodi',
+            imageUrl: path,
+          });
+        }
+      });
+    });
+    return Array.from(byPath.values()).filter(m =>
       !q || [m.id, m.title, m.titleEn, m.category, m.imageUrl].join(' ').toLocaleLowerCase('sr-Latn').includes(q)
     );
   }, [mediaQuery]);
