@@ -12,7 +12,10 @@ const slotPaths = (p: any): Record<Slot, string> => ({
   G2: p.images?.[0] || '',
 });
 
+import { AdminMediaLibraryPage } from './AdminMediaLibraryPage';
+
 export function AdminV2Page() {
+  if (window.location.pathname === '/admin-v2/media') return <AdminMediaLibraryPage />;
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<string | null>(null);
   const [mediaQuery, setMediaQuery] = useState('');
