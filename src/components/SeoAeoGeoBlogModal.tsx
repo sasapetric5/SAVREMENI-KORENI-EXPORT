@@ -31,8 +31,11 @@ import {
   GeneratedBlogPostResult, 
   GeneratedLandingPageResult,
   BlogGeneratorParams,
-  LandingPageGeneratorParams
+  LandingPageGeneratorParams,
+  buildProductSourceFacts,
+  validateGeneratedBlogResult
 } from '../utils/seoAeoGeoBlogGenerator';
+import { permanentProductsData } from '../data/permanentProductsData';
 
 interface SeoAeoGeoBlogModalProps {
   isOpen: boolean;
@@ -109,6 +112,13 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
   // General Inputs
   const [topic, setTopic] = useState('');
   const [keyword, setKeyword] = useState('');
+  const [selectedProductId, setSelectedProductId] = useState('');
+  const selectedProduct = permanentProductsData.find(p => p.id === selectedProductId);
+  const [writingStyle, setWritingStyle] = useState<'artisan' | 'premium' | 'editorial' | 'informational' | 'educational' | 'storytelling' | 'sales' | 'traditional'>('artisan');
+  const [wordCount, setWordCount] = useState<300 | 500 | 750 | 1000 | 1500 | 2000 | 2500 | 3000 | 3500 | 4000>(1000);
+  const [seoEnabled, setSeoEnabled] = useState(true);
+  const [aeoEnabled, setAeoEnabled] = useState(true);
+  const [geoEnabled, setGeoEnabled] = useState(true);
   const [geoRegion, setGeoRegion] = useState<'all' | 'homolje' | 'zlatibor' | 'pirot' | 'pester' | 'sumadija'>('all');
 
   // Blog-specific
@@ -136,6 +146,7 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedBlogResult, setGeneratedBlogResult] = useState<GeneratedBlogPostResult | null>(null);
   const [generatedLandingResult, setGeneratedLandingResult] = useState<GeneratedLandingPageResult | null>(null);
+  const [blogValidation, setBlogValidation] = useState<ReturnType<typeof validateGeneratedBlogResult> | null>(null);
 
   if (!isOpen) return null;
 
@@ -182,18 +193,41 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
     setIsGenerating(true);
     if (activeMode === 'blog') {
       setGeneratedBlogResult(null);
+      setBlogValidation(null);
       try {
         const params: BlogGeneratorParams = {
           topic: topic.trim(),
           keyword: keyword.trim() || undefined,
           tone,
+          writingStyle,
+          wordCount,
+          seoEnabled,
+          aeoEnabled,
+          geoEnabled,
           geoRegion,
           geminiApiKey: useGemini ? geminiApiKey.trim() : undefined,
-          geminiModel
+          geminiModel,
+          productId: selectedProduct?.id,
+          sourceFacts: selectedProduct ? buildProductSourceFacts(selectedProduct) : undefined,
+          forbidUnverifiedClaims: true
         };
         const res = await generateSeoAeoGeoArticle(params);
         setGeneratedBlogResult(res);
-        showToast("✨ SEO Blog članak je uspešno generisan sa 100% ljudskim zanatskim tonom!");
+        const validation = validateGeneratedBlogResult(res, {
+          keyword: params.keyword,
+          wordCount: params.wordCount,
+          seoEnabled: params.seoEnabled,
+          aeoEnabled: params.aeoEnabled,
+          geoEnabled: params.geoEnabled,
+          sourceFacts: params.sourceFacts,
+          forbidUnverifiedClaims: true
+        });
+        setBlogValidation(validation);
+        showToast(
+          validation.ok
+            ? `✨ Super Cool tekst je generisan i prošao validaciju: ${validation.score}/100 — SR+EN, People-first, SEO/AEO/GEO.`
+            : `⚠️ Tekst je generisan, ali validacija traži doradu: ${validation.score}/100. Pregledajte rezultat pre uvoza.`
+        );
       } catch (err: any) {
         console.error("Greška pri generisanju:", err);
         showToast("Došlo je do greške pri generisanju bloga.");
@@ -207,6 +241,11 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
           topic: topic.trim(),
           keyword: keyword.trim() || undefined,
           targetAudience,
+          writingStyle,
+          wordCount,
+          seoEnabled,
+          aeoEnabled,
+          geoEnabled,
           geoRegion,
           productCategory,
           geminiApiKey: useGemini ? geminiApiKey.trim() : undefined,
@@ -226,6 +265,10 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
 
   const handleApplyBlog = () => {
     if (!generatedBlogResult || !onApplyArticle) return;
+    if (blogValidation && !blogValidation.ok) {
+      showToast('⚠️ Uvoz je blokiran: Content Quality Check nije prošao. Doradite tekst pa pokušajte ponovo.');
+      return;
+    }
     onApplyArticle(generatedBlogResult);
     onClose();
   };
@@ -253,18 +296,18 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
             <div>
               <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-base sm:text-lg font-serif text-[#E8D0A9]">
-                  SEO + AEO + GEO Maker (Ljudski Stil)
+                  SUPER COOL TEXT GENERATOR
                 </h2>
                 <span className="bg-emerald-500/20 text-emerald-300 text-[10px] px-2 py-0.5 rounded border border-emerald-500/30 flex items-center gap-1 font-medium">
                   <UserCheck className="w-3 h-3" />
-                  Anti-AI Detector
+                  People-first / editorial
                 </span>
                 <span className="bg-amber-500/20 text-amber-300 text-[10px] px-2 py-0.5 rounded border border-amber-500/30 flex items-center gap-1 font-mono">
                   {geminiModel}
                 </span>
               </div>
               <p className="text-xs text-stone-400">
-                Tekstovi sa dušom majstora, AEO direktnim odgovorima za Google AI i Perplexity, i ciljanim GEO toponimima.
+                Prirodan, koristan i originalan sadržaj do 4.000 reči — SR + EN, uz SEO, AEO i Generative Engine Optimization kontrole.
               </p>
             </div>
           </div>
@@ -292,7 +335,7 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
             }`}
           >
             <FileText className="w-4 h-4 text-[#C2872A]" />
-            <span>📝 SEO Blog Članak</span>
+            <span>📝 Super Cool tekst generator</span>
           </button>
 
           <button
@@ -316,6 +359,36 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
         {/* Scrollable Body */}
         <div className="p-6 overflow-y-auto space-y-6 text-xs sm:text-sm text-stone-300">
 
+          {/* CONTENT OPTIMIZATION CONTROLS */}
+          <div className="p-4 bg-[#15100D] border border-[#C2872A]/30 rounded-2xl space-y-4">
+            <div className="flex items-center gap-2">
+              <Sliders className="w-4 h-4 text-[#C2872A]" />
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[#E8D0A9]">Kontrole sadržaja</div>
+                <div className="text-[10px] text-stone-500">Ove vrednosti se stvarno prosleđuju generatoru.</div>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[11px] uppercase tracking-wider text-stone-400 mb-1">Stil pisanja</label>
+                <select value={writingStyle} onChange={e => setWritingStyle(e.target.value as typeof writingStyle)} className="w-full bg-[#120E0C] border border-stone-700 rounded-xl px-3 py-2 text-xs text-white">
+                  <option value="artisan">Zanatski / prirodan</option><option value="premium">Premium</option><option value="editorial">Editorial</option><option value="informational">Informativni</option><option value="educational">Edukativni</option><option value="storytelling">Storytelling</option><option value="sales">Prodajni</option><option value="traditional">Tradicionalni / etno</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-[11px] uppercase tracking-wider text-stone-400 mb-1">Ciljna dužina</label>
+                <select value={wordCount} onChange={e => setWordCount(Number(e.target.value) as typeof wordCount)} className="w-full bg-[#120E0C] border border-stone-700 rounded-xl px-3 py-2 text-xs text-white">
+                  {[300,500,750,1000,1500,2000,2500,3000,3500,4000].map(n => <option key={n} value={n}>{n} reči (±10%)</option>)}
+                </select>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <label className="p-3 rounded-xl border border-white/10 bg-black/20 cursor-pointer"><div className="flex justify-between items-center"><span className="font-bold text-xs">SEO</span><input type="checkbox" checked={seoEnabled} onChange={e => setSeoEnabled(e.target.checked)} /></div><div className="text-[10px] text-stone-500 mt-1">Klasična pretraga</div></label>
+              <label className="p-3 rounded-xl border border-white/10 bg-black/20 cursor-pointer"><div className="flex justify-between items-center"><span className="font-bold text-xs">AEO</span><input type="checkbox" checked={aeoEnabled} onChange={e => setAeoEnabled(e.target.checked)} /></div><div className="text-[10px] text-stone-500 mt-1">Direktni odgovori i FAQ</div></label>
+              <label className="p-3 rounded-xl border border-white/10 bg-black/20 cursor-pointer"><div className="flex justify-between items-center"><span className="font-bold text-xs">GEO</span><input type="checkbox" checked={geoEnabled} onChange={e => setGeoEnabled(e.target.checked)} /></div><div className="text-[10px] text-stone-500 mt-1">Generative Engine Optimization</div></label>
+            </div>
+          </div>
+
           {/* GEMINI API KEY & MODEL SETTINGS (Za kompleksnije zadatke) */}
           <div className="p-4 bg-gradient-to-r from-[#241D19] to-[#1a1411] border border-[#C2872A]/30 rounded-2xl space-y-3 shadow-inner">
             <div className="flex items-center justify-between flex-wrap gap-2">
@@ -333,7 +406,7 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
                     </span>
                   </div>
                   <p className="text-[11px] text-stone-400">
-                    {useGemini ? 'Aktiviran je Google Gemini režim uz Anti-AI filtere.' : 'Koristi se ugrađeni klijentski zanatski rečnik.'}
+                    {useGemini ? 'Aktiviran je Google Gemini režim uz people-first pravila.' : 'Koristi se ugrađeni klijentski zanatski rečnik.'}
                   </p>
                 </div>
               </div>
@@ -653,6 +726,28 @@ export const SeoAeoGeoBlogModal: React.FC<SeoAeoGeoBlogModalProps> = ({
                   </button>
                 </div>
               </div>
+
+              {/* CONTENT QUALITY CHECK */}
+              {blogValidation && (
+                <div className={`p-4 rounded-2xl border ${blogValidation.ok ? 'bg-emerald-950/30 border-emerald-500/40' : 'bg-red-950/20 border-red-500/40'}`}>
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    <div className="flex items-center gap-2">
+                      {blogValidation.ok ? <CheckCircle2 className="w-5 h-5 text-emerald-400" /> : <AlertCircle className="w-5 h-5 text-red-400" />}
+                      <span className="text-sm font-bold text-stone-100">CONTENT QUALITY CHECK</span>
+                    </div>
+                    <span className={`text-lg font-bold ${blogValidation.ok ? 'text-emerald-300' : 'text-red-300'}`}>{blogValidation.score}/100</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {blogValidation.items.map(item => (
+                      <div key={item.key} className="flex items-start gap-2 p-2.5 bg-black/25 rounded-lg border border-white/5">
+                        {item.ok ? <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" /> : <AlertCircle className="w-4 h-4 text-red-400 mt-0.5 shrink-0" />}
+                        <div className="min-w-0"><div className="text-xs font-semibold text-stone-200">{item.label}</div><div className="text-[11px] text-stone-400 break-words">{item.detail}</div></div>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-3 text-[11px] text-stone-400">Uvoz u formu je dozvoljen samo kada sve obavezne kontrole prođu.</p>
+                </div>
+              )}
 
               {/* Meta & Slug kartica */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

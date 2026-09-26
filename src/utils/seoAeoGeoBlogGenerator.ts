@@ -37,15 +37,29 @@ export interface BlogGeneratorParams {
   topic: string;
   keyword?: string;
   tone?: 'artisan' | 'history' | 'buyers_guide' | 'heritage_diaspora';
+  writingStyle?: 'artisan' | 'premium' | 'editorial' | 'informational' | 'educational' | 'storytelling' | 'sales' | 'traditional';
+  wordCount?: 300 | 500 | 750 | 1000 | 1500 | 2000 | 2500 | 3000 | 3500 | 4000;
+  seoEnabled?: boolean;
+  aeoEnabled?: boolean;
+  geoEnabled?: boolean;
   geoRegion?: 'all' | 'homolje' | 'zlatibor' | 'pirot' | 'pester' | 'sumadija';
   geminiApiKey?: string;
   geminiModel?: 'gemini-2.5-flash' | 'gemini-2.5-pro';
+  /** Optional real product from permanentProductsData used as verified content source. */
+  productId?: string;
+  sourceFacts?: ContentSourceFact[];
+  forbidUnverifiedClaims?: boolean;
 }
 
 export interface LandingPageGeneratorParams {
   topic: string;
   keyword?: string;
   targetAudience?: 'general' | 'folklore' | 'diaspora' | 'slava_gifts' | 'collectors';
+  writingStyle?: 'artisan' | 'premium' | 'editorial' | 'informational' | 'educational' | 'storytelling' | 'sales' | 'traditional';
+  wordCount?: 500 | 750 | 1000 | 1500 | 2000 | 2500 | 3000 | 3500 | 4000;
+  seoEnabled?: boolean;
+  aeoEnabled?: boolean;
+  geoEnabled?: boolean;
   geoRegion?: 'all' | 'homolje' | 'zlatibor' | 'pirot' | 'pester' | 'sumadija';
   productCategory?: 'subare' | 'nosnje' | 'carape' | 'pokloni' | 'torbice' | 'nakit' | 'kosulje' | 'dom-pokloni';
   geminiApiKey?: string;
@@ -97,6 +111,160 @@ export function cleanSlug(text: string): string {
     .replace(/[^a-z0-9\s-]/g, '')
     .trim()
     .replace(/\s+/g, '-');
+}
+
+/** People-first / Human Editorial kontrola. Ne procenjuje da li je tekst AI; proverava merljive osobine teksta. */
+export interface HumanEditorialCheck { key: string; label: string; ok: boolean; detail: string; }
+
+export function validatePeopleFirstText(text: string): HumanEditorialCheck[] {
+  const source = (text || '').replace(/[#*_>`]/g, ' ').replace(/\s+/g, ' ').trim();
+  const lower = source.toLocaleLowerCase('sr-Latn');
+  const checks: HumanEditorialCheck[] = [];
+  const banned = ['u današnjem modernom svetu','u savremenom dobu','kao što svi znamo','u ovom članku ćemo','bez daljeg odlaganja','fascinantno putovanje','možemo zaključiti','igra ključnu ulogu'];
+  const found = banned.filter(p => lower.includes(p));
+  checks.push({ key:'cliches', label:'Bez generičkih AI klišea', ok:found.length===0, detail:found.length ? 'Pronađeno: '+found.join(', ') : 'Nema poznatih klišea' });
+  const sentences = source.split(/[.!?]+/).map(s=>s.trim()).filter(Boolean);
+  const words = source.split(/\s+/).filter(Boolean);
+  const uniqueRatio = words.length ? new Set(words.map(w=>w.toLocaleLowerCase('sr-Latn'))).size / words.length : 0;
+  checks.push({ key:'variation', label:'Jezička raznovrsnost', ok:words.length<80 || uniqueRatio>=0.35, detail:'Odnos jedinstvenih reči: '+Math.round(uniqueRatio*100)+'%' });
+  const repeatedSentence = sentences.length>8 && new Set(sentences.map(s=>s.toLocaleLowerCase('sr-Latn'))).size < sentences.length*0.9;
+  checks.push({ key:'repetition', label:'Bez ponavljanja rečenica', ok:!repeatedSentence, detail:repeatedSentence ? 'Pronađena su ponavljanja' : 'Nema značajnih ponavljanja' });
+  checks.push({ key:'substance', label:'Dovoljno konkretan sadržaj', ok:words.length>=120, detail:words.length>=120 ? 'Tekst ima dovoljno prostora za konkretne informacije' : 'Tekst je prekratak za pouzdanu procenu' });
+  return checks;
+}
+
+export interface ContentSourceFact {
+  label: string;
+  value: string;
+  source: 'product' | 'site' | 'user' | 'verified';
+  required?: boolean;
+}
+
+export interface SuperCoolGeneratorOptions {
+  sourceFacts?: ContentSourceFact[];
+  forbidUnverifiedClaims?: boolean;
+  requireEditorialReview?: boolean;
+}
+
+export function buildPeopleFirstBrief(
+  topic: string,
+  keyword?: string,
+  sourceFacts: ContentSourceFact[] = []
+): string {
+  const verified = sourceFacts
+    .filter(f => f.value.trim())
+    .map(f => `- ${f.label}: ${f.value} [${f.source}]`)
+    .join('\n');
+  return [
+    'CONTENT BRIEF — PEOPLE-FIRST / SUPER COOL',
+    `Tema: ${topic}`,
+    `Primarna ključna reč: ${keyword || 'nije zadato'}`,
+    verified ? 'Proverene činjenice koje smeš koristiti:\n' + verified : 'Nema dodatih proverених činjenica.',
+    'Pravilo: ne izmišljaj poreklo, materijale, mere, postupke, iskustva kupaca, rokove, sertifikate ili druge činjenice koje nisu potvrđene.',
+    'Tekst treba da bude koristan čoveku i razumljiv pretraživačima i generativnim sistemima; SEO/AEO/GEO služe sadržaju, ne obrnuto.'
+  ].join('\n');
+}
+
+export function validateSourceFacts(
+  text: string,
+  sourceFacts: ContentSourceFact[] = [],
+  forbidUnverifiedClaims = true
+): ContentValidationItem {
+  if (!forbidUnverifiedClaims || sourceFacts.length === 0) {
+    return { key: 'facts', label: 'Činjenična osnova', ok: true, detail: sourceFacts.length ? `${sourceFacts.length} činjenica prosleđeno generatoru` : 'Nema obaveznih činjenica za proveru' };
+  }
+  const body = text.toLocaleLowerCase('sr-Latn');
+  const missing = sourceFacts.filter(f => f.required && f.value.trim() && !body.includes(f.value.toLocaleLowerCase('sr-Latn')));
+  return {
+    key: 'facts',
+    label: 'Činjenična osnova',
+    ok: missing.length === 0,
+    detail: missing.length ? 'Obavezne činjenice nisu pronađene u tekstu: ' + missing.map(f => f.label).join(', ') : 'Obavezne prosleđene činjenice su zastupljene'
+  };
+}
+
+export function buildProductSourceFacts(product: import('../types').Product): ContentSourceFact[] {
+  const imagePaths = [product.image, ...(product.images || [])].filter(Boolean);
+  const imageRoles = ['MAIN', 'CLOSE-UP', 'INTERIOR', 'MODEL'];
+  const facts: ContentSourceFact[] = [
+    { label: 'Product ID', value: product.id, source: 'product', required: false },
+    { label: 'Naziv proizvoda (SR)', value: product.name, source: 'product', required: true },
+    { label: 'Product name (EN)', value: product.nameEn || product.name, source: 'product', required: false },
+    { label: 'Kategorija', value: product.category, source: 'product', required: false },
+    { label: 'Cena RSD', value: String(product.priceRsd), source: 'product', required: false },
+    { label: 'Cena EUR', value: product.priceEur != null ? String(product.priceEur) : '', source: 'product', required: false },
+    { label: 'Opis SR', value: product.descriptionSr || product.description || '', source: 'product', required: false },
+    { label: 'Opis EN', value: product.descriptionEn || '', source: 'product', required: false },
+    { label: 'Materijali SR', value: (product.materials || []).join(', '), source: 'product', required: false },
+    { label: 'Materijali EN', value: (product.materialsEn || []).join(', '), source: 'product', required: false },
+    { label: 'Tehnike SR', value: (product.craftTechniques || []).join(', '), source: 'product', required: false },
+    { label: 'Tehnike EN', value: (product.craftTechniquesEn || []).join(', '), source: 'product', required: false },
+    { label: 'ALT SR', value: product.alt || '', source: 'product', required: false },
+    { label: 'ALT EN', value: product.altEn || '', source: 'product', required: false },
+  ];
+  imagePaths.forEach((path, index) => {
+    facts.push({
+      label: `Slika ${index + 1} — ${imageRoles[index] || 'GALLERY'}`,
+      value: path,
+      source: 'product',
+      required: false
+    });
+  });
+  return facts.filter(f => f.value.trim());
+}
+
+export interface ContentValidationItem { key: string; label: string; ok: boolean; detail: string; }
+export interface ContentValidationResult { ok: boolean; score: number; items: ContentValidationItem[]; }
+
+function countWords(text: string): number {
+  return text.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
+}
+
+/** Deterministička validacija rezultata pre prihvatanja u Admin 2.0. */
+export function validateGeneratedBlogResult(
+  result: GeneratedBlogPostResult,
+  options: Pick<BlogGeneratorParams, 'keyword' | 'wordCount' | 'seoEnabled' | 'aeoEnabled' | 'geoEnabled'> & {
+    sourceFacts?: ContentSourceFact[];
+    forbidUnverifiedClaims?: boolean;
+  }
+): ContentValidationResult {
+  const bodySr = result.contentSr || '';
+  const bodyEn = result.contentEn || '';
+  const wordsSr = countWords(bodySr);
+  const wordsEn = countWords(bodyEn);
+  const target = options.wordCount || 1000;
+  const tolerance = target * 0.10;
+  const keyword = (options.keyword || '').trim().toLocaleLowerCase('sr-Latn');
+  const haystack = (result.titleSr + ' ' + result.excerptSr + ' ' + bodySr).toLocaleLowerCase('sr-Latn');
+  const items: ContentValidationItem[] = [];
+  const add = (key: string, label: string, ok: boolean, detail: string) => items.push({ key, label, ok, detail });
+
+  add('title', 'Naslov SR', Boolean(result.titleSr?.trim()), result.titleSr ? 'Prisutan' : 'Nedostaje');
+  add('slug', 'Slug', Boolean(result.slug?.trim()) && !/\s/.test(result.slug), result.slug || 'Nedostaje ili sadrži razmake');
+  add('length-sr', 'Dužina SR sadržaja', wordsSr >= target - tolerance && wordsSr <= target + tolerance, `${wordsSr} reči / cilj ${target} ±10%`);
+  add('length-en', 'Dužina EN sadržaja', wordsEn >= target - tolerance && wordsEn <= target + tolerance, `${wordsEn} words / target ${target} ±10%`);
+  add('keyword', 'Primarna ključna reč', !keyword || haystack.includes(keyword), keyword ? (haystack.includes(keyword) ? 'Pronađena u SR sadržaju' : 'Nije pronađena') : 'Nije zadato');
+  add('excerpt', 'Excerpt SR', Boolean(result.excerptSr?.trim()), result.excerptSr ? 'Prisutan' : 'Nedostaje');
+
+  if (options.seoEnabled !== false) {
+    add('meta-title', 'SEO Meta title', Boolean(result.metaTitle?.trim()) && result.metaTitle.length <= 65, `${result.metaTitle?.length || 0}/65 karaktera`);
+    add('meta-description', 'SEO Meta description', Boolean(result.metaDescription?.trim()) && result.metaDescription.length <= 170, `${result.metaDescription?.length || 0}/170 karaktera`);
+  }
+  if (options.aeoEnabled !== false) {
+    add('aeo-answer', 'AEO direktan odgovor', Boolean(result.aeoDirectAnswer?.trim()), result.aeoDirectAnswer ? 'Prisutan' : 'Nedostaje');
+    add('faq', 'AEO FAQ', Array.isArray(result.faqList) && result.faqList.length > 0, `${Array.isArray(result.faqList) ? result.faqList.length : 0} pitanja`);
+  }
+  if (options.geoEnabled !== false) add('geo', 'GEO podaci', Array.isArray(result.targetKeywords) && result.targetKeywords.length > 0, `${result.targetKeywords?.length || 0} ciljanih pojmova`);
+
+  if (options.sourceFacts?.length) {
+    add('facts-sr', 'Proverene činjenice SR', validateSourceFacts(bodySr, options.sourceFacts, options.forbidUnverifiedClaims !== false).ok,
+      'Generator je dobio proverene podatke iz izvora proizvoda');
+    add('people-first', 'People-first kontrola SR', validatePeopleFirstText(bodySr).every(check => check.ok),
+      validatePeopleFirstText(bodySr).filter(check => !check.ok).map(check => check.label).join(', ') || 'Kontrole prošle');
+  }
+
+  const passed = items.filter(i => i.ok).length;
+  return { ok: items.length > 0 && passed === items.length, score: Math.round((passed / Math.max(items.length, 1)) * 100), items };
 }
 
 // -------------------------------------------------------------------
@@ -428,6 +596,7 @@ const PRESET_LANDING_TEMPLATES: Record<string, SeoLandingPageData> = {
 // -------------------------------------------------------------------
 export async function generateSeoAeoGeoArticle(params: BlogGeneratorParams): Promise<GeneratedBlogPostResult> {
   const { topic, keyword, tone = 'artisan', geoRegion = 'all', geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
+  const sourceFacts = params.sourceFacts || [];
 
   // 1. Ako postoji uneti Gemini API ključ, pozivamo Gemini sa Anti-AI instrukcijama
   if (geminiApiKey && geminiApiKey.trim().length > 10) {
@@ -444,7 +613,7 @@ export async function generateSeoAeoGeoArticle(params: BlogGeneratorParams): Pro
     const serverResp = await fetch('/api/generate-blog', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ topic, keyword, tone, geoRegion, geminiModel })
+      body: JSON.stringify({ topic, keyword, tone, geoRegion, geminiModel, sourceFacts, forbidUnverifiedClaims: params.forbidUnverifiedClaims !== false })
     });
     if (serverResp.ok) {
       const data = await serverResp.json();
@@ -619,29 +788,34 @@ ${tmpl.en.faq.map(f => `**Question: ${f.q}**
  * Gemini poziv za Blog Članke sa Anti-AI detector instrukcijama
  */
 async function generateBlogWithGemini(params: BlogGeneratorParams): Promise<GeneratedBlogPostResult | null> {
-  const { topic, keyword, tone, geoRegion, geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
+  const { topic, keyword, tone, writingStyle = 'artisan', wordCount = 1000, seoEnabled = true, aeoEnabled = true, geoEnabled = true, geoRegion, geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
+  const sourceBrief = buildPeopleFirstBrief(topic, keyword, params.sourceFacts || []);
   if (!geminiApiKey) return null;
-
   const prompt = `
+SOURCE OF TRUTH — PROVERENI PODACI:\n${sourceBrief}
+
 Ti si stari, iskusni srpski majstor-zanatlija i osnivač etno radionice "Savremeni Koreni" (Srbija).
 Tvoj zadatak je da napišeš VRHUNSKI SEO, AEO i GEO blog članak na temu: "${topic}".
 Fokusna ključna reč: "${keyword || topic}".
 Ciljani geografski region: "${geoRegion || 'Srbija i dijaspora'}".
 
-STRIKTNA PRAVILA ZA STIL PISANJA (ANTI-AI DETECTOR / STOPROCENTNO LJUDSKI TON):
-1. Nikada, ni pod kojim uslovima nemoj koristiti generičke AI kliše fraze poput:
+PROVERENI IZVORNI PODACI — SMEŠ KORISTITI SAMO OVO KAO ČINJENIČNU OSNOVU:
+${sourceBrief}
+
+STRIKTNA PRAVILA ZA PEOPLE-FIRST / HUMAN-CRAFTED STIL (NE POKUŠAVAJ DA ZAOBIĐEŠ AI DETEKTORE):
+1. Ne koristi generičke uvodne i zaključne klišee. Tekst mora zvučati kao originalan urednički rad, a ne kao šablon. Ne pokušavaj da "prevariš" AI detektore; cilj je prirodan, koristan i proverljiv tekst.\n   Izbegavaj fraze poput:
    - "U današnjem modernom svetu...", "U savremenom dobu...", "Kao što svi znamo..."
    - "Zaključak je...", "Možemo zaključiti...", "U ovom članku ćemo istražiti..."
    - "Fascinantno putovanje...", "Predstavlja svedočanstvo...", "Igra ključnu ulogu..."
    - "Uronimo u...", "Bez daljeg odlaganja..."
 2. Koristi izuzetno živopisan, opipljiv zanatski jezik:
    - Miris vune i kože, zatezanje potke na razboju, voskirani laneni konac, autohtona ovca pramenka, oputa, srma, Pešterska visoravan, Homolje, Pirot, Zlatibor.
-3. Burstiness i perplexity: Kombinuj kratke, autoritativne rečenice sa dužim, opisnim mislima. Piši prirodno, kao čovek koji decenijama lično šije, kroji i razgovara sa kupcima u radionici.
-4. AEO (Answer Engine Optimization):
+3. Prirodna ritmika: Kombinuj kratke i duže rečenice, ali bez veštačkog "burstiness/perplexity" trika. Menjaj ritam samo kada to odgovara značenju. Piši jasno, toplo i konkretno.\n4. Bez izmišljanja iskustva: ne tvrdi da si lično nešto radio, video, merio ili razgovarao sa kupcem ako takva činjenica nije data u kontekstu. Koristi samo proverljive podatke iz teme, proizvoda i dostavljenih činjenica.\n5. Bez punjenja teksta: ciljaj približno ${wordCount} reči na srpskom i približno isto na engleskom, ali ne dodaj prazne pasuse samo radi dužine. Svaki pasus treba da donese novu informaciju, primer, objašnjenje ili koristan detalj.
+6. AEO (Answer Engine Optimization):
    - Na samom vrhu mora postojati jasan "AEO Direct Answer" (45-55 reči) koji daje konkretnu definiciju i činjenicu pogodnu za Google AI Overviews i Perplexity citiranje.
    - Uključi 3 do 4 FAQ pitanja sa jasnim, praktičnim odgovorima (mere, nega, održavanje).
-5. GEO (Geografska optimizacija):
-   - Citiraj mikro-lokacije (Pešter, Homolje, Pirot, Zlatibor, Šumadija, dijaspora: Beč, Minhen, Čikago, Cirih).
+7. GEO (Generative Engine Optimization):
+   - Organizuj informacije tako da ih generativni sistemi lako razumeju i citiraju: jasne tvrdnje, kratki odgovori, definicije, entiteti, odnosi između pojmova i konkretne činjenice kada su dostupne.\n   - Geografske podatke koristi samo kada su relevantni za temu; ne ubacuj lokacije nasumično radi SEO-a.
 
 VRATI REZULTAT ISKLJUČIVO U ČISTOM JSON FORMATU (bez markdown backtick oznaka oko JSON-a) sa sledećom strukturom:
 {
@@ -651,8 +825,8 @@ VRATI REZULTAT ISKLJUČIVO U ČISTOM JSON FORMATU (bez markdown backtick oznaka 
   "excerptSr": "Uvodni sažetak na srpskom (130-150 karaktera)",
   "excerptEn": "Excerpt in English",
   "aeoDirectAnswer": "Konkretan direktan odgovor na pitanje/temu od 45-55 reči",
-  "contentSr": "Kompletan tekst članka u Markdown formatu sa H2 i H3 podnaslovima, AEO odgovorom na vrhu i FAQ sekcijom",
-  "contentEn": "Full article in English with Markdown headings and FAQ",
+  "contentSr": "Kompletan tekst članka u Markdown formatu sa H2 i H3 podnaslovima, AEO odgovorom na vrhu i FAQ sekcijom. Cilj: približno ${wordCount} reči.",
+  "contentEn": "Full article in English with Markdown headings and FAQ. Target approximately ${wordCount} words.",
   "metaTitle": "SEO Meta naslov | Savremeni Koreni",
   "metaDescription": "Meta opis do 155 karaktera za Google prikaz",
   "targetKeywords": ["ključna reč 1", "ključna reč 2", "ključna reč 3"],
@@ -709,7 +883,7 @@ VRATI REZULTAT ISKLJUČIVO U ČISTOM JSON FORMATU (bez markdown backtick oznaka 
  * Gemini poziv za CILJANE LANDING STRANICE (Kompletan Page Builder sa AEO/GEO/SEO)
  */
 async function generateLandingWithGemini(params: LandingPageGeneratorParams): Promise<GeneratedLandingPageResult | null> {
-  const { topic, keyword, targetAudience, geoRegion, productCategory, geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
+  const { topic, keyword, targetAudience, writingStyle, wordCount, seoEnabled = true, aeoEnabled = true, geoEnabled = true, geoRegion, productCategory, geminiApiKey, geminiModel = 'gemini-2.5-flash' } = params;
   if (!geminiApiKey) return null;
 
   const prompt = `

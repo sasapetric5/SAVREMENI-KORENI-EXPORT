@@ -13,6 +13,7 @@ import {
 import { Product } from '../types';
 import { compressImageFile, formatBytes } from '../utils/imageCompressor';
 import { saveCustomProduct } from '../utils/customProductStorage';
+import { generateProductImageAlt, AiImageAltResult } from '../utils/imageSeo';
 
 interface ProductImageEditModalProps {
   product: Product | null;
@@ -34,6 +35,9 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
   const [compressionBadge, setCompressionBadge] = useState<string | null>(null);
   const [activeSlotIndex, setActiveSlotIndex] = useState<number | null>(null);
   const [showDescriptionPreview, setShowDescriptionPreview] = useState(false);
+  const [altResults, setAltResults] = useState<Record<number, AiImageAltResult | null>>({});
+  const [altLoading, setAltLoading] = useState<number | null>(null);
+  const [editableAlts, setEditableAlts] = useState<Record<number, { alt: string; altEn: string }>>({});
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -65,6 +69,12 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
       setSlots(initialSlots);
       setCompressionBadge(null);
       setActiveSlotIndex(null);
+      setAltResults({});
+      setAltLoading(null);
+      const existingAlts = product.imageAlts || [];
+      const restored: Record<number, { alt: string; altEn: string }> = {};
+      existingAlts.forEach((a, i) => { if (a) restored[i] = { alt: a.alt || '', altEn: a.altEn || '' }; });
+      setEditableAlts(restored);
     }
   }, [product, isOpen]);
 
@@ -144,6 +154,35 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
     showToast(`Glavna slika je uspešno zamenjena sa Slotom ${index + 1}!`);
   };
 
+  const handleGenerateAlt = async (index: number) => {
+    const imageUrl = slots[index];
+    if (!imageUrl) return;
+    setAltLoading(index);
+    try {
+      const apiKey = localStorage.getItem('koreni_gemini_api_key') || '';
+      const result = await generateProductImageAlt({
+        imageUrl,
+        productNameSr: product.name,
+        productNameEn: product.nameEn,
+        keywords: [
+          product.category,
+          ...(product.materials || []),
+          ...(product.craftTechniques || [])
+        ],
+        imageRole: index === 0 ? 'main' : index === 1 ? 'closeup' : index === 2 ? 'interior' : 'model',
+        apiKey
+      });
+      setAltResults(prev => ({ ...prev, [index]: result }));
+      setEditableAlts(prev => ({ ...prev, [index]: { alt: result.altSr, altEn: result.altEn } }));
+      showToast(result.source === 'vision' ? '✨ ALT je generisan analizom stvarne fotografije.' : 'ALT je napravljen pomoću sigurnog fallback-a.');
+    } catch (error) {
+      console.error('ALT generation error:', error);
+      showToast('Nije moguće generisati ALT tekst.');
+    } finally {
+      setAltLoading(null);
+    }
+  };
+
   const handleSaveChanges = async () => {
     const validSlots = slots.filter((s): s is string => Boolean(s));
     if (validSlots.length === 0) {
@@ -158,6 +197,8 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
       ...product,
       image: mainImage,
       images: allValidImages,
+      imageAlts: allValidImages.map((_, index) => editableAlts[index] || { alt: '', altEn: '' }),
+      ...(editableAlts[0]?.alt ? { alt: editableAlts[0].alt, altEn: editableAlts[0].altEn } : {}),
       name: product.name,
       nameEn: product.nameEn,
       description: product.description,
@@ -330,6 +371,16 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
                         </div>
 
                         {/* Hover Overlay Actions */}
+                        <button
+                          type="button"
+                          onClick={() => handleGenerateAlt(index)}
+                          disabled={altLoading === index}
+                          className="absolute bottom-2 left-2 right-2 z-10 px-2.5 py-1.5 bg-[#C2872A]/95 hover:bg-[#d49635] text-stone-950 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1.5 disabled:opacity-60 cursor-pointer shadow"
+                          title="Automatski generiši ALT analizom fotografije + nazivom + ključnim rečima"
+                        >
+                          {altLoading === index ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Languages className="w-3 h-3" />}
+                          <span>{altLoading === index ? 'Analiziram...' : '✨ Generiši ALT'}</span>
+                        </button>
                         <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2.5">
                           <button
                             type="button"
@@ -435,6 +486,33 @@ export const ProductImageEditModal: React.FC<ProductImageEditModalProps> = ({
           </div>
 
         </div>
+
+        {/* ALT editor */}
+        {Object.keys(editableAlts).length > 0 && (
+          <div className="px-5 sm:px-6 pb-4">
+            <div className="bg-[#121212] border border-[#C2872A]/30 rounded-xl p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-[#E8D0A9]">ALT tekstovi po fotografiji</span>
+                <span className="text-[10px] text-stone-500">AI predlog + ručna kontrola</span>
+              </div>
+              {Object.entries(editableAlts).map(([key, value]) => {
+                const index = Number(key);
+                return (
+                  <div key={key} className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <div>
+                      <label className="text-[10px] text-stone-500">Slot {index + 1} — SR</label>
+                      <input value={value.alt} onChange={e => setEditableAlts(prev => ({...prev, [index]: {...prev[index], alt: e.target.value}}))} className="w-full mt-1 bg-stone-900 border border-stone-700 rounded-lg px-2.5 py-2 text-xs text-white" />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-stone-500">Slot {index + 1} — EN</label>
+                      <input value={value.altEn} onChange={e => setEditableAlts(prev => ({...prev, [index]: {...prev[index], altEn: e.target.value}}))} className="w-full mt-1 bg-stone-900 border border-stone-700 rounded-lg px-2.5 py-2 text-xs text-white" />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Footer */}
         <div className="p-4 border-t border-stone-800 bg-[#241D19] flex items-center justify-between gap-3">
