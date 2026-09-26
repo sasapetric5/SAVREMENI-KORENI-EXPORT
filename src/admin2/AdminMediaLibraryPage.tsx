@@ -41,10 +41,33 @@ export function AdminMediaLibraryPage() {
     return () => window.removeEventListener('admin-media-updated', fn);
   }, []);
 
-  const rows = useMemo<Row[]>(() => [
-    ...(permanentGalleryPhotosData as any[]).map(m => ({ ...m, source: 'PERMANENT' as const, hiddenFromSite: hidden.has(String(m.id)) })),
-    ...uploaded.map(m => ({ ...m, source: 'UPLOADED' as const, hiddenFromSite: Boolean(m.hiddenFromSite) }))
-  ], [uploaded, hidden]);
+  const rows = useMemo<Row[]>(() => {
+    // Build the permanent library from BOTH the gallery index and every image
+    // referenced by the 47 canonical products. The old gallery index does not
+    // contain all product images, so the Product Image Manager must never use it
+    // as the sole source of truth.
+    const byPath = new Map<string, any>();
+    (permanentGalleryPhotosData as any[]).forEach(m => byPath.set(String(m.imageUrl), m));
+    (permanentProductsData as any[]).forEach(p => {
+      const paths = [p.image, ...(Array.isArray(p.images) ? p.images : [])].filter(Boolean).map(String);
+      paths.forEach(path => {
+        if (!byPath.has(path)) {
+          byPath.set(path, {
+            id: 'repo:' + path,
+            title: p.name + ' — proizvodna fotografija',
+            titleEn: p.nameEn || p.name,
+            category: p.category || 'Proizvodi',
+            imageUrl: path,
+            isCustomUploaded: true,
+          });
+        }
+      });
+    });
+    return [
+      ...Array.from(byPath.values()).map(m => ({ ...m, source: 'PERMANENT' as const, hiddenFromSite: hidden.has(String(m.id)) })),
+      ...uploaded.map(m => ({ ...m, source: 'UPLOADED' as const, hiddenFromSite: Boolean(m.hiddenFromSite) }))
+    ];
+  }, [uploaded, hidden]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLocaleLowerCase('sr-Latn');
