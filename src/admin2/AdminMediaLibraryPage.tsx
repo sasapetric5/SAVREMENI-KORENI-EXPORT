@@ -4,10 +4,10 @@ import { permanentProductsData } from '../data/permanentProductsData';
 
 type Filter = 'ALL' | 'PRODUCT' | 'GALLERY' | 'UNUSED';
 
-function classify(path: string, assigned: boolean) {
-  if (assigned) return 'PRODUCT';
-  if (path.includes('/custom_products/')) return 'GALLERY';
-  return 'GALLERY';
+// This page intentionally works from the permanent reference index.
+// It does NOT claim that reference records equal physical files on disk.
+function classify(_path: string, assigned: boolean) {
+  return assigned ? 'PRODUCT' : 'GALLERY';
 }
 
 export function AdminMediaLibraryPage() {
@@ -52,6 +52,11 @@ export function AdminMediaLibraryPage() {
 
   const assignedCount = (permanentGalleryPhotosData as any[]).filter(m => (usage.get(m.imageUrl) || []).length).length;
   const unusedCount = permanentGalleryPhotosData.length - assignedCount;
+  const uniquePathCount = new Set((permanentGalleryPhotosData as any[]).map(m => m.imageUrl).filter(Boolean)).size;
+  const duplicateReferenceCount = permanentGalleryPhotosData.length - uniquePathCount;
+  const assignmentCount = [...usage.values()].reduce((sum, links) => sum + links.length, 0);
+  const referencedProductPaths = new Set([...usage.keys()]);
+  const missingReferenceCount = [...referencedProductPaths].filter(path => !(permanentGalleryPhotosData as any[]).some(m => m.imageUrl === path)).length;
 
   return (
     <div className="min-h-screen bg-[#f6f1e9] text-[#241d19]">
@@ -71,10 +76,24 @@ export function AdminMediaLibraryPage() {
 
       <main className="max-w-[1600px] mx-auto p-4 md:p-8">
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-          <Stat label="UKUPNO MEDIA" value={permanentGalleryPhotosData.length} note="indeksiranih zapisa" />
-          <Stat label="POVEZANO" value={assignedCount} note="ima aktivnu vezu" />
-          <Stat label="NEPOVEZANO" value={unusedCount} note="nije dodeljeno proizvodu" />
+          <Stat label="REFERENCE ZAPISI" value={permanentGalleryPhotosData.length} note="trenutni permanent index" />
+          <Stat label="POVEZANO" value={assignedCount} note="jedinstvenih referenci sa proizvodom" />
+          <Stat label="NEPOVEZANO" value={unusedCount} note="referentnih zapisa bez product veze" />
           <Stat label="PROIZVODI" value={permanentProductsData.length} note="referentni katalog" />
+        </section>
+
+        <section className="bg-white rounded-2xl border border-[#ded3c7] shadow-sm p-4 md:p-5 mb-6">
+          <div className="text-[10px] font-bold tracking-[0.18em] text-[#9e3e26]">A / B / C / D INVENTAR — SAMO ČITANJE</div>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-3">
+            <Stat label="A • REFERENCE" value={permanentGalleryPhotosData.length} note="zapisi u indeksu" />
+            <Stat label="A • UNIQUE PATH" value={uniquePathCount} note="jedinstvenih putanja" />
+            <Stat label="B • ASSIGNMENTS" value={assignmentCount} note="47 × 4 očekivanje" />
+            <Stat label="C • DUPLIKATI" value={duplicateReferenceCount} note="duplirani reference zapisi" />
+            <Stat label="D • MISSING REF" value={missingReferenceCount} note="product putanje bez reference" />
+          </div>
+          <div className="mt-3 rounded-xl border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900">
+            <b>Važno:</b> ovde još ne tvrdimo koliko fizičkih fajlova postoji na disku/ZIP-u. To je zaseban <b>B — PHYSICAL INVENTORY</b> korak. Takođe, slotovi MAIN/G0/G1/G2 su trenutno referentno mapirani iz postojećeg product modela; njihova <b>vizuelna semantika nije potvrđena</b>.
+          </div>
         </section>
 
         <section className="bg-white rounded-2xl border border-[#ded3c7] shadow-sm p-4 md:p-5 mb-6">
