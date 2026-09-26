@@ -13,6 +13,8 @@ import {
 type Slot = MediaSlot;
 
 
+const PUBLIC_SITE_ORIGIN = 'https://savremenikoreni.com';
+
 function mediaPreviewUrl(path: string): string {
   const value = String(path || '').trim();
   if (!value) return '';
@@ -21,16 +23,22 @@ function mediaPreviewUrl(path: string): string {
 }
 
 function MediaPreview({ src, alt, className, loading = 'lazy' }: { src: string; alt: string; className?: string; loading?: 'lazy' | 'eager' }) {
-  const [failedLocal, setFailedLocal] = React.useState(false);
+  const [attempt, setAttempt] = React.useState(0);
   const local = mediaPreviewUrl(src);
-  const fallback = /^\/custom_products\//i.test(local) ? 'https://savremenikoreni.com' + local : local;
-  const actual = failedLocal ? fallback : local;
+  const candidates = React.useMemo(() => {
+    if (!local) return [];
+    const production = /^\/custom_products\//i.test(local) ? PUBLIC_SITE_ORIGIN + local : local;
+    return production === local ? [local] : [production, local];
+  }, [local]);
+  const actual = candidates[attempt] || '';
   return <img
     src={actual}
     alt={alt}
     loading={loading}
     className={className}
-    onError={() => { if (actual !== fallback) setFailedLocal(true); }}
+    onError={() => {
+      if (attempt + 1 < candidates.length) setAttempt(attempt + 1);
+    }}
   />;
 }
 
