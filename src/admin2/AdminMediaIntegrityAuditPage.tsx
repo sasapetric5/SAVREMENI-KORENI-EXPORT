@@ -150,8 +150,18 @@ export function AdminMediaIntegrityAuditPage() {
                         return (
                           <td key={slot} className="p-2 min-w-[200px]">
                             <div className="font-bold mb-1">{slot}</div>
-                            {r.path ? <img src={r.path} alt="" className="w-24 h-20 object-contain rounded border bg-gray-50 mb-1" loading="lazy" /> : <div className="w-24 h-20 rounded border bg-red-50 mb-1 flex items-center justify-center text-[10px] text-red-700">NEMA</div>}
-                            <div className="break-all text-[9px] text-gray-500">{r.path || '—'}</div>
+                            {r.path ? (
+                              <a
+                                href={r.path}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title="Otvori originalnu fotografiju u novom tabu"
+                                className="block w-fit rounded border-2 border-transparent hover:border-[#9e3e26] focus:outline-none focus:ring-2 focus:ring-[#9e3e26]"
+                              >
+                                <img src={r.path} alt={`${p.name} — ${slot}`} className="w-24 h-20 object-contain rounded bg-gray-50 cursor-zoom-in" loading="lazy" />
+                              </a>
+                            ) : <div className="w-24 h-20 rounded border bg-red-50 mb-1 flex items-center justify-center text-[10px] text-red-700">NEMA</div>}
+                            <a href={r.path || '#'} target="_blank" rel="noopener noreferrer" className={r.path ? "block break-all text-[9px] text-blue-700 hover:underline" : "block break-all text-[9px] text-gray-500"}>{r.path || '—'}</a>
                             <div className={good ? 'mt-1 text-green-700 font-bold' : 'mt-1 text-red-700 font-bold'}>{state}</div>
                             {!r.inIndex && r.path && <div className="mt-1 text-amber-700 font-semibold">⚠ nije u Media indeksu</div>}
                           </td>
