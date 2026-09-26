@@ -31,6 +31,7 @@ export function AdminMediaIntegrityAuditPage() {
   }), [products, media]);
 
   const [physical, setPhysical] = useState<Record<string, PhysicalStatus>>({});
+  const [previewProductId, setPreviewProductId] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -151,15 +152,14 @@ export function AdminMediaIntegrityAuditPage() {
                           <td key={slot} className="p-2 min-w-[200px]">
                             <div className="font-bold mb-1">{slot}</div>
                             {r.path ? (
-                              <a
-                                href={r.path}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                title="Otvori originalnu fotografiju u novom tabu"
+                              <button
+                                type="button"
+                                onClick={() => setPreviewProductId(p.id)}
+                                title="Otvori sve 4 fotografije proizvoda"
                                 className="block w-fit rounded border-2 border-transparent hover:border-[#9e3e26] focus:outline-none focus:ring-2 focus:ring-[#9e3e26]"
                               >
                                 <img src={r.path} alt={`${p.name} — ${slot}`} className="w-24 h-20 object-contain rounded bg-gray-50 cursor-zoom-in" loading="lazy" />
-                              </a>
+                              </button>
                             ) : <div className="w-24 h-20 rounded border bg-red-50 mb-1 flex items-center justify-center text-[10px] text-red-700">NEMA</div>}
                             <a href={r.path || '#'} target="_blank" rel="noopener noreferrer" className={r.path ? "block break-all text-[9px] text-blue-700 hover:underline" : "block break-all text-[9px] text-gray-500"}>{r.path || '—'}</a>
                             <div className={good ? 'mt-1 text-green-700 font-bold' : 'mt-1 text-red-700 font-bold'}>{state}</div>
@@ -217,6 +217,42 @@ export function AdminMediaIntegrityAuditPage() {
         <div className="rounded-2xl bg-[#241d19] text-white p-5 text-sm">
           <b>BEZBEDNOSNA GARANCIJA:</b> FAZA 3B ne poziva saveCustomProduct, ne menja permanentProductsData, ne menja Media biblioteku, ne piše IndexedDB/localStorage i ne vrši GitHub/Cloudflare publish.
         </div>
+        {previewProductId && (() => {
+          const previewProduct = products.find(p => p.id === previewProductId);
+          if (!previewProduct) return null;
+          const previewRows = rows.filter(r => r.productId === previewProduct.id);
+          return (
+            <div className="fixed inset-0 z-50 bg-black/80 p-4 md:p-8 overflow-auto" role="dialog" aria-modal="true">
+              <div className="max-w-6xl mx-auto bg-[#f7f3ed] rounded-2xl p-4 md:p-6">
+                <div className="flex flex-wrap justify-between items-center gap-3 mb-5">
+                  <div>
+                    <div className="text-xs font-bold tracking-wider text-[#9e3e26]">VIZUELNA KONTROLA 4 SLIKE</div>
+                    <h2 className="text-2xl font-bold">{previewProduct.name}</h2>
+                    <p className="text-xs text-gray-600 mt-1">Kliknite sliku za originalnu fotografiju u novom tabu.</p>
+                  </div>
+                  <button type="button" onClick={() => setPreviewProductId(null)} className="px-4 py-2 rounded-xl bg-[#241d19] text-white text-sm font-bold">Zatvori</button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {slots.map(slot => {
+                    const r = previewRows.find(x => x.slot === slot);
+                    return (
+                      <div key={slot} className="bg-white rounded-2xl border border-[#e8e0d5] p-3">
+                        <div className="font-bold mb-2">{slot}</div>
+                        {r?.path ? (
+                          <a href={r.path} target="_blank" rel="noopener noreferrer" title="Otvori originalnu fotografiju">
+                            <img src={r.path} alt={`${previewProduct.name} — ${slot}`} className="w-full aspect-[4/3] object-contain rounded-xl bg-gray-50 hover:ring-2 hover:ring-[#9e3e26]" />
+                          </a>
+                        ) : <div className="aspect-[4/3] rounded-xl border bg-red-50 flex items-center justify-center text-red-700 text-sm">NEMA SLIKE</div>}
+                        <div className="mt-2 break-all text-[10px] text-gray-600">{r?.path || '—'}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="mt-5 p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900">READ ONLY — nema izmene rasporeda, putanja ili podataka.</div>
+              </div>
+            </div>
+          );
+        })()}
       </div>
     </div>
   );
