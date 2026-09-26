@@ -235,9 +235,9 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789208559853.jpg",
+    "image": "/custom_products/luxury_macrame_bag_studio.jpg",
     "images": [
-      "/custom_products/prod_custom-prod-1789208559853_g0.jpg",
+      "/custom_products/macro_bag_detail.jpg",
       "/custom_products/prod_custom-prod-1789208559853_g1.jpg",
       "/custom_products/prod_custom-prod-1789208559853_g2.jpg"
     ],
@@ -265,9 +265,9 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789209800143.jpg",
+    "image": "/custom_products/black_crochet_handbag_luxury_studio.jpg",
     "images": [
-      "/custom_products/prod_custom-prod-1789209800143_g0.jpg",
+      "/custom_products/silver_clasp_macro.jpg",
       "/custom_products/prod_custom-prod-1789209800143_g1.jpg",
       "/custom_products/prod_custom-prod-1789209800143_g2.jpg"
     ],
@@ -295,9 +295,9 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789210279779.jpg",
+    "image": "/custom_products/luxury_crochet_bag_studio.jpg",
     "images": [
-      "/custom_products/prod_custom-prod-1789210279779_g0.jpg",
+      "/custom_products/crochet_bag_macro_7.jpg",
       "/custom_products/prod_custom-prod-1789210279779_g1.jpg",
       "/custom_products/prod_custom-prod-1789210279779_g2.jpg"
     ],
@@ -325,9 +325,9 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789210578864.jpg",
+    "image": "/custom_products/luxury_crochet_bag_studio_5.jpg",
     "images": [
-      "/custom_products/prod_custom-prod-1789210578864_g0.jpg",
+      "/custom_products/crochet_chain_macro.jpg",
       "/custom_products/prod_custom-prod-1789210578864_g1.jpg",
       "/custom_products/prod_custom-prod-1789210578864_g2.jpg"
     ],
@@ -448,7 +448,7 @@ export const permanentProductsData: Product[] = [
     "image": "/custom_products/luxury_crochet_bag_editorial.jpg",
     "images": [
       "/custom_products/macro_bead_crochet.jpg",
-      "/custom_products/black_crochet_bag_interior.jpg",
+      "/custom_products/black_crochet_bag_interior_1.jpg",
       "/custom_products/prod_custom-prod-1789212070909_g2.jpg"
     ],
     "priceEur": 32,
@@ -505,9 +505,9 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789212797315.jpg",
+    "image": "/custom_products/embroidered_tote_luxury.jpg",
     "images": [
-      "/custom_products/prod_custom-prod-1789212797315_g0.jpg",
+      "/custom_products/embroidered_linen_macro.jpg",
       "/custom_products/prod_custom-prod-1789212797315_g1.jpg",
       "/custom_products/prod_custom-prod-1789212797315_g2.jpg"
     ],
@@ -568,7 +568,7 @@ export const permanentProductsData: Product[] = [
     ],
     "image": "/custom_products/prod_custom-prod-1789213437909.jpg",
     "images": [
-      "/custom_products/prod_custom-prod-1789213437909_g0.jpg",
+      "/custom_products/tassel_macro_closeup.jpg",
       "/custom_products/prod_custom-prod-1789213437909_g1.jpg",
       "/custom_products/prod_custom-prod-1789213437909_g2.jpg"
     ],
@@ -596,9 +596,9 @@ export const permanentProductsData: Product[] = [
       "100% prirodni pamuk",
       "postava"
     ],
-    "image": "/custom_products/prod_custom-prod-1789215182204.jpg",
+    "image": "/custom_products/etno_unikatna_torba_1789105500674.jpg",
     "images": [
-      "/custom_products/prod_custom-prod-1789215182204_g0.jpg",
+      "/custom_products/extreme_macro_embroidery.jpg",
       "/custom_products/prod_custom-prod-1789215182204_g1.jpg",
       "/custom_products/prod_custom-prod-1789215182204_g2.jpg"
     ],
