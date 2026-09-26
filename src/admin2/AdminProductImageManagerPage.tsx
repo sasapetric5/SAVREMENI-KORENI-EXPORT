@@ -12,6 +12,28 @@ import {
 
 type Slot = MediaSlot;
 
+
+function mediaPreviewUrl(path: string): string {
+  const value = String(path || '').trim();
+  if (!value) return '';
+  if (/^https?:\\/\\//i.test(value)) return value;
+  return value.startsWith('/') ? value : '/' + value;
+}
+
+function MediaPreview({ src, alt, className, loading = 'lazy' }: { src: string; alt: string; className?: string; loading?: 'lazy' | 'eager' }) {
+  const [failedLocal, setFailedLocal] = React.useState(false);
+  const local = mediaPreviewUrl(src);
+  const fallback = /^\\/custom_products\\//i.test(local) ? 'https://savremenikoreni.com' + local : local;
+  const actual = failedLocal ? fallback : local;
+  return <img
+    src={actual}
+    alt={alt}
+    loading={loading}
+    className={className}
+    onError={() => { if (actual !== fallback) setFailedLocal(true); }}
+  />;
+}
+
 function label(slot: Slot) {
   return slot === 'MAIN' ? 'MAIN — Glavna' :
     slot === 'G0' ? 'G0 — Krupan plan' :
@@ -171,7 +193,7 @@ export function AdminProductImageManagerPage() {
               const a = assignment(slot);
               const changed = Boolean(a);
               return <div key={slot} className="bg-white rounded-2xl border border-[#ded3c7] overflow-hidden">
-                <div className="aspect-[4/3] bg-[#eee8df]"><img src={src} alt={label(slot)} className="w-full h-full object-contain" /></div>
+                <div className="aspect-[4/3] bg-[#eee8df]"><MediaPreview src={src} alt={label(slot)} loading="eager" className="w-full h-full object-contain" /></div>
                 <div className="p-3">
                   <div className="font-bold text-sm">{label(slot)}</div>
                   <div className="text-[9px] text-gray-500 truncate mt-1">{a?.mediaId || 'LEGACY: ' + (src || 'nema putanje')}</div>
@@ -204,7 +226,7 @@ export function AdminProductImageManagerPage() {
         <div className="p-4 overflow-auto max-h-[78vh]">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-3">
             {media.map(m => <button key={m.id} onClick={()=>choose(picker.slot,m)} className="text-left rounded-xl border border-[#e5ddd4] overflow-hidden hover:shadow-lg bg-white">
-              <div className="aspect-square bg-[#eee8df]"><img src={m.imageUrl} alt={m.title||m.id} loading="lazy" className="w-full h-full object-cover" /></div>
+              <div className="aspect-square bg-[#eee8df]"><MediaPreview src={m.imageUrl} alt={m.title||m.id} loading="lazy" className="w-full h-full object-cover" /></div>
               <div className="p-2"><div className="text-[10px] font-bold truncate">{m.title||m.id}</div><div className="text-[9px] text-gray-500 truncate">Media ID: {m.id}</div></div>
             </button>)}
           </div>
