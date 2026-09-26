@@ -6,6 +6,28 @@ import { addAdminMediaFile, AdminMediaMeta, loadAdminUploadedMedia, setMediaSite
 type Filter = 'ALL' | 'USED' | 'UNUSED' | 'HIDDEN' | 'UPLOADED';
 type Row = AdminMediaMeta & { source: 'PERMANENT' | 'UPLOADED'; hiddenFromSite: boolean };
 
+function mediaPreviewUrl(path: string): string {
+  const value = String(path || '').trim();
+  if (!value) return '';
+  if (/^https?:\\/\\//i.test(value)) return value;
+  return value.startsWith('/') ? value : '/' + value;
+}
+
+function MediaPreview({ src, alt, className, loading = 'lazy' }: { src: string; alt: string; className?: string; loading?: 'lazy' | 'eager' }) {
+  const [failedLocal, setFailedLocal] = React.useState(false);
+  const local = mediaPreviewUrl(src);
+  const fallback = /^\\/custom_products\\//i.test(local) ? 'https://savremenikoreni.com' + local : local;
+  const actual = failedLocal ? fallback : local;
+  return <img
+    src={actual}
+    alt={alt}
+    loading={loading}
+    className={className}
+    onError={() => { if (actual !== fallback) setFailedLocal(true); }}
+  />;
+}
+
+
 function buildUsage() {
   const map = new Map<string, Array<{ product: string; slot: string }>>();
   (permanentProductsData as any[]).forEach(p => {
@@ -138,7 +160,7 @@ export function AdminMediaLibraryPage() {
         {filtered.map(m => {
           const links=usage.get(m.imageUrl)||[];
           return <button key={m.source+m.id} onClick={()=>setSelected(m)} className="text-left rounded-xl border border-[#e5ddd4] bg-white overflow-hidden hover:shadow-lg">
-            <div className="aspect-square bg-[#eee8df] relative"><img src={m.imageUrl} alt={m.title||m.id} loading="lazy" className={'w-full h-full object-cover '+(m.hiddenFromSite?'opacity-45 grayscale':'')} /><span className={(m.hiddenFromSite?'bg-red-700':'bg-green-700')+' absolute top-2 left-2 px-2 py-1 rounded-lg text-white text-[9px] font-bold'}>{m.hiddenFromSite?'UKLONJENA':m.source==='UPLOADED'?'NOVO':'AKTIVNA'}</span></div>
+            <div className="aspect-square bg-[#eee8df] relative"><MediaPreview src={m.imageUrl} alt={m.title||m.id} loading="lazy" className={'w-full h-full object-cover '+(m.hiddenFromSite?'opacity-45 grayscale':'')} /><span className={(m.hiddenFromSite?'bg-red-700':'bg-green-700')+' absolute top-2 left-2 px-2 py-1 rounded-lg text-white text-[9px] font-bold'}>{m.hiddenFromSite?'UKLONJENA':m.source==='UPLOADED'?'NOVO':'AKTIVNA'}</span></div>
             <div className="p-2.5"><div className="text-[10px] font-bold truncate">{m.title||m.id}</div><div className="text-[9px] text-gray-500 truncate">{m.originalName||m.imageUrl}</div>{links.length>0&&<div className="mt-1 text-[9px] font-bold">{links.map(x=>x.product+' • '+x.slot).join(' | ')}</div>}</div>
           </button>;
         })}
@@ -152,7 +174,7 @@ function MediaModal({row,usage,busy,onClose,onToggle,onSaved}:{row:Row;usage:Arr
   const [title,setTitle]=useState(row.title||''); const [alt,setAlt]=useState((row as any).alt||''); const [altEn,setAltEn]=useState((row as any).altEn||'');
   return <div className="fixed inset-0 z-50 bg-black/70 p-4 flex items-center justify-center" onClick={onClose}><div className="bg-white rounded-2xl max-w-6xl w-full max-h-[92vh] overflow-auto p-5" onClick={e=>e.stopPropagation()}>
     <div className="flex justify-between gap-3 mb-4"><div><div className="text-[10px] font-bold text-[#9e3e26]">MEDIA ASSET</div><h2 className="text-xl font-bold">{row.title||row.id}</h2></div><button onClick={onClose} className="px-3 py-2 rounded-xl bg-gray-100">Zatvori</button></div>
-    <div className="grid lg:grid-cols-[minmax(0,1fr)_360px] gap-5"><div className="rounded-xl bg-[#eee8df] p-2 flex items-center justify-center"><img src={row.imageUrl} alt={row.title||row.id} className="w-full max-h-[68vh] object-contain rounded-lg"/></div>
+    <div className="grid lg:grid-cols-[minmax(0,1fr)_360px] gap-5"><div className="rounded-xl bg-[#eee8df] p-2 flex items-center justify-center"><MediaPreview src={row.imageUrl} alt={row.title||row.id} loading="eager" className="w-full max-h-[68vh] object-contain rounded-lg"/></div>
     <div className="space-y-3"><Info label="Izvor" value={row.source==='PERMANENT'?'PERMANENT — original ostaje':'ADMIN UPLOAD — IndexedDB'}/><Info label="Korišćenje" value={usage.length?usage.map(x=>x.product+' / '+x.slot).join(', '):'Nije vezana za proizvod'}/>
     {row.source==='UPLOADED'&&<><Field label="Naziv" value={title} onChange={setTitle}/><Field label="ALT SR" value={alt} onChange={setAlt}/><Field label="ALT EN" value={altEn} onChange={setAltEn}/><button disabled={busy} onClick={()=>onSaved({title,alt,altEn})} className="w-full px-4 py-2 rounded-xl bg-[#241d19] text-white text-sm font-bold">Sačuvaj metapodatke</button></>}
     <button disabled={busy} onClick={onToggle} className={row.hiddenFromSite?'w-full px-4 py-2 rounded-xl bg-green-700 text-white font-bold':'w-full px-4 py-2 rounded-xl bg-red-700 text-white font-bold'}>{row.hiddenFromSite?'Vrati na sajt':'Ukloni sa sajta (NE BRIŠI)'}</button>
