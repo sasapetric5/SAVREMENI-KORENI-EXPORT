@@ -301,6 +301,8 @@ export function AdminV2Page() {
           <Card label="NEISPRAVNI PROIZVODI" value={validation.invalid.length} target="0" ok={validation.invalid.length === 0} />
         </div>
 
+        <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6"><div className="flex flex-wrap items-center justify-between gap-3"><div><div className="text-[10px] tracking-[0.18em] font-bold text-[#9e3e26]">MEDIA / BIBLIOTEKA</div><h2 className="font-bold text-lg mt-1">Centralna Media Biblioteka</h2><p className="text-xs text-gray-500 mt-1">Pregled bez upisa, brisanja ili promene postojećih slika.</p></div><a href="/admin-v2/media" className="px-4 py-2 rounded-xl bg-[#241d19] text-white text-xs font-bold">Otvori biblioteku →</a></div></div>
+
         <div className="rounded-2xl bg-white border-2 border-[#9e3e26] shadow-sm p-5 mb-6">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
             <div>
