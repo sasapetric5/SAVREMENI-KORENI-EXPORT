@@ -9,14 +9,14 @@ type Row = AdminMediaMeta & { source: 'PERMANENT' | 'UPLOADED'; hiddenFromSite: 
 function mediaPreviewUrl(path: string): string {
   const value = String(path || '').trim();
   if (!value) return '';
-  if (/^https?:\\/\\//i.test(value)) return value;
+  if (/^https?:\/\//i.test(value)) return value;
   return value.startsWith('/') ? value : '/' + value;
 }
 
 function MediaPreview({ src, alt, className, loading = 'lazy' }: { src: string; alt: string; className?: string; loading?: 'lazy' | 'eager' }) {
   const [failedLocal, setFailedLocal] = React.useState(false);
   const local = mediaPreviewUrl(src);
-  const fallback = /^\\/custom_products\\//i.test(local) ? 'https://savremenikoreni.com' + local : local;
+  const fallback = /^\/custom_products\//i.test(local) ? 'https://savremenikoreni.com' + local : local;
   const actual = failedLocal ? fallback : local;
   return <img
     src={actual}
