@@ -9,6 +9,7 @@ import { CurrencySelector } from './CurrencySelector';
 import { ProductReviews } from './ProductReviews';
 import { getProductImageAlt, getProductImageTitle } from '../utils/imageSeo';
 import { injectProductSocialMeta, toAbsoluteUrl } from '../utils/socialMeta';
+import { getProductImagesInDisplayOrder } from '../admin2/productImageResolver';
 
 interface ProductDetailModalProps {
   product: Product | null;
@@ -39,39 +40,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const [magnifierPos, setMagnifierPos] = useState({ x: 0, y: 0, relX: 0, relY: 0 });
   const [magnifierEnabled, setMagnifierEnabled] = useState(false);
 
-  // Compute full 4 images list for the product
+  // Product images are resolved by the Admin 2.0 Media ID layer when an assignment exists.
+  // Until publish exists, legacy permanent data remains the fallback, so this change is non-destructive.
   const allImages: string[] = React.useMemo(() => {
     if (!product) return ['/logo.jpg'];
-    const list: string[] = [];
-    const addIfValid = (url?: string) => {
-      if (
-        url &&
-        typeof url === 'string' &&
-        url.trim().length > 0 &&
-        !list.includes(url.trim())
-      ) {
-        list.push(url.trim());
-      }
-    };
-
-    const perm = permanentProductsData.find((p) => p.id === product.id);
-
-    // Permanent product images are authoritative for canonical products.
-    if (perm) {
-      addIfValid(perm.image);
-      perm.images?.forEach(addIfValid);
-    } else {
-      // Future custom products keep their own image/gallery data.
-      addIfValid(product.image);
-      if (Array.isArray(product.images)) {
-        product.images.forEach(addIfValid);
-      }
-    }
-
-    if (list.length === 0) {
-      list.push('/logo.jpg');
-    }
-    return list;
+    const resolved = getProductImagesInDisplayOrder(product.id, product);
+    return resolved.length ? resolved : ['/logo.jpg'];
   }, [product]);
 
   // Reset states when product changes

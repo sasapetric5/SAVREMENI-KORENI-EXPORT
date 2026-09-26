@@ -42,8 +42,12 @@ import { initWebVitalsTracking } from './utils/webVitals';
 import { useSectionObserver } from './hooks/useSectionObserver';
 import { resetSocialMeta } from './utils/socialMeta';
 import { AdminV2Page } from './admin2/AdminV2Page';
+import { AdminMediaIntegrityAuditPage } from './admin2/AdminMediaIntegrityAuditPage';
 
-function AdminV2Route() { return <AdminV2Page />; }
+function AdminV2Route() {
+  if (window.location.pathname === '/admin-v2/media-audit') return <AdminMediaIntegrityAuditPage />;
+  return <AdminV2Page />;
+}
 
 function AppContent() {
   const { t, isEn } = useLanguage();
@@ -429,7 +433,7 @@ function AppContent() {
 }
 
 export default function App() {
-  if (window.location.pathname === '/admin-v2') return <AdminV2Route />;
+  if (window.location.pathname === '/admin-v2' || window.location.pathname.startsWith('/admin-v2/')) return <AdminV2Route />;
   return (
     <ThemeProvider>
       <LanguageProvider>

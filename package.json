@@ -11,7 +11,7 @@
     "generate:sitemap": "tsx scripts/generateSitemap.ts",
     "verify:seo": "tsx scripts/verifySeoTags.ts",
     "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
-    "build:client": "vite build",
+    "build:client": "tsx scripts/generateMediaManifest.ts && vite build",
     "start": "node dist/server.cjs",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
