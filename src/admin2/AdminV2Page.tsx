@@ -39,7 +39,8 @@ export function AdminV2Page() {
     const products = permanentProductsData as any[];
     const media = permanentGalleryPhotosData as any[];
     const paths = products.flatMap(p => Object.values(slotPaths(p))).filter(Boolean) as string[];
-    const missing = paths.filter(path => !media.some(m => m.imageUrl === path));
+    const manifestPaths = new Set((publicCustomProductsManifest as string[]).map(file => '/custom_products/' + file));
+    const missing = paths.filter(path => !manifestPaths.has(path));
     const duplicateIds = products.filter(p => p.image && products.filter(x => x.image === p.image).length > 1).map(p => p.id);
     const invalid = products.filter(p => !p.image || !p.images || p.images.length !== 3);
     return { productCount: products.length, mediaCount: media.length, assignments: paths.length, missing, duplicateIds: [...new Set(duplicateIds)], invalid: invalid.map(p => p.name) };
@@ -393,7 +394,7 @@ export function AdminV2Page() {
             <Status ok={validation.productCount === 47} text={'47 proizvoda: ' + validation.productCount + '/47'} />
             <Status ok={validation.mediaCount === 504} text={'504 media zapisa: ' + validation.mediaCount + '/504'} />
             <Status ok={validation.assignments === 188} text={'4 slike po proizvodu: ' + validation.assignments + '/188 slot referenci'} />
-            <Status ok={validation.missing.length === 0} text={'Sve reference postoje u galerijskom indeksu: ' + (validation.missing.length === 0 ? 'DA' : 'NE')} />
+            <Status ok={validation.missing.length === 0} text={'Sve reference postoje u javnom media manifestu: ' + (validation.missing.length === 0 ? 'DA' : 'NE')} />
             <Status ok={validation.invalid.length === 0} text={'Struktura MAIN + G0 + G1 + G2: ' + (validation.invalid.length === 0 ? 'DA' : 'NE')} />
             <Status ok={validation.duplicateIds.length === 0} text={'Dupli MAIN među proizvodima: ' + (validation.duplicateIds.length === 0 ? 'NE' : 'DA')} />
           </div>
@@ -545,7 +546,7 @@ export function AdminV2Page() {
 
           <WorkflowPreviewPanel open={workflowPreviewOpen} changes={workflowPreviewChanges} approvedCount={approvedAltCount} reviewed={previewReviewed} onReviewedChange={setPreviewReviewed} onClose={() => setWorkflowPreviewOpen(false)} onApprove={() => { setPreviewReviewed(true); setWorkflowStage('APPROVED'); setWorkflowPreviewOpen(false); setPublishResult('APPROVE potvrđen iz Preview ekrana. Publish je zaključan do sledećeg koraka.'); }} />
 
-    <div className="mt-5 text-xs text-gray-500">Izvor: permanentProductsData.ts + permanentGalleryPhotosData.ts. Ova faza samo čita stanje. Ne menja proizvode, slike, localStorage, IndexedDB, GitHub niti Cloudflare.</div>
+    <div className="mt-5 text-xs text-gray-500">Izvor: permanentProductsData.ts + javni media manifest (504 fajla). Ova validacija putanja proverava fizički javni media manifest; ne menja proizvode, slike, GitHub niti Cloudflare.</div>
       </div>
 
       {selectedMedia && <div className="fixed inset-0 z-[60] bg-black/70 p-4 flex items-center justify-center" onClick={() => setSelectedMedia(null)}>
