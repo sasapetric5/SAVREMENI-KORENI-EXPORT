@@ -87,6 +87,18 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
     const removedProductIds = Array.isArray(body?.removedProductIds) ? body.removedProductIds.map(String) : [];
     const removedMediaPaths = Array.isArray(body?.removedMediaPaths) ? body.removedMediaPaths.map(String) : [];
     const uploads = Array.isArray(body?.uploads) ? body.uploads : [];
+    const canonical = body?.canonical && typeof body.canonical === 'object' ? body.canonical : {};
+    const allowedProductIds = new Set(Object.keys(canonical));
+    const allowedSlots = new Set(['MAIN','G0','G1','G2']);
+    const safeAssignments: Record<string, any> = {};
+    for (const [productId, slots] of Object.entries(safeAssignments)) {
+      if (!allowedProductIds.has(productId) || !slots || typeof slots !== 'object') continue;
+      const clean: Record<string,string> = {};
+      for (const [slot, value] of Object.entries(slots as any)) {
+        if (allowedSlots.has(slot) && typeof value === 'string' && value.trim()) clean[slot] = value;
+      }
+      if (Object.keys(clean).length) safeAssignments[productId] = clean;
+    }
     const altDrafts = body?.altDrafts && typeof body.altDrafts === 'object' ? body.altDrafts : {};
 
     const uploadPathById: Record<string, string> = {};
