@@ -33,9 +33,9 @@ export function AdminV2Page() {
 
   const validation = useMemo(() => {
     const products = permanentProductsData as any[];
-    const media = permanentGalleryPhotosData as any[];
+    const physicalPaths = new Set(publicCustomProductsManifest.map((file: string) => '/custom_products/' + file));
     const paths = products.flatMap(p => Object.values(slotPaths(p))).filter(Boolean) as string[];
-    const missing = paths.filter(path => !media.some(m => m.imageUrl === path));
+    const missing = paths.filter(path => !physicalPaths.has(path));
     const duplicateIds = products.filter(p => p.image && products.filter(x => x.image === p.image).length > 1).map(p => p.id);
     const invalid = products.filter(p => !p.image || !p.images || p.images.length !== 3);
     return { productCount: products.length, mediaCount: publicCustomProductsManifest.length, assignments: paths.length, missing, duplicateIds: [...new Set(duplicateIds)], invalid: invalid.map(p => p.name) };
@@ -464,7 +464,6 @@ export function AdminV2Page() {
         </div>
 
         <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
-        <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
           <div className="flex flex-wrap justify-between items-end gap-3 mb-3">
             <div><h2 className="font-bold text-lg">Schema Generator — Product</h2><p className="text-xs text-gray-500 mt-1">Preview only • JSON-LD se ne upisuje automatski</p></div>
             <span className="text-xs font-semibold text-amber-700">VALIDACIJA PRE UPISA</span>
@@ -509,22 +508,9 @@ export function AdminV2Page() {
 
           <WorkflowPreviewPanel open={workflowPreviewOpen} changes={workflowPreviewChanges} approvedCount={approvedAltCount} reviewed={previewReviewed} onReviewedChange={setPreviewReviewed} onClose={() => setWorkflowPreviewOpen(false)} onApprove={() => { setPreviewReviewed(true); setWorkflowStage('APPROVED'); setWorkflowPreviewOpen(false); setPublishResult('APPROVE potvrđen iz Preview ekrana. Publish je zaključan do sledećeg koraka.'); }} />
 
-    <div className="mt-5 text-xs text-gray-500">Izvor: permanentProductsData.ts + permanentGalleryPhotosData.ts. Ova faza samo čita stanje. Ne menja proizvode, slike, localStorage, IndexedDB, GitHub niti Cloudflare.</div>
+    <div className="mt-5 text-xs text-gray-500">Izvor: permanentProductsData.ts + publicCustomProductsManifest. Ova faza samo čita stanje. Ne menja proizvode, slike, localStorage, IndexedDB, GitHub niti Cloudflare.</div>
       </div>
 
-      {selectedMedia && <div className="fixed inset-0 z-[60] bg-black/70 p-4 flex items-center justify-center" onClick={() => setSelectedMedia(null)}>
-        <div className="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-auto p-5" onClick={e => e.stopPropagation()}>
-          <div className="flex justify-between items-center mb-4"><h2 className="text-xl font-bold">{selectedProduct.name}</h2><button onClick={() => setSelected(null)} className="px-3 py-1 rounded-lg bg-gray-100">Zatvori</button></div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {(['MAIN','G0','G1','G2'] as Slot[]).map(slot => { const path = slotPaths(selectedProduct)[slot]; return <div key={slot}><div className="font-bold text-xs mb-1">{slot}</div><img src={path} alt={selectedProduct.name + ' ' + slot} className="w-full aspect-square object-cover rounded-xl border" /><div className="text-[9px] break-all mt-1">{path}</div></div>; })}
-          </div>
-        </div>
-      </div>}
     </div>
   );
 }
-
-function Card({label,value,target,ok}:{label:string;value:number;target:string;ok:boolean}) {
-  return <div className="bg-white border border-[#e8e0d5] rounded-2xl p-4 shadow-sm"><div className="text-[10px] tracking-wider text-gray-500">{label}</div><div className="text-2xl font-bold mt-1">{value}</div><div className={ok ? 'text-xs text-green-700 font-semibold' : 'text-xs text-red-700 font-semibold'}>{ok ? 'DA' : 'NE'} • cilj {target}</div></div>;
-}
-function Status({ok,text}:{ok:boolean;text:string}) { return <div className="flex items-center gap-2"><span className={ok ? 'text-green-700 font-bold' : 'text-red-700 font-bold'}>{ok ? '✓' : '✕'}</span><span>{text}</span></div>; }
