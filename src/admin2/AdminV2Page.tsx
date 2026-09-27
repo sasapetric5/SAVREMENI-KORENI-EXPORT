@@ -319,9 +319,7 @@ export function AdminV2Page() {
       const title=(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]||'').trim();
       const description=(html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i)?.[1]||'').trim();
       const jsonLd=[...html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]);
-      const jsonLd=[...html.matchAll(/<script[^>]+type=["']application\/ld\\+json["'][^>]*>([\s\\S]*?)<\/script>/gi)].map(m=>m[1]);
       const pass=r.ok && Boolean(title) && Boolean(description) && /^https:\/\/savremenikoreni\.com\/?$/i.test(canonical) && schemaValid;
-      const pass=r.ok && Boolean(title) && Boolean(description) && /^https:\/\/savremenikoreni\\.com\/?$/i.test(canonical) && schemaValid;
       setSeoImpactStatus(pass?'PASS':'UNKNOWN');
       setPublishResult(pass
         ? 'SEO/AEO/GEO osnovna provera PASS: title, description, canonical i JSON-LD postoje.'
