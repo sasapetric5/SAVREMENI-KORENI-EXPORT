@@ -133,6 +133,30 @@ export function AdminV2Page() {
     return rows;
   }, [draftSnapshot, altDrafts]);
 
+  const altAudit = useMemo(() => {
+    const rows: { productId: string; productName: string; slot: Slot; path: string; sr: string; en: string; status: 'OK' | 'MISSING_SR' | 'MISSING_EN' | 'MISSING_BOTH' }[] = [];
+    (permanentProductsData as any[]).forEach(p => {
+      const slots = slotPaths(p);
+      const alts = Array.isArray(p.imageAlts) ? p.imageAlts : [];
+      (Object.keys(slots) as Slot[]).forEach((slot, index) => {
+        const path = slots[slot];
+        const alt = alts[index] || {};
+        const hasSr = Boolean(String(alt.alt || '').trim());
+        const hasEn = Boolean(String(alt.altEn || '').trim());
+        rows.push({
+          productId: p.id,
+          productName: p.name,
+          slot,
+          path,
+          sr: String(alt.alt || ''),
+          en: String(alt.altEn || ''),
+          status: hasSr && hasEn ? 'OK' : !hasSr && !hasEn ? 'MISSING_BOTH' : !hasSr ? 'MISSING_SR' : 'MISSING_EN'
+        });
+      });
+    });
+    return rows;
+  }, []);
+
   const effectiveAltAudit = useMemo(() => altAudit.map(row => {
     const key = row.productId + ':' + row.slot;
     const draft = altDrafts[key];
@@ -173,6 +197,8 @@ export function AdminV2Page() {
       {key:'finalPreview',label:'FINALNI PUBLIC PREVIEW',pass:finalPublicPreviewStatus==='PASS',detail:finalPublicPreviewStatus==='PASS'?'ručno potvrđeno':'potrebno otvoriti i potvrditi javni preview'}
     ];
   }, [draftImageRows,draftSnapshot,draftProductIds,sitemapStatus,visualReviewStatus,seoImpactStatus,finalPublicPreviewStatus,publicMediaStatus,dimensionsStatus,brokenImageStatus,effectiveAltAudit,workflowValidationOk,slotAudit,auditProblems,validation]);
+
+  const allPrePublishPass = prePublishChecks.every(check => check.pass);
 
   const generateAltForDraftImages = async () => {
     if (!draftImageRows.length || altGeneratingDraft) return;
@@ -333,30 +359,6 @@ export function AdminV2Page() {
     });
     return [...imageChanges, ...altChanges];
   }, [altDrafts, altSuggestions, draftSnapshot]);
-
-  const altAudit = useMemo(() => {
-    const rows: { productId: string; productName: string; slot: Slot; path: string; sr: string; en: string; status: 'OK' | 'MISSING_SR' | 'MISSING_EN' | 'MISSING_BOTH' }[] = [];
-    (permanentProductsData as any[]).forEach(p => {
-      const slots = slotPaths(p);
-      const alts = Array.isArray(p.imageAlts) ? p.imageAlts : [];
-      (Object.keys(slots) as Slot[]).forEach((slot, index) => {
-        const path = slots[slot];
-        const alt = alts[index] || {};
-        const hasSr = Boolean(String(alt.alt || '').trim());
-        const hasEn = Boolean(String(alt.altEn || '').trim());
-        rows.push({
-          productId: p.id,
-          productName: p.name,
-          slot,
-          path,
-          sr: String(alt.alt || ''),
-          en: String(alt.altEn || ''),
-          status: hasSr && hasEn ? 'OK' : !hasSr && !hasEn ? 'MISSING_BOTH' : !hasSr ? 'MISSING_SR' : 'MISSING_EN'
-        });
-      });
-    });
-    return rows;
-  }, []);
 
   const altProblems = altAudit.filter(x => x.status !== 'OK');
 
