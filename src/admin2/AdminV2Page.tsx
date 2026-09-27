@@ -286,9 +286,8 @@ export function AdminV2Page() {
     setPublishBusy(true);
     try {
       const canonical: Record<string, any> = {};
-      for (const id of draftProductIds) {
-        const p = (permanentProductsData as any[]).find(x => x.id === id);
-        if (p) canonical[id] = { image: p.image || '', images: Array.isArray(p.images) ? [...p.images] : [] };
+      for (const p of (permanentProductsData as any[])) {
+        canonical[p.id] = { image: p.image || '', images: Array.isArray(p.images) ? [...p.images] : [] };
       }
       const response = await fetch('/api/admin/publish', {
         method: 'POST', headers: { 'content-type': 'application/json' },
