@@ -316,11 +316,11 @@ export function AdminV2Page() {
     try {
       const r=await fetch('/',{cache:'no-store'});
       const html=await r.text();
-      const title=(html.match(/<title[^>]*>([\s\\S]*?)<\/title>/i)?.[1]||'').trim();
+      const title=(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]||'').trim();
       const description=(html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i)?.[1]||'').trim();
-      const canonical=(html.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i)?.[1]||'').trim();
+      const jsonLd=[...html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]);
       const jsonLd=[...html.matchAll(/<script[^>]+type=["']application\/ld\\+json["'][^>]*>([\s\\S]*?)<\/script>/gi)].map(m=>m[1]);
-      const schemaValid=jsonLd.some(raw=>{try{const x=JSON.parse(raw);return Boolean(x && (x['@context']==='https://schema.org' || x['@graph']));}catch{return false;}});
+      const pass=r.ok && Boolean(title) && Boolean(description) && /^https:\/\/savremenikoreni\.com\/?$/i.test(canonical) && schemaValid;
       const pass=r.ok && Boolean(title) && Boolean(description) && /^https:\/\/savremenikoreni\\.com\/?$/i.test(canonical) && schemaValid;
       setSeoImpactStatus(pass?'PASS':'UNKNOWN');
       setPublishResult(pass
