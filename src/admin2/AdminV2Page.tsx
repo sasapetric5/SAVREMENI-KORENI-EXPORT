@@ -297,10 +297,10 @@ export function AdminV2Page() {
     try {
       const r=await fetch('/sitemap.xml',{cache:'no-store'});
       const body=await r.text();
-      const locs=[...body.matchAll(/<loc>\\s*([^<]+?)\\s*<\\/loc>/gi)].map(m=>m[1].trim());
-      const validXml=r.ok && /<urlset\\b/i.test(body) && /<url>\\s*<loc>/i.test(body) && locs.length > 0;
-      const canonicalHost=locs.every(url => /^https:\\/\\/savremenikoreni\\.com\\//i.test(url));
-      const homeIncluded=locs.some(url => url.replace(/\\/$/,'') === 'https://savremenikoreni.com');
+      const locs=[...body.matchAll(/<loc>\s*([^<]+?)\s*<\/loc>/gi)].map(m=>m[1].trim());
+      const validXml=r.ok && /<urlset\b/i.test(body) && /<url>\s*<loc>/i.test(body) && locs.length > 0;
+      const canonicalHost=locs.every(url => /^https:\/\/savremenikoreni\.com\//i.test(url));
+      const homeIncluded=locs.some(url => url.replace(/\/$/,'') === 'https://savremenikoreni.com');
       setSitemapStatus(validXml && canonicalHost && homeIncluded ? 'PASS' : 'FAIL');
       setPublishResult(validXml && canonicalHost && homeIncluded
         ? `Sitemap PASS: ${locs.length} URL-ova, canonical domen i početna stranica provereni.`
