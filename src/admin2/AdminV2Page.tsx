@@ -24,7 +24,7 @@ export function AdminV2Page() {
   const [altSuggestions, setAltSuggestions] = useState<Record<string, AiImageAltResult>>({});
   const [altGenerating, setAltGenerating] = useState<string | null>(null);
   const [altDrafts, setAltDrafts] = useState<Record<string, { alt: string; altEn: string }>>({});
-  const [altApproved, setAltApproved] = useState<Record<string, boolean>>({});
+  const [altApproved, setAltApproved] = useState<Record<string, boolean>>(() => { try { return JSON.parse(localStorage.getItem('admin2_alt_approved_v2') || '{}'); } catch { return {}; } });
   const [altSaving, setAltSaving] = useState(false);
   const [schemaPreview, setSchemaPreview] = useState<string | null>(null);
   const [schemaType, setSchemaType] = useState<'Organization' | 'Article' | 'BreadcrumbList'>('Organization');
@@ -41,6 +41,12 @@ export function AdminV2Page() {
   const [sitemapStatus, setSitemapStatus] = useState<'UNKNOWN' | 'PASS' | 'FAIL'>('UNKNOWN');
   const [imageCheckStatus, setImageCheckStatus] = useState<'UNKNOWN' | 'PASS' | 'FAIL'>('UNKNOWN');
   const [altGeneratingDraft, setAltGeneratingDraft] = useState(false);
+  const [visualReviewStatus, setVisualReviewStatus] = useState<'UNKNOWN' | 'PASS'>('UNKNOWN');
+  const [seoImpactStatus, setSeoImpactStatus] = useState<'UNKNOWN' | 'PASS'>('UNKNOWN');
+  const [finalPublicPreviewStatus, setFinalPublicPreviewStatus] = useState<'UNKNOWN' | 'PASS'>('UNKNOWN');
+  const [publicMediaStatus, setPublicMediaStatus] = useState<'UNKNOWN' | 'PASS' | 'FAIL'>('UNKNOWN');
+  const [dimensionsStatus, setDimensionsStatus] = useState<'UNKNOWN' | 'PASS' | 'FAIL'>('UNKNOWN');
+  const [brokenImageStatus, setBrokenImageStatus] = useState<'UNKNOWN' | 'PASS' | 'FAIL'>('UNKNOWN');
 
   const validation = useMemo(() => {
     const products = permanentProductsData as any[];
@@ -127,27 +133,46 @@ export function AdminV2Page() {
     return rows;
   }, [draftSnapshot, altDrafts]);
 
+  const effectiveAltAudit = useMemo(() => altAudit.map(row => {
+    const key = row.productId + ':' + row.slot;
+    const draft = altDrafts[key];
+    const approved = Boolean(altApproved[key]);
+    const sr = draft?.alt?.trim() || row.sr.trim();
+    const en = draft?.altEn?.trim() || row.en.trim();
+    return { ...row, effectiveSr: sr, effectiveEn: en, confirmed: Boolean(sr && en && (row.status === 'OK' || approved)) };
+  }), [altAudit, altDrafts, altApproved]);
+
   const prePublishChecks = useMemo(() => {
     const changed = draftImageRows;
-    const altPass = changed.length === 0 || changed.every(x => x.altSr.trim() && x.altEn.trim());
-    const imagePass = changed.length === 0 || changed.every(x => Boolean(x.image));
+    const imagePass = changed.length === 0 || changed.every(x => Boolean(x.image) && ['MAIN','G0','G1','G2'].includes(x.slot));
+    const slotLayoutPass = workflowValidationOk && slotAudit.length === 188 && auditProblems.length === 0 && changed.every(x => Boolean(x.image));
+    const altSrCount = effectiveAltAudit.filter(x => Boolean(x.effectiveSr)).length;
+    const altEnCount = effectiveAltAudit.filter(x => Boolean(x.effectiveEn)).length;
+    const altConfirmedCount = effectiveAltAudit.filter(x => x.confirmed).length;
     const uploads = draftSnapshot.uploads || [];
-    const uploadPass = uploads.every((u:any) => u.source !== 'upload' || (u.data && u.data.startsWith('data:image/webp') && Number(u.width) <= 1600 && Number(u.height) <= 1600 && Number(u.size) > 0));
+    const uploadPass = uploads.every((u:any) => u.source !== 'upload' || (u.data && u.data.startsWith('data:image/webp') && Number(u.width) > 0 && Number(u.height) > 0 && Number(u.width) <= 1600 && Number(u.height) <= 1600 && Number(u.size) > 0));
     const schemaPass = draftProductIds.every(id => {
       const p=(permanentProductsData as any[]).find(x=>x.id===id);
       return !p || Boolean(p.name && p.category);
     });
     return [
-      {key:'images',label:'IZMENE SLIKA / SLOTOVA',pass:imagePass,detail:changed.length ? changed.length + ' izmenjenih slotova' : 'nema izmena slika'},
-      {key:'alt',label:'ALT SR + EN',pass:altPass,detail:changed.length ? changed.filter(x=>x.altSr.trim()&&x.altEn.trim()).length + '/' + changed.length + ' slotova' : 'nema izmena slika'},
+      {key:'images',label:'IZMENE SLIKA',pass:imagePass,detail:changed.length ? changed.length + ' izmenjenih slotova u DRAFT-u' : 'nema izmena slika'},
+      {key:'layout',label:'MAIN / G0 / G1 / G2 RASPORED',pass:slotLayoutPass,detail:slotLayoutPass ? '188/188 tehnički validno' : 'potrebna validacija rasporeda'},
+      {key:'visual',label:'VIZUELNA PROVERA NOVIH SLIKA',pass:visualReviewStatus==='PASS',detail:visualReviewStatus==='PASS'?'ručno potvrđeno':'potrebna ručna potvrda'},
+      {key:'physical',label:'SVE FIZIČKE SLIKE POSTOJE',pass:publicMediaStatus==='PASS',detail:publicMediaStatus==='PASS'?'504 javne slike proverene':'potrebno pokrenuti proveru 504 javne slike'},
+      {key:'media',label:'504 MEDIA FAJLA',pass:publicCustomProductsManifest.length===504,detail:publicCustomProductsManifest.length + '/504 u canonical manifestu'},
+      {key:'slots',label:'188 SLOTOVA',pass:validation.assignments===188,detail:validation.assignments + '/188 slot referenci'},
+      {key:'altSr',label:'ALT SR',pass:altSrCount===188,detail:altSrCount + '/188 • potvrđeno ' + altConfirmedCount + '/188'},
+      {key:'altEn',label:'ALT EN',pass:altEnCount===188,detail:altEnCount + '/188 • potvrđeno ' + altConfirmedCount + '/188'},
       {key:'compression',label:'KOMPRESIJA NOVIH UPLOAD-A',pass:uploadPass,detail:uploads.length ? uploads.length + ' upload-a provereno' : 'nema novih upload-a'},
-      {key:'imagecheck',label:'PROVERA JAVNIH SLIKA',pass:imageCheckStatus==='PASS',detail:imageCheckStatus==='PASS'?'PASS':'potrebno pokrenuti proveru'},
+      {key:'dimensions',label:'DIMENZIJE / FORMATI',pass:dimensionsStatus==='PASS',detail:dimensionsStatus==='PASS'?'proverene javne slike':'potrebno proveriti'},
       {key:'sitemap',label:'SITEMAP',pass:sitemapStatus==='PASS',detail:sitemapStatus==='PASS'?'sitemap.xml dostupan':'potrebno proveriti'},
-      {key:'schema',label:'PRODUCT SCHEMA PODACI',pass:schemaPass,detail:schemaPass?'osnovni Product podaci validni':'nedostaju obavezni podaci'}
+      {key:'seo',label:'SEO / AEO / GEO POSLEDICE',pass:seoImpactStatus==='PASS',detail:seoImpactStatus==='PASS'?'ručno potvrđeno':'potrebna provera posledica izmene'},
+      {key:'schema',label:'SCHEMA',pass:schemaPass,detail:schemaPass?'osnovni Product podaci validni':'nedostaju obavezni podaci'},
+      {key:'broken',label:'BROKEN IMAGE CHECK',pass:brokenImageStatus==='PASS',detail:brokenImageStatus==='PASS'?'nema HTTP grešaka':'potrebno proveriti javne slike'},
+      {key:'finalPreview',label:'FINALNI PUBLIC PREVIEW',pass:finalPublicPreviewStatus==='PASS',detail:finalPublicPreviewStatus==='PASS'?'ručno potvrđeno':'potrebno otvoriti i potvrditi javni preview'}
     ];
-  }, [draftImageRows,draftSnapshot,draftProductIds,imageCheckStatus,sitemapStatus]);
-
-  const allPrePublishPass = prePublishChecks.every(x => x.pass);
+  }, [draftImageRows,draftSnapshot,draftProductIds,sitemapStatus,visualReviewStatus,seoImpactStatus,finalPublicPreviewStatus,publicMediaStatus,dimensionsStatus,brokenImageStatus,effectiveAltAudit,workflowValidationOk,slotAudit,auditProblems,validation]);
 
   const generateAltForDraftImages = async () => {
     if (!draftImageRows.length || altGeneratingDraft) return;
@@ -172,10 +197,8 @@ export function AdminV2Page() {
   };
 
   const checkDraftImages = async () => {
-    const rows=draftImageRows;
-    if(!rows.length){setImageCheckStatus('PASS');return;}
     let ok=true;
-    for(const row of rows){
+    for(const row of draftImageRows){
       await new Promise<void>(resolve=>{
         if(row.image.startsWith('data:image/')){resolve();return;}
         const img=new Image(); const timer=window.setTimeout(()=>{ok=false;resolve()},5000);
@@ -183,14 +206,47 @@ export function AdminV2Page() {
       });
     }
     setImageCheckStatus(ok?'PASS':'FAIL');
+    setVisualReviewStatus('UNKNOWN');
+  };
+
+  const checkPublicMedia = async () => {
+    const manifest = publicCustomProductsManifest.map((f:string) => '/custom_products/' + f);
+    let broken=0, badDimensions=0, index=0;
+    const worker=async()=>{ while(index<manifest.length){ const path=manifest[index++]; await new Promise<void>(resolve=>{
+      const img=new Image(); const timer=window.setTimeout(()=>{broken++;resolve()},6000);
+      img.onload=()=>{clearTimeout(timer); if(img.naturalWidth<=0||img.naturalHeight<=0||img.naturalWidth>10000||img.naturalHeight>10000) badDimensions++; resolve();};
+      img.onerror=()=>{clearTimeout(timer);broken++;resolve();}; img.src=path+'?adminCheck=1';
+    }); }};
+    await Promise.all(Array.from({length:8},worker));
+    const formatOk=manifest.every((p:string)=>/\.(jpe?g|png|webp|avif)$/i.test(p));
+    const ok=broken===0;
+    setPublicMediaStatus(ok?'PASS':'FAIL');
+    setBrokenImageStatus(ok?'PASS':'FAIL');
+    setDimensionsStatus(ok&&badDimensions===0&&formatOk?'PASS':'FAIL');
+    setImageCheckStatus(ok?'PASS':'FAIL');
+    setPublishResult(ok ? '504 javne slike proverene: nema broken image grešaka.' : 'Provera javnih slika je našla nedostupne fajlove. Publish ostaje zaključan.');
   };
 
   const checkSitemap = async () => {
     try {
       const r=await fetch('/sitemap.xml',{cache:'no-store'});
-      const text=await r.text();
-      setSitemapStatus(r.ok && text.includes('<urlset') ? 'PASS' : 'FAIL');
+      const body=await r.text();
+      setSitemapStatus(r.ok && body.includes('<urlset') && body.includes('<url>') ? 'PASS' : 'FAIL');
     } catch { setSitemapStatus('FAIL'); }
+  };
+
+  const confirmVisualReview = () => {
+    setVisualReviewStatus('PASS');
+    setPublishResult(draftImageRows.length ? 'Vizuelna provera novih fotografija je ručno potvrđena.' : 'Nema novih fotografija za vizuelnu proveru.');
+  };
+  const confirmSeoImpact = () => {
+    setSeoImpactStatus('PASS');
+    setPublishResult('SEO / AEO / GEO posledice su ručno proverene i potvrđene.');
+  };
+  const confirmFinalPublicPreview = () => {
+    window.open('/', '_blank', 'noopener,noreferrer');
+    setFinalPublicPreviewStatus('PASS');
+    setPublishResult('Finalni public preview je otvoren. Potvrda je evidentirana u ovom Admin nacrtu.');
   };
 
   const publishApprovedDraft = async () => {
@@ -406,45 +462,12 @@ export function AdminV2Page() {
       ]
     };
   };  const handleSaveApprovedAlts = async () => {
-    if (workflowStage !== 'APPROVED') {
-      setPublishResult('PUBLISH BLOKIRAN: prvo mora postojati VALIDATE → PREVIEW → APPROVE.');
-      return;
-    }
-    const approvedKeys = Object.keys(altApproved).filter(key => altApproved[key] && altDrafts[key]);
-    if (!approvedKeys.length) return;
-    setAltSaving(true);
-    try {
-      const byProduct = new Map<string, Record<number, { alt: string; altEn: string }>>();
-      approvedKeys.forEach(key => {
-        const [productId, slot] = key.split(':');
-        const slotIndex: Record<Slot, number> = { MAIN: 0, G0: 1, G1: 2, G2: 3 };
-        const index = slotIndex[slot as Slot];
-        const current = byProduct.get(productId) || {};
-        current[index] = altDrafts[key];
-        byProduct.set(productId, current);
-      });
-
-      for (const [productId, changes] of byProduct) {
-        const product = (permanentProductsData as any[]).find(p => p.id === productId);
-        if (!product) continue;
-        const nextAlts = Array.isArray(product.imageAlts) ? product.imageAlts.map((a: any) => ({ alt: a?.alt || '', altEn: a?.altEn || '' })) : [];
-        while (nextAlts.length < 4) nextAlts.push({ alt: '', altEn: '' });
-        Object.entries(changes).forEach(([index, value]) => {
-          nextAlts[Number(index)] = value;
-        });
-        const updated = { ...product, imageAlts: nextAlts.slice(0, 4) };
-        const { saveCustomProduct } = await import('../utils/customProductStorage');
-        await saveCustomProduct(updated);
-      }
-      window.dispatchEvent(new CustomEvent('custom-products-updated'));
-      setWorkflowStage('PUBLISHED');
-      setPublishResult(`PUBLISHED: ${approvedKeys.length} odobrenih ALT izmena je upisano u Admin storage. GitHub/Cloudflare nisu menjani ovim korakom.`);
-    } catch (error) {
-      console.error('ALT save error:', error);
-    } finally {
-      setAltSaving(false);
-    }
+    const approvedKeys = Object.keys(altApproved).filter(key => altApproved[key] && altDrafts[key]?.alt?.trim() && altDrafts[key]?.altEn?.trim());
+    localStorage.setItem('admin2_alt_approved_v2', JSON.stringify(altApproved));
+    localStorage.setItem('admin2_alt_drafts_v2', JSON.stringify(altDrafts));
+    setPublishResult(`${approvedKeys.length} ALT predloga je potvrđeno u DRAFT-u. Nema javnog upisa; PUBLISH endpoint ih obrađuje tek nakon pune kapije.`);
   };
+
   const mediaIndex = useMemo(() => {
     const result = new Map<string, { productId: string; productName: string; slot: Slot }[]>();
     (permanentProductsData as any[]).forEach(p => {
@@ -537,8 +560,12 @@ export function AdminV2Page() {
               <div><b>PRE-PUBLISH CHECKLIST</b><div className="text-[10px] text-gray-500">Svaka kontrola mora biti PASS pre PUBLISH.</div></div>
               <div className="flex flex-wrap gap-2">
                 <button onClick={generateAltForDraftImages} disabled={!draftImageRows.length || altGeneratingDraft} className="px-3 py-2 rounded-lg border text-[10px] font-bold disabled:opacity-40">{altGeneratingDraft?'ALT...':'GENERIŠI ALT SR + EN'}</button>
-                <button onClick={checkDraftImages} className="px-3 py-2 rounded-lg border text-[10px] font-bold">PROVERI SLIKE</button>
+                <button onClick={checkPublicMedia} disabled={publicMediaStatus==='PASS'} className="px-3 py-2 rounded-lg border text-[10px] font-bold disabled:opacity-40">PROVERI 504 JAVNE SLIKE</button>
+                <button onClick={checkDraftImages} className="px-3 py-2 rounded-lg border text-[10px] font-bold">PROVERI DRAFT SLIKE</button>
                 <button onClick={checkSitemap} className="px-3 py-2 rounded-lg border text-[10px] font-bold">PROVERI SITEMAP</button>
+                <button onClick={confirmVisualReview} className="px-3 py-2 rounded-lg border text-[10px] font-bold">POTVRDI VIZUELNU PROVERU</button>
+                <button onClick={confirmSeoImpact} className="px-3 py-2 rounded-lg border text-[10px] font-bold">POTVRDI SEO/AEO/GEO</button>
+                <button onClick={confirmFinalPublicPreview} className="px-3 py-2 rounded-lg border text-[10px] font-bold">FINALNI PUBLIC PREVIEW</button>
               </div>
             </div>
             <div className="grid md:grid-cols-3 gap-2 mt-3">
@@ -549,9 +576,17 @@ export function AdminV2Page() {
             </div>
           </div>
           <div className="flex flex-wrap gap-2 items-center">
-            <button onClick={() => { setDraftVersion(v => v + 1); setWorkflowStage('VALIDATE'); setPublishResult(draftChangeCount ? 'VALIDATE PASS: osnovni integritet je dobar. Admin nacrt sadrži ' + draftChangeCount + ' izmena.' : 'VALIDATE PASS: osnovni integritet je potvrđen, ali nema Admin izmena.'); }} className="px-4 py-2 rounded-xl border border-[#cdbfb0] text-xs font-bold">1. VALIDATE</button>
+            <button onClick={() => {
+              setDraftVersion(v => v + 1); setWorkflowStage('VALIDATE');
+              setVisualReviewStatus('UNKNOWN'); setSeoImpactStatus('UNKNOWN'); setFinalPublicPreviewStatus('UNKNOWN');
+              setPublicMediaStatus('UNKNOWN'); setDimensionsStatus('UNKNOWN'); setBrokenImageStatus('UNKNOWN');
+              setPublishResult(draftChangeCount ? 'VALIDATE: osnovni integritet je potvrđen. Sada pokrenite PRE-PUBLISH kontrole.' : 'VALIDATE: osnovni integritet je potvrđen, ali nema Admin izmena.');
+            }} className="px-4 py-2 rounded-xl border border-[#cdbfb0] text-xs font-bold">1. VALIDATE</button>
             <button disabled={workflowStage !== 'VALIDATE' || !workflowValidationOk || draftChangeCount === 0} onClick={() => { setWorkflowStage('PREVIEW'); setPreviewReviewed(false); setWorkflowPreviewOpen(true); setPublishResult('PREVIEW: proverite izabrane izmene pre APPROVE.'); }} className="px-4 py-2 rounded-xl border border-[#cdbfb0] text-xs font-bold disabled:opacity-40">2. PREVIEW</button>
-            <button disabled={workflowStage !== 'PREVIEW' || !previewReviewed} onClick={() => { setWorkflowStage('APPROVED'); setWorkflowPreviewOpen(false); setPublishResult('APPROVE potvrđen: publish je dozvoljen.'); }} className="px-4 py-2 rounded-xl bg-[#241d19] text-white text-xs font-bold disabled:opacity-40">3. APPROVE</button>
+            <button disabled={workflowStage !== 'PREVIEW' || !previewReviewed || !allPrePublishPass} onClick={() => {
+              if (!allPrePublishPass) { setPublishResult('APPROVE BLOKIRAN: sve PRE-PUBLISH kontrole moraju biti PASS.'); return; }
+              setWorkflowStage('APPROVED'); setWorkflowPreviewOpen(false); setPublishResult('APPROVE potvrđen: sve PRE-PUBLISH kontrole su PASS.');
+            }} className="px-4 py-2 rounded-xl bg-[#241d19] text-white text-xs font-bold disabled:opacity-40">3. APPROVE</button>
             <button disabled={workflowStage !== 'APPROVED' || draftChangeCount === 0 || !allPrePublishPass || publishBusy} onClick={publishApprovedDraft} className="px-4 py-2 rounded-xl bg-green-700 text-white text-xs font-bold disabled:opacity-40">{publishBusy ? 'PUBLISH...' : '4. PUBLISH NA SAJT'}</button>
             <input type="password" value={publishKey} onChange={e => setPublishKey(e.target.value)} placeholder="ADMIN PUBLISH KEY" className="border rounded-xl px-3 py-2 text-xs w-48" />
           </div>
