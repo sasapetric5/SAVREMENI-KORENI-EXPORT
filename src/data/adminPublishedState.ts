@@ -6,6 +6,7 @@ export type AdminPublishedState = {
   productOverrides: Record<string, Partial<Pick<Product, 'image' | 'images'>>>;
   removedProductIds: string[];
   removedMediaPaths: string[];
+  altOverrides: Record<string, Record<string, { alt: string; altEn: string }>>;
 };
 
 export const adminPublishedState: AdminPublishedState = {
@@ -14,4 +15,5 @@ export const adminPublishedState: AdminPublishedState = {
   productOverrides: {},
   removedProductIds: [],
   removedMediaPaths: [],
+  altOverrides: {},
 };
