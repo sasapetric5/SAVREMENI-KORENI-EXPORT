@@ -3,6 +3,7 @@ import { generateProductImageAlt, AiImageAltResult } from '../utils/imageSeo';
 import { permanentProductsData } from '../data/permanentProductsData';
 import { permanentGalleryPhotosData } from '../data/permanentGalleryPhotosData';
 import WorkflowPreviewPanel, { WorkflowPreviewChange } from './WorkflowPreviewPanel';
+import AdminImageWorkspace from './AdminImageWorkspace';
 
 type Slot = 'MAIN' | 'G0' | 'G1' | 'G2';
 const slotPaths = (p: any): Record<Slot, string> => ({
@@ -497,63 +498,7 @@ export function AdminV2Page() {
           </div>}
         </div>
 
-        <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
-          <div className="flex flex-wrap items-end justify-between gap-3 mb-4">
-            <div><h2 className="font-bold text-lg">Media Library — 504 fotografije</h2><p className="text-xs text-gray-500 mt-1">READ ONLY • svaka fotografija ostaje fizički nezavisna od proizvoda</p></div>
-            <div className="text-xs font-semibold">Povezane: {assignedMediaCount} • Nepovezane: {unassignedMediaCount}</div>
-          </div>
-          <div className="flex flex-col md:flex-row gap-2 mb-4">
-            <input value={mediaQuery} onChange={e => setMediaQuery(e.target.value)} placeholder="Pretraži 504 fotografije, naziv, kategoriju ili proizvod..." className="flex-1 px-4 py-3 rounded-xl border border-[#d8cec1] bg-white" />
-            {(['all','assigned','unassigned','removed','newUpload'] as const).map(f => {
-              const disabled = f === 'removed';
-              return (
-                <button
-                  key={f}
-                  onClick={() => !disabled && setMediaFilter(f)}
-                  disabled={disabled}
-                  className={disabled
-                    ? 'px-4 py-2 rounded-xl border border-[#e8e0d5] bg-gray-50 text-gray-400 cursor-not-allowed'
-                    : mediaFilter === f
-                      ? 'px-4 py-2 rounded-xl bg-[#241d19] text-white font-semibold'
-                      : 'px-4 py-2 rounded-xl border border-[#d8cec1] bg-white'}
-                  title={disabled ? 'Uklonjene nisu deo READ ONLY indeksa ove faze.' : undefined}
-                >
-                  {f === 'all' ? 'SVE' : f === 'assigned' ? 'Korišćene' : f === 'unassigned' ? 'Nepovezane' : f === 'removed' ? 'Uklonjene' : 'Novi upload'}
-                </button>
-              );
-            })}
-          </div>
-          <div className="text-xs text-gray-500 mb-3">
-            Prikaz: <b>{filteredMedia.length}</b> / {permanentGalleryPhotosData.length}
-            {mediaFilter === 'assigned' && <> • Korišćene: {assignedMediaCount}</>}
-            {mediaFilter === 'unassigned' && <> • Nepovezane: {unassignedMediaCount}</>}
-            {mediaFilter === 'newUpload' && <> • Novi upload: {newUploadMediaCount}</>}
-            {Object.keys(mediaImageErrors).length > 0 && <> • Greške učitavanja: {Object.keys(mediaImageErrors).length}</>}
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-3">
-            {filteredMedia.map((m: any, index: number) => {
-              const links = mediaIndex.get(m.imageUrl) || [];
-              const imageError = Boolean(mediaImageErrors[m.id]);
-              return <button key={m.id + m.imageUrl} onClick={() => setSelectedMedia(m)} className="text-left rounded-xl border border-[#e8e0d5] bg-white overflow-hidden hover:shadow-md">
-                <div className="aspect-square bg-gray-100 relative">
-                  {imageError ? (
-                    <div className="w-full h-full flex items-center justify-center p-2 text-center text-[10px] text-red-700 font-semibold">GREŠKA UČITAVANJA<br/>{m.imageUrl}</div>
-                  ) : (
-                    <img
-                      src={m.imageUrl}
-                      alt={m.title || m.id}
-                      className="w-full h-full object-cover"
-                      loading={index < 30 ? 'eager' : 'lazy'}
-                      decoding="async"
-                      onError={() => setMediaImageErrors(prev => ({ ...prev, [m.id]: true }))}
-                    />
-                  )}
-                </div>
-                <div className="p-2"><div className="text-[10px] font-bold truncate">{m.id}</div><div className="text-[9px] text-gray-500 truncate">{m.title || 'Bez naslova'}</div><div className="mt-1 text-[9px]">{links.length ? links.map(x => x.slot).join(' • ') : 'NIJE DODELJENA'}</div></div>
-              </button>;
-            })}
-          </div>
-        </div>
+        <AdminImageWorkspace />
 
         <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
           <div className="flex flex-wrap justify-between items-end gap-3 mb-3">
