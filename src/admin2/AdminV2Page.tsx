@@ -80,7 +80,8 @@ export function AdminV2Page() {
     return rows;
   }, []);
 
-  const auditProblems = slotAudit.filter(x => x.status !== 'OK');
+  const auditProblems = slotAudit.filter(x => x.status === 'MISSING');
+  const auditDuplicateWarnings = slotAudit.filter(x => x.status === 'DUPLICATE');
   const approvedAltCount = Object.values(altApproved).filter(Boolean).length;
   const workflowValidationOk = validation.productCount === 47 && validation.mediaCount === 504 && validation.assignments === 188 && validation.missing.length === 0 && validation.invalid.length === 0;
 
@@ -107,7 +108,7 @@ export function AdminV2Page() {
   };
 
   const draftSnapshot = useMemo(() => readAdminDraft(), [draftVersion]);
-  const draftChangeCount = Object.values(draftSnapshot.assignments).reduce((n, slots) => n + Object.keys(slots).length, 0) + draftSnapshot.removedProductIds.length + draftSnapshot.removedMediaPaths.length + draftSnapshot.uploads.length;
+  const draftChangeCount = Object.values(draftSnapshot.assignments).reduce((n, slots) => n + Object.keys(slots).length, 0) + draftSnapshot.removedProductIds.length + draftSnapshot.removedMediaPaths.length + draftSnapshot.uploads.length + Object.keys(altDrafts).length;
   const draftProductIds = [...new Set([...Object.keys(draftSnapshot.assignments), ...draftSnapshot.removedProductIds])];
 
   const draftImageRows = useMemo(() => {
@@ -173,6 +174,7 @@ export function AdminV2Page() {
     const altSrCount = effectiveAltAudit.filter(x => Boolean(x.effectiveSr)).length;
     const altEnCount = effectiveAltAudit.filter(x => Boolean(x.effectiveEn)).length;
     const altConfirmedCount = effectiveAltAudit.filter(x => x.confirmed).length;
+    const altApprovedPass = altConfirmedCount === 188;
     const uploads = draftSnapshot.uploads || [];
     const uploadPass = uploads.every((u:any) => u.source !== 'upload' || (u.data && u.data.startsWith('data:image/webp') && Number(u.width) > 0 && Number(u.height) > 0 && Number(u.width) <= 1600 && Number(u.height) <= 1600 && Number(u.size) > 0));
     const schemaPass = draftProductIds.every(id => {
@@ -186,8 +188,8 @@ export function AdminV2Page() {
       {key:'physical',label:'SVE FIZIČKE SLIKE POSTOJE',pass:publicMediaStatus==='PASS',detail:publicMediaStatus==='PASS'?'504 javne slike proverene':'potrebno pokrenuti proveru 504 javne slike'},
       {key:'media',label:'504 MEDIA FAJLA',pass:publicCustomProductsManifest.length===504,detail:publicCustomProductsManifest.length + '/504 u canonical manifestu'},
       {key:'slots',label:'188 SLOTOVA',pass:validation.assignments===188,detail:validation.assignments + '/188 slot referenci'},
-      {key:'altSr',label:'ALT SR',pass:altSrCount===188,detail:altSrCount + '/188 • potvrđeno ' + altConfirmedCount + '/188'},
-      {key:'altEn',label:'ALT EN',pass:altEnCount===188,detail:altEnCount + '/188 • potvrđeno ' + altConfirmedCount + '/188'},
+      {key:'altSr',label:'ALT SR',pass:altSrCount===188 && altApprovedPass,detail:altSrCount + '/188 • potvrđeno ' + altConfirmedCount + '/188'},
+      {key:'altEn',label:'ALT EN',pass:altEnCount===188 && altApprovedPass,detail:altEnCount + '/188 • potvrđeno ' + altConfirmedCount + '/188'},
       {key:'compression',label:'KOMPRESIJA NOVIH UPLOAD-A',pass:uploadPass,detail:uploads.length ? uploads.length + ' upload-a provereno' : 'nema novih upload-a'},
       {key:'dimensions',label:'DIMENZIJE / FORMATI',pass:dimensionsStatus==='PASS',detail:dimensionsStatus==='PASS'?'proverene javne slike':'potrebno proveriti'},
       {key:'sitemap',label:'SITEMAP',pass:sitemapStatus==='PASS',detail:sitemapStatus==='PASS'?'sitemap.xml dostupan':'potrebno proveriti'},
@@ -271,8 +273,9 @@ export function AdminV2Page() {
   };
   const confirmFinalPublicPreview = () => {
     window.open('/', '_blank', 'noopener,noreferrer');
-    setFinalPublicPreviewStatus('PASS');
-    setPublishResult('Finalni public preview je otvoren. Potvrda je evidentirana u ovom Admin nacrtu.');
+    const confirmed = window.confirm('Da li ste pregledali javni sajt i potvrđujete da je finalni public preview ispravan?');
+    if (confirmed) { setFinalPublicPreviewStatus('PASS'); setPublishResult('Finalni public preview je ručno potvrđen.'); }
+    else { setFinalPublicPreviewStatus('UNKNOWN'); setPublishResult('Finalni public preview nije potvrđen.'); }
   };
 
   const publishApprovedDraft = async () => {
@@ -289,7 +292,7 @@ export function AdminV2Page() {
       }
       const response = await fetch('/api/admin/publish', {
         method: 'POST', headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ publishKey: publishKey.trim(), assignments: draftSnapshot.assignments, canonical, removedProductIds: draftSnapshot.removedProductIds, removedMediaPaths: draftSnapshot.removedMediaPaths, uploads: draftSnapshot.uploads, altDrafts })
+        body: JSON.stringify({ publishKey: publishKey.trim(), assignments: draftSnapshot.assignments, canonical, removedProductIds: draftSnapshot.removedProductIds, removedMediaPaths: draftSnapshot.removedMediaPaths, uploads: draftSnapshot.uploads, altDrafts: Object.fromEntries(Object.entries(altDrafts).filter(([key]) => Boolean(altApproved[key]))) })
       });
       const result = await response.json().catch(() => ({}));
       if (!response.ok || !result?.ok) throw new Error(result?.error || ('HTTP ' + response.status));
@@ -341,7 +344,7 @@ export function AdminV2Page() {
       });
     });
 
-    const altChanges = Object.entries(altDrafts).map(([key, draft]) => {
+    const altChanges = Object.entries(altDrafts).filter(([key]) => Boolean(altApproved[key])).map(([key, draft]) => {
       const [productId, slotValue] = key.split(':');
       const slot = slotValue as Slot;
       const product = (permanentProductsData as any[]).find(p => p.id === productId);
@@ -361,6 +364,14 @@ export function AdminV2Page() {
   }, [altDrafts, altSuggestions, draftSnapshot]);
 
   const altProblems = altAudit.filter(x => x.status !== 'OK');
+
+  const generateAllMissingAlt = async () => {
+    if (altGenerating) return;
+    const missing = effectiveAltAudit.filter(x => !x.effectiveSr || !x.effectiveEn);
+    if (!missing.length) { setPublishResult('Svi ALT SR/EN već postoje.'); return; }
+    for (const row of missing) await handleGenerateAltSuggestion(row);
+    setPublishResult('Predlozi ALT SR + EN su generisani za sve nedostajuće slotove. Nijedan nije automatski odobren.');
+  };
 
   const handleGenerateAltSuggestion = async (row: typeof altAudit[number]) => {
     if (!row.path) return;
@@ -561,7 +572,7 @@ export function AdminV2Page() {
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div><b>PRE-PUBLISH CHECKLIST</b><div className="text-[10px] text-gray-500">Svaka kontrola mora biti PASS pre PUBLISH.</div></div>
               <div className="flex flex-wrap gap-2">
-                <button onClick={generateAltForDraftImages} disabled={!draftImageRows.length || altGeneratingDraft} className="px-3 py-2 rounded-lg border text-[10px] font-bold disabled:opacity-40">{altGeneratingDraft?'ALT...':'GENERIŠI ALT SR + EN'}</button>
+                <button onClick={async()=>{ await generateAltForDraftImages(); }} disabled={!draftImageRows.length || altGeneratingDraft} className="px-3 py-2 rounded-lg border text-[10px] font-bold disabled:opacity-40">{altGeneratingDraft?'ALT...':'ALT ZA DRAFT SLIKE'}</button><button onClick={generateAllMissingAlt} disabled={Boolean(altGenerating)} className="px-3 py-2 rounded-lg border text-[10px] font-bold disabled:opacity-40">{altGenerating?'ALT...':'ALT ZA SVIH 188'}</button>
                 <button onClick={checkPublicMedia} disabled={publicMediaStatus==='PASS'} className="px-3 py-2 rounded-lg border text-[10px] font-bold disabled:opacity-40">PROVERI 504 JAVNE SLIKE</button>
                 <button onClick={checkDraftImages} className="px-3 py-2 rounded-lg border text-[10px] font-bold">PROVERI DRAFT SLIKE</button>
                 <button onClick={checkSitemap} className="px-3 py-2 rounded-lg border text-[10px] font-bold">PROVERI SITEMAP</button>
