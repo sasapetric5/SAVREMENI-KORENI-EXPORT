@@ -66,7 +66,7 @@ function safeName(name: string) {
 }
 
 function dataUrlToBytes(data: string) {
-  const match = String(data || '').match(/^data:image\\/webp;base64,(.+)$/i);
+  const match = String(data || '').match(/^data:image\/webp;base64,(.+)$/i);
   if (!match) throw new Error('Upload mora biti kompresovan WebP.');
   return match[1];
 }
