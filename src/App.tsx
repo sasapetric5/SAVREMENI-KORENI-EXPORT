@@ -429,7 +429,7 @@ function AppContent() {
 }
 
 export default function App() {
-  if (window.location.pathname === '/admin-v2') return <AdminV2Route />;
+  if (window.location.pathname === '/admin-v2' || window.location.pathname === '/admin-v2/media' || window.location.pathname === '/admin-v2/products/images') return <AdminV2Route />;
   return (
     <ThemeProvider>
       <LanguageProvider>
