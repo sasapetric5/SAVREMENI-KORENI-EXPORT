@@ -128,7 +128,45 @@ export function AdminV2Page() {
 
   const workflowPreviewChanges = useMemo<WorkflowPreviewChange[]>(() => {
     const slotIndex: Record<Slot, number> = { MAIN: 0, G0: 1, G1: 2, G2: 3 };
-    return Object.entries(altDrafts).map(([key, draft]) => {
+    const imageChanges: WorkflowPreviewChange[] = [];
+    const draft = draftSnapshot.assignments || {};
+    let uploads: any[] = [];
+    try { uploads = JSON.parse(localStorage.getItem('admin2_media_v2') || '[]'); } catch {}
+    const resolveDraftImage = (id: string) => {
+      if (!id) return '';
+      if (id.startsWith('repo-')) return '/custom_products/' + id.slice(5);
+      const upload = uploads.find((x: any) => x.id === id);
+      return upload?.data || id;
+    };
+    Object.entries(draft).forEach(([productId, slots]) => {
+      const product = (permanentProductsData as any[]).find(p => p.id === productId);
+      if (!product) return;
+      const current = slotPaths(product);
+      Object.entries(slots).forEach(([slotValue, imageId]) => {
+        const slot = slotValue as Slot;
+        if (!imageId) return;
+        const newImage = resolveDraftImage(String(imageId));
+        const oldImage = current[slot] || '';
+        imageChanges.push({
+          key: 'image:' + productId + ':' + slot,
+          productId,
+          productName: product.name,
+          slot,
+          path: newImage,
+          oldSr: '',
+          oldEn: '',
+          newSr: '',
+          newEn: '',
+          source: 'Admin Image Workspace',
+          valid: Boolean(newImage),
+          kind: 'IMAGE',
+          oldImage,
+          newImage,
+        });
+      });
+    });
+
+    const altChanges = Object.entries(altDrafts).map(([key, draft]) => {
       const [productId, slotValue] = key.split(':');
       const slot = slotValue as Slot;
       const product = (permanentProductsData as any[]).find(p => p.id === productId);
@@ -141,9 +179,11 @@ export function AdminV2Page() {
         newSr: String(draft?.alt || ''), newEn: String(draft?.altEn || ''),
         source: suggestion?.source === 'vision' ? 'Vision — stvarna fotografija' : suggestion?.source === 'fallback' ? 'fallback' : String(suggestion?.source || 'nije naveden'),
         valid: Boolean(draft?.alt?.trim() && draft?.altEn?.trim() && suggestion),
+        kind: 'ALT' as const,
       };
     });
-  }, [altDrafts, altSuggestions]);
+    return [...imageChanges, ...altChanges];
+  }, [altDrafts, altSuggestions, draftSnapshot]);
 
   const altAudit = useMemo(() => {
     const rows: { productId: string; productName: string; slot: Slot; path: string; sr: string; en: string; status: 'OK' | 'MISSING_SR' | 'MISSING_EN' | 'MISSING_BOTH' }[] = [];
