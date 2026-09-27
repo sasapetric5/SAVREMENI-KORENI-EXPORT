@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { generateProductImageAlt, AiImageAltResult } from '../utils/imageSeo';
 import { permanentProductsData } from '../data/permanentProductsData';
 import { permanentGalleryPhotosData } from '../data/permanentGalleryPhotosData';
@@ -47,6 +47,28 @@ export function AdminV2Page() {
   const [publicMediaStatus, setPublicMediaStatus] = useState<'UNKNOWN' | 'PASS' | 'FAIL'>('UNKNOWN');
   const [dimensionsStatus, setDimensionsStatus] = useState<'UNKNOWN' | 'PASS' | 'FAIL'>('UNKNOWN');
   const [brokenImageStatus, setBrokenImageStatus] = useState<'UNKNOWN' | 'PASS' | 'FAIL'>('UNKNOWN');
+
+  const invalidatePrePublish = () => {
+    setWorkflowStage('DRAFT');
+    setPreviewReviewed(false);
+    setVisualReviewStatus('UNKNOWN');
+    setSeoImpactStatus('UNKNOWN');
+    setFinalPublicPreviewStatus('UNKNOWN');
+    setPublicMediaStatus('UNKNOWN');
+    setDimensionsStatus('UNKNOWN');
+    setBrokenImageStatus('UNKNOWN');
+    setImageCheckStatus('UNKNOWN');
+  };
+
+  useEffect(() => {
+    const onDraftMutation = () => invalidatePrePublish();
+    window.addEventListener('admin2-draft-mutated', onDraftMutation);
+    window.addEventListener('admin2-draft-saved', onDraftMutation);
+    return () => {
+      window.removeEventListener('admin2-draft-mutated', onDraftMutation);
+      window.removeEventListener('admin2-draft-saved', onDraftMutation);
+    };
+  }, []);
 
   const validation = useMemo(() => {
     const products = permanentProductsData as any[];
@@ -179,7 +201,23 @@ export function AdminV2Page() {
     const uploadPass = uploads.every((u:any) => u.source !== 'upload' || (u.data && u.data.startsWith('data:image/webp') && Number(u.width) > 0 && Number(u.height) > 0 && Number(u.width) <= 1600 && Number(u.height) <= 1600 && Number(u.size) > 0));
     const schemaPass = draftProductIds.every(id => {
       const p=(permanentProductsData as any[]).find(x=>x.id===id);
-      return !p || Boolean(p.name && p.category);
+      if (!p) return true;
+      const schema = buildProductSchema(p);
+      try {
+        const json = JSON.stringify(schema);
+        return Boolean(
+          schema['@context'] === 'https://schema.org' &&
+          schema['@type'] === 'Product' &&
+          String(schema.name || '').trim() &&
+          String(schema.category || '').trim() &&
+          Array.isArray(schema.image) &&
+          schema.image.length > 0 &&
+          schema.offers?.['@type'] === 'Offer' &&
+          String(schema.offers?.priceCurrency || '').trim() &&
+          String(schema.offers?.availability || '').trim() &&
+          json.includes('"@type":"Product"')
+        );
+      } catch { return false; }
     });
     return [
       {key:'images',label:'IZMENE SLIKA',pass:imagePass,detail:changed.length ? changed.length + ' izmenjenih slotova u DRAFT-u' : 'nema izmena slika'},
@@ -259,17 +297,39 @@ export function AdminV2Page() {
     try {
       const r=await fetch('/sitemap.xml',{cache:'no-store'});
       const body=await r.text();
-      setSitemapStatus(r.ok && body.includes('<urlset') && body.includes('<url>') ? 'PASS' : 'FAIL');
-    } catch { setSitemapStatus('FAIL'); }
+      const locs=[...body.matchAll(/<loc>\\s*([^<]+?)\\s*<\\/loc>/gi)].map(m=>m[1].trim());
+      const validXml=r.ok && /<urlset\\b/i.test(body) && /<url>\\s*<loc>/i.test(body) && locs.length > 0;
+      const canonicalHost=locs.every(url => /^https:\\/\\/savremenikoreni\\.com\\//i.test(url));
+      const homeIncluded=locs.some(url => url.replace(/\\/$/,'') === 'https://savremenikoreni.com');
+      setSitemapStatus(validXml && canonicalHost && homeIncluded ? 'PASS' : 'FAIL');
+      setPublishResult(validXml && canonicalHost && homeIncluded
+        ? `Sitemap PASS: ${locs.length} URL-ova, canonical domen i početna stranica provereni.`
+        : 'Sitemap FAIL: XML, canonical domen ili početna URL provera nije prošla.');
+    } catch { setSitemapStatus('FAIL'); setPublishResult('Sitemap FAIL: fajl nije dostupan za proveru.'); }
   };
 
   const confirmVisualReview = () => {
     setVisualReviewStatus('PASS');
     setPublishResult(draftImageRows.length ? 'Vizuelna provera novih fotografija je ručno potvrđena.' : 'Nema novih fotografija za vizuelnu proveru.');
   };
-  const confirmSeoImpact = () => {
-    setSeoImpactStatus('PASS');
-    setPublishResult('SEO / AEO / GEO posledice su ručno proverene i potvrđene.');
+  const confirmSeoImpact = async () => {
+    try {
+      const r=await fetch('/',{cache:'no-store'});
+      const html=await r.text();
+      const title=(html.match(/<title[^>]*>([\\s\\S]*?)<\\/title>/i)?.[1]||'').trim();
+      const description=(html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i)?.[1]||'').trim();
+      const canonical=(html.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i)?.[1]||'').trim();
+      const jsonLd=[...html.matchAll(/<script[^>]+type=["']application\\/ld\\+json["'][^>]*>([\\s\\S]*?)<\\/script>/gi)].map(m=>m[1]);
+      const schemaValid=jsonLd.some(raw=>{try{const x=JSON.parse(raw);return Boolean(x && (x['@context']==='https://schema.org' || x['@graph']));}catch{return false;}});
+      const pass=r.ok && Boolean(title) && Boolean(description) && /^https:\\/\\/savremenikoreni\\.com\\/?$/i.test(canonical) && schemaValid;
+      setSeoImpactStatus(pass?'PASS':'UNKNOWN');
+      setPublishResult(pass
+        ? 'SEO/AEO/GEO osnovna provera PASS: title, description, canonical i JSON-LD postoje.'
+        : 'SEO/AEO/GEO provera NIJE PASS: proverite title, meta description, canonical ili JSON-LD.');
+    } catch {
+      setSeoImpactStatus('UNKNOWN');
+      setPublishResult('SEO/AEO/GEO provera nije mogla da se izvrši.');
+    }
   };
   const confirmFinalPublicPreview = () => {
     window.open('/', '_blank', 'noopener,noreferrer');
