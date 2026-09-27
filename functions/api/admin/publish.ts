@@ -79,7 +79,7 @@ function binaryToUtf8(binary: string) {
 function extractManifestPaths(content: string) {
   const text = binaryToUtf8(content);
   const names = [...text.matchAll(/['"]([^'"]+\.(?:jpe?g|png|webp|avif))['"]/gi)].map(m => m[1]);
-  return new Set(names.map(name => '/custom_products/' + name.replace(/^\\/+/, '')));
+  return new Set(names.map(name => '/custom_products/' + name.replace(/^\/+/, '')));
 }
 
 async function getCanonicalMediaPaths(env: Env) {
