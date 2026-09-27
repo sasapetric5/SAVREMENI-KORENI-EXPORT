@@ -675,7 +675,7 @@ function mergeGallery(factory: GalleryPhoto[], permanent: GalleryPhoto[]): Galle
   return result;
 }
 
-export const initialGalleryPhotos: GalleryPhoto[] = mergeGallery(defaultFactoryGalleryPhotos, permanentGalleryPhotosData);
+export const initialGalleryPhotos: GalleryPhoto[] = mergeGallery(defaultFactoryGalleryPhotos, permanentGalleryPhotosData).filter((photo) => !new Set(adminPublishedState.removedMediaPaths || []).has(photo.imageUrl));
 
 export const craftSteps = [
   {
