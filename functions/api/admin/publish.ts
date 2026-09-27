@@ -66,9 +66,30 @@ function safeName(name: string) {
 }
 
 function dataUrlToBytes(data: string) {
-  const match = String(data || '').match(/^data:[^;]+;base64,(.+)$/);
-  if (!match) throw new Error('Upload nema validan data URL.');
+  const match = String(data || '').match(/^data:image\\/webp;base64,(.+)$/i);
+  if (!match) throw new Error('Upload mora biti kompresovan WebP.');
   return match[1];
+}
+
+function binaryToUtf8(binary: string) {
+  try { return decodeURIComponent(Array.from(binary, c => '%' + c.charCodeAt(0).toString(16).padStart(2, '0')).join('')); }
+  catch { return binary; }
+}
+
+function extractManifestPaths(content: string) {
+  const text = binaryToUtf8(content);
+  const names = [...text.matchAll(/['"]([^'"]+\\.(?:jpe?g|png|webp|avif))['"]/gi)].map(m => m[1]);
+  return new Set(names.map(name => '/custom_products/' + name.replace(/^\\/+/, '')));
+}
+
+async function getCanonicalMediaPaths(env: Env) {
+  const file = await getFile(env, 'src/data/publicCustomProductsManifest.ts');
+  if (!file) throw new Error('Canonical media manifest nije pronađen na GitHub-u.');
+  return extractManifestPaths(file.content);
+}
+
+function validateRepoMediaPath(path: string, manifestPaths: Set<string>) {
+  return /^\\/custom_products\\/[^\\s?#]+$/i.test(path) && manifestPaths.has(path);
 }
 
 export const onRequestGet = async ({ env }: { env: Env }) => {
@@ -100,16 +121,48 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
       if (Object.keys(clean).length) safeAssignments[productId] = clean;
     }
     const altDrafts = body?.altDrafts && typeof body.altDrafts === 'object' ? body.altDrafts : {};
+    const manifestPaths = await getCanonicalMediaPaths(env);
+
+    if (uploads.length > 20) return json({ ok: false, error: 'Maksimalno 20 novih upload-a po publish-u.' }, 400);
+
+    const canonicalIds = new Set(Object.keys(canonical));
+    for (const id of removedProductIds) {
+      if (!canonicalIds.has(id)) return json({ ok: false, error: `Nepoznat product ID za uklanjanje: ${id}` }, 400);
+    }
+    for (const path of removedMediaPaths) {
+      if (!validateRepoMediaPath(path, manifestPaths)) return json({ ok: false, error: `Nepoznata media putanja za uklanjanje: ${path}` }, 400);
+    }
 
     const uploadPathById: Record<string, string> = {};
-    for (const u of uploads.slice(0, 20)) {
+    const uploadedPaths: string[] = [];
+    for (const u of uploads) {
       const id = String(u?.id || '');
-      if (!id || !u?.data) continue;
+      if (!id || !u?.data) return json({ ok: false, error: 'Svaki upload mora imati ID i kompresovan WebP data URL.' }, 400);
       const filename = safeName(String(u.name || `${id}.webp`));
       const path = `public/custom_products/${filename}`;
+      const base64 = dataUrlToBytes(String(u.data));
+      if (base64.length > 8_000_000) return json({ ok: false, error: `Upload ${filename} je prevelik nakon kompresije.` }, 400);
       const existing = await getFile(env, path);
-      await putBinaryBase64File(env, path, dataUrlToBytes(String(u.data)), `Admin 2.0: upload media ${filename}`, existing?.sha);
+      if (existing) {
+        const existingBase64 = btoa(existing.content);
+        if (existingBase64.replace(/=+$/,'') !== base64.replace(/=+$/,'')) {
+          return json({ ok: false, error: `Fajl već postoji i razlikuje se: ${path}. Promenite naziv upload-a.` }, 409);
+        }
+        uploadPathById[id] = `/custom_products/${filename}`;
+        continue;
+      }
+      await putBinaryBase64File(env, path, base64, `Admin 2.0: upload media ${filename}`);
       uploadPathById[id] = `/custom_products/${filename}`;
+      uploadedPaths.push(path);
+    }
+
+    for (const [productId, slots] of Object.entries(safeAssignments)) {
+      for (const [slot, value] of Object.entries(slots as any)) {
+        if (uploadPathById[value]) continue;
+        if (!validateRepoMediaPath(value, manifestPaths)) {
+          return json({ ok: false, error: `Nepoznata media putanja za ${productId}/${slot}: ${value}` }, 400);
+        }
+      }
     }
 
     const productOverrides: Record<string, any> = {};
@@ -133,7 +186,7 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
     const altOverrides: Record<string, any> = {};
     for (const [key, value] of Object.entries(altDrafts)) {
       const [productId, slot] = String(key).split(':');
-      if (!productId || !['MAIN','G0','G1','G2'].includes(slot)) continue;
+      if (!productId || !canonicalIds.has(productId) || !['MAIN','G0','G1','G2'].includes(slot)) continue;
       const sr = String((value as any)?.alt || '').trim();
       const en = String((value as any)?.altEn || '').trim();
       if (sr && en) (altOverrides[productId] ||= {})[slot] = { alt: sr, altEn: en };
@@ -161,7 +214,7 @@ export const adminPublishedState: AdminPublishedState = ${JSON.stringify({
 `;
     const existingState = await getFile(env, STATE_PATH);
     const saved = await putFile(env, STATE_PATH, stateContent, 'Admin 2.0: publish approved changes', existingState?.sha);
-    return json({ ok: true, commit: saved.commit?.sha || saved.content?.sha || null, uploaded: Object.keys(uploadPathById).length, overrides: Object.keys(productOverrides).length });
+    return json({ ok: true, commit: saved.commit?.sha || saved.content?.sha || null, uploaded: Object.keys(uploadPathById).length, overrides: Object.keys(productOverrides).length, note: 'GitHub state je upisan. Cloudflare Git integracija zatim pokreće deployment sa main grane.' });
   } catch (error) {
     return json({ ok: false, error: error instanceof Error ? error.message : String(error) }, 500);
   }
