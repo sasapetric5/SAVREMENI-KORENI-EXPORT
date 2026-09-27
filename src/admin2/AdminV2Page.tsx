@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { generateProductImageAlt, AiImageAltResult } from '../utils/imageSeo';
 import { permanentProductsData } from '../data/permanentProductsData';
-import { permanentGalleryPhotosData } from '../data/permanentGalleryPhotosData';
+import { publicCustomProductsManifest } from '../data/publicCustomProductsManifest';
 import WorkflowPreviewPanel, { WorkflowPreviewChange } from './WorkflowPreviewPanel';
 import { AdminImageWorkspace } from './AdminImageWorkspace';
 
@@ -16,10 +16,6 @@ const slotPaths = (p: any): Record<Slot, string> => ({
 export function AdminV2Page() {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<string | null>(null);
-  const [mediaQuery, setMediaQuery] = useState('');
-  const [mediaFilter, setMediaFilter] = useState<'all' | 'assigned' | 'unassigned' | 'removed' | 'newUpload'>('all');
-  const [mediaImageErrors, setMediaImageErrors] = useState<Record<string, boolean>>({});
-  const [selectedMedia, setSelectedMedia] = useState<any | null>(null);
   const [altSuggestions, setAltSuggestions] = useState<Record<string, AiImageAltResult>>({});
   const [altGenerating, setAltGenerating] = useState<string | null>(null);
   const [altDrafts, setAltDrafts] = useState<Record<string, { alt: string; altEn: string }>>({});
@@ -42,7 +38,7 @@ export function AdminV2Page() {
     const missing = paths.filter(path => !media.some(m => m.imageUrl === path));
     const duplicateIds = products.filter(p => p.image && products.filter(x => x.image === p.image).length > 1).map(p => p.id);
     const invalid = products.filter(p => !p.image || !p.images || p.images.length !== 3);
-    return { productCount: products.length, mediaCount: media.length, assignments: paths.length, missing, duplicateIds: [...new Set(duplicateIds)], invalid: invalid.map(p => p.name) };
+    return { productCount: products.length, mediaCount: publicCustomProductsManifest.length, assignments: paths.length, missing, duplicateIds: [...new Set(duplicateIds)], invalid: invalid.map(p => p.name) };
   }, []);
 
   const filtered = useMemo(() => {
@@ -256,39 +252,6 @@ export function AdminV2Page() {
       setAltSaving(false);
     }
   };
-  const mediaIndex = useMemo(() => {
-    const result = new Map<string, { productId: string; productName: string; slot: Slot }[]>();
-    (permanentProductsData as any[]).forEach(p => {
-      const slots = slotPaths(p);
-      (Object.keys(slots) as Slot[]).forEach(slot => {
-        const path = slots[slot];
-        if (!path) return;
-        const list = result.get(path) || [];
-        list.push({ productId: p.id, productName: p.name, slot });
-        result.set(path, list);
-      });
-    });
-    return result;
-  }, []);
-
-  const filteredMedia = useMemo(() => {
-    const q = mediaQuery.trim().toLowerCase();
-    return (permanentGalleryPhotosData as any[]).filter(m => {
-      const links = mediaIndex.get(m.imageUrl) || [];
-      const matchesFilter =
-        mediaFilter === 'all' ||
-        (mediaFilter === 'assigned' ? links.length > 0 :
-        mediaFilter === 'unassigned' ? links.length === 0 :
-        mediaFilter === 'newUpload' ? Boolean(m.isCustomUploaded) :
-        false);
-      const haystack = [m.id, m.title, m.category, m.imageUrl, ...(links.map(x => x.productName + ' ' + x.slot))].join(' ').toLowerCase();
-      return matchesFilter && (!q || haystack.includes(q));
-    });
-  }, [mediaQuery, mediaFilter, mediaIndex]);
-
-  const assignedMediaCount = useMemo(() => (permanentGalleryPhotosData as any[]).filter(m => (mediaIndex.get(m.imageUrl) || []).length > 0).length, [mediaIndex]);
-  const unassignedMediaCount = permanentGalleryPhotosData.length - assignedMediaCount;
-  const newUploadMediaCount = permanentGalleryPhotosData.filter(m => Boolean((m as any).isCustomUploaded)).length;
 
   return (
     <div className="min-h-screen bg-[#f7f3ed] text-[#241d19] p-4 md:p-8">
@@ -501,63 +464,6 @@ export function AdminV2Page() {
         </div>
 
         <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
-          <div className="flex flex-wrap items-end justify-between gap-3 mb-4">
-            <div><h2 className="font-bold text-lg">Media Library — 504 fotografije</h2><p className="text-xs text-gray-500 mt-1">READ ONLY • svaka fotografija ostaje fizički nezavisna od proizvoda</p></div>
-            <div className="text-xs font-semibold">Povezane: {assignedMediaCount} • Nepovezane: {unassignedMediaCount}</div>
-          </div>
-          <div className="flex flex-col md:flex-row gap-2 mb-4">
-            <input value={mediaQuery} onChange={e => setMediaQuery(e.target.value)} placeholder="Pretraži 504 fotografije, naziv, kategoriju ili proizvod..." className="flex-1 px-4 py-3 rounded-xl border border-[#d8cec1] bg-white" />
-            {(['all','assigned','unassigned','removed','newUpload'] as const).map(f => {
-              const disabled = f === 'removed';
-              return (
-                <button
-                  key={f}
-                  onClick={() => !disabled && setMediaFilter(f)}
-                  disabled={disabled}
-                  className={disabled
-                    ? 'px-4 py-2 rounded-xl border border-[#e8e0d5] bg-gray-50 text-gray-400 cursor-not-allowed'
-                    : mediaFilter === f
-                      ? 'px-4 py-2 rounded-xl bg-[#241d19] text-white font-semibold'
-                      : 'px-4 py-2 rounded-xl border border-[#d8cec1] bg-white'}
-                  title={disabled ? 'Uklonjene nisu deo READ ONLY indeksa ove faze.' : undefined}
-                >
-                  {f === 'all' ? 'SVE' : f === 'assigned' ? 'Korišćene' : f === 'unassigned' ? 'Nepovezane' : f === 'removed' ? 'Uklonjene' : 'Novi upload'}
-                </button>
-              );
-            })}
-          </div>
-          <div className="text-xs text-gray-500 mb-3">
-            Prikaz: <b>{filteredMedia.length}</b> / {permanentGalleryPhotosData.length}
-            {mediaFilter === 'assigned' && <> • Korišćene: {assignedMediaCount}</>}
-            {mediaFilter === 'unassigned' && <> • Nepovezane: {unassignedMediaCount}</>}
-            {mediaFilter === 'newUpload' && <> • Novi upload: {newUploadMediaCount}</>}
-            {Object.keys(mediaImageErrors).length > 0 && <> • Greške učitavanja: {Object.keys(mediaImageErrors).length}</>}
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-3">
-            {filteredMedia.map((m: any, index: number) => {
-              const links = mediaIndex.get(m.imageUrl) || [];
-              const imageError = Boolean(mediaImageErrors[m.id]);
-              return <button key={m.id + m.imageUrl} onClick={() => setSelectedMedia(m)} className="text-left rounded-xl border border-[#e8e0d5] bg-white overflow-hidden hover:shadow-md">
-                <div className="aspect-square bg-gray-100 relative">
-                  {imageError ? (
-                    <div className="w-full h-full flex items-center justify-center p-2 text-center text-[10px] text-red-700 font-semibold">GREŠKA UČITAVANJA<br/>{m.imageUrl}</div>
-                  ) : (
-                    <img
-                      src={m.imageUrl}
-                      alt={m.title || m.id}
-                      className="w-full h-full object-cover"
-                      loading={index < 30 ? 'eager' : 'lazy'}
-                      decoding="async"
-                      onError={() => setMediaImageErrors(prev => ({ ...prev, [m.id]: true }))}
-                    />
-                  )}
-                </div>
-                <div className="p-2"><div className="text-[10px] font-bold truncate">{m.id}</div><div className="text-[9px] text-gray-500 truncate">{m.title || 'Bez naslova'}</div><div className="mt-1 text-[9px]">{links.length ? links.map(x => x.slot).join(' • ') : 'NIJE DODELJENA'}</div></div>
-              </button>;
-            })}
-          </div>
-        </div>
-
         <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
           <div className="flex flex-wrap justify-between items-end gap-3 mb-3">
             <div><h2 className="font-bold text-lg">Schema Generator — Product</h2><p className="text-xs text-gray-500 mt-1">Preview only • JSON-LD se ne upisuje automatski</p></div>
@@ -607,13 +513,6 @@ export function AdminV2Page() {
       </div>
 
       {selectedMedia && <div className="fixed inset-0 z-[60] bg-black/70 p-4 flex items-center justify-center" onClick={() => setSelectedMedia(null)}>
-        <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-auto p-5" onClick={e => e.stopPropagation()}>
-          <div className="flex justify-between items-start gap-3 mb-4"><div><h2 className="text-xl font-bold">{selectedMedia.title || selectedMedia.id}</h2><div className="text-xs text-gray-500 break-all">{selectedMedia.imageUrl}</div></div><button onClick={() => setSelectedMedia(null)} className="px-3 py-1 rounded-lg bg-gray-100">Zatvori</button></div>
-          <img src={selectedMedia.imageUrl} alt={selectedMedia.title || selectedMedia.id} className="w-full max-h-[65vh] object-contain rounded-xl bg-gray-100" />
-          <div className="mt-4 p-3 rounded-xl bg-[#f7f3ed]"><div className="text-xs font-bold mb-2">TRENUTNE VEZE</div>{(mediaIndex.get(selectedMedia.imageUrl) || []).length ? (mediaIndex.get(selectedMedia.imageUrl) || []).map(x => <div key={x.productId + x.slot} className="text-sm">{x.productName} — <b>{x.slot}</b></div>) : <div className="text-sm text-gray-600">Nije dodeljena nijednom proizvodu.</div>}</div>
-        </div>
-      </div>}
-      {selectedProduct && <div className="fixed inset-0 z-50 bg-black/60 p-4 flex items-center justify-center" onClick={() => setSelected(null)}>
         <div className="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-auto p-5" onClick={e => e.stopPropagation()}>
           <div className="flex justify-between items-center mb-4"><h2 className="text-xl font-bold">{selectedProduct.name}</h2><button onClick={() => setSelected(null)} className="px-3 py-1 rounded-lg bg-gray-100">Zatvori</button></div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
