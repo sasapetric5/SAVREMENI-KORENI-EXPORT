@@ -1,5 +1,5 @@
 const DB_NAME = 'savremeni_koreni_db';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 
 export function openAppDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -17,6 +17,9 @@ export function openAppDB(): Promise<IDBDatabase> {
       }
       if (!db.objectStoreNames.contains('custom_products')) {
         db.createObjectStore('custom_products', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('admin_media')) {
+        db.createObjectStore('admin_media', { keyPath: 'id' });
       }
     };
 
