@@ -78,6 +78,7 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
     const removedProductIds = Array.isArray(body?.removedProductIds) ? body.removedProductIds.map(String) : [];
     const removedMediaPaths = Array.isArray(body?.removedMediaPaths) ? body.removedMediaPaths.map(String) : [];
     const uploads = Array.isArray(body?.uploads) ? body.uploads : [];
+    const altDrafts = body?.altDrafts && typeof body.altDrafts === 'object' ? body.altDrafts : {};
 
     const uploadPathById: Record<string, string> = {};
     for (const u of uploads.slice(0, 20)) {
@@ -108,6 +109,15 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
       if (main || paths.some(Boolean)) productOverrides[productId] = { image: main, images: paths };
     }
 
+    const altOverrides: Record<string, any> = {};
+    for (const [key, value] of Object.entries(altDrafts)) {
+      const [productId, slot] = String(key).split(':');
+      if (!productId || !['MAIN','G0','G1','G2'].includes(slot)) continue;
+      const sr = String((value as any)?.alt || '').trim();
+      const en = String((value as any)?.altEn || '').trim();
+      if (sr && en) (altOverrides[productId] ||= {})[slot] = { alt: sr, altEn: en };
+    }
+
     const stateContent = `import { Product } from '../types';
 
 export type AdminPublishedState = {
@@ -116,6 +126,7 @@ export type AdminPublishedState = {
   productOverrides: Record<string, Partial<Pick<Product, 'image' | 'images'>>>;
   removedProductIds: string[];
   removedMediaPaths: string[];
+  altOverrides: Record<string, Record<string, { alt: string; altEn: string }>>;
 };
 
 export const adminPublishedState: AdminPublishedState = ${JSON.stringify({
@@ -124,6 +135,7 @@ export const adminPublishedState: AdminPublishedState = ${JSON.stringify({
   productOverrides,
   removedProductIds,
   removedMediaPaths,
+  altOverrides,
 }, null, 2)};
 `;
     const existingState = await getFile(env, STATE_PATH);
