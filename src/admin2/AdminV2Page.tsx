@@ -50,7 +50,7 @@ export function AdminV2Page() {
 
   const validation = useMemo(() => {
     const products = permanentProductsData as any[];
-    const media = permanentGalleryPhotosData as any[];
+    const media = publicCustomProductsManifest as string[];
     const paths = products.flatMap(p => Object.values(slotPaths(p))).filter(Boolean) as string[];
     const manifestPaths = new Set((publicCustomProductsManifest as string[]).map(file => '/custom_products/' + file));
     const missing = paths.filter(path => !manifestPaths.has(path));
