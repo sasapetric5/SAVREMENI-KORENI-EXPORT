@@ -16,7 +16,8 @@ export function AdminV2Page() {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<string | null>(null);
   const [mediaQuery, setMediaQuery] = useState('');
-  const [mediaFilter, setMediaFilter] = useState<'all' | 'assigned' | 'unassigned'>('all');
+  const [mediaFilter, setMediaFilter] = useState<'all' | 'assigned' | 'unassigned' | 'removed' | 'newUpload'>('all');
+  const [mediaImageErrors, setMediaImageErrors] = useState<Record<string, boolean>>({});
   const [selectedMedia, setSelectedMedia] = useState<any | null>(null);
   const [altSuggestions, setAltSuggestions] = useState<Record<string, AiImageAltResult>>({});
   const [altGenerating, setAltGenerating] = useState<string | null>(null);
@@ -273,7 +274,12 @@ export function AdminV2Page() {
     const q = mediaQuery.trim().toLowerCase();
     return (permanentGalleryPhotosData as any[]).filter(m => {
       const links = mediaIndex.get(m.imageUrl) || [];
-      const matchesFilter = mediaFilter === 'all' || (mediaFilter === 'assigned' ? links.length > 0 : links.length === 0);
+      const matchesFilter =
+        mediaFilter === 'all' ||
+        (mediaFilter === 'assigned' ? links.length > 0 :
+        mediaFilter === 'unassigned' ? links.length === 0 :
+        mediaFilter === 'newUpload' ? Boolean(m.isCustomUploaded) :
+        false);
       const haystack = [m.id, m.title, m.category, m.imageUrl, ...(links.map(x => x.productName + ' ' + x.slot))].join(' ').toLowerCase();
       return matchesFilter && (!q || haystack.includes(q));
     });
@@ -281,6 +287,7 @@ export function AdminV2Page() {
 
   const assignedMediaCount = useMemo(() => (permanentGalleryPhotosData as any[]).filter(m => (mediaIndex.get(m.imageUrl) || []).length > 0).length, [mediaIndex]);
   const unassignedMediaCount = permanentGalleryPhotosData.length - assignedMediaCount;
+  const newUploadMediaCount = permanentGalleryPhotosData.filter(m => Boolean((m as any).isCustomUploaded)).length;
 
   return (
     <div className="min-h-screen bg-[#f7f3ed] text-[#241d19] p-4 md:p-8">
@@ -497,18 +504,51 @@ export function AdminV2Page() {
           </div>
           <div className="flex flex-col md:flex-row gap-2 mb-4">
             <input value={mediaQuery} onChange={e => setMediaQuery(e.target.value)} placeholder="Pretraži 504 fotografije, naziv, kategoriju ili proizvod..." className="flex-1 px-4 py-3 rounded-xl border border-[#d8cec1] bg-white" />
-            {(['all','assigned','unassigned'] as const).map(f => (
-              <button key={f} onClick={() => setMediaFilter(f)} className={mediaFilter === f ? 'px-4 py-2 rounded-xl bg-[#241d19] text-white font-semibold' : 'px-4 py-2 rounded-xl border border-[#d8cec1] bg-white'}>
-                {f === 'all' ? 'Sve' : f === 'assigned' ? 'Povezane' : 'Nepovezane'}
-              </button>
-            ))}
+            {(['all','assigned','unassigned','removed','newUpload'] as const).map(f => {
+              const disabled = f === 'removed';
+              return (
+                <button
+                  key={f}
+                  onClick={() => !disabled && setMediaFilter(f)}
+                  disabled={disabled}
+                  className={disabled
+                    ? 'px-4 py-2 rounded-xl border border-[#e8e0d5] bg-gray-50 text-gray-400 cursor-not-allowed'
+                    : mediaFilter === f
+                      ? 'px-4 py-2 rounded-xl bg-[#241d19] text-white font-semibold'
+                      : 'px-4 py-2 rounded-xl border border-[#d8cec1] bg-white'}
+                  title={disabled ? 'Uklonjene nisu deo READ ONLY indeksa ove faze.' : undefined}
+                >
+                  {f === 'all' ? 'SVE' : f === 'assigned' ? 'Korišćene' : f === 'unassigned' ? 'Nepovezane' : f === 'removed' ? 'Uklonjene' : 'Novi upload'}
+                </button>
+              );
+            })}
           </div>
-          <div className="text-xs text-gray-500 mb-3">Prikaz: {filteredMedia.length} / {permanentGalleryPhotosData.length}</div>
+          <div className="text-xs text-gray-500 mb-3">
+            Prikaz: <b>{filteredMedia.length}</b> / {permanentGalleryPhotosData.length}
+            {mediaFilter === 'assigned' && <> • Korišćene: {assignedMediaCount}</>}
+            {mediaFilter === 'unassigned' && <> • Nepovezane: {unassignedMediaCount}</>}
+            {mediaFilter === 'newUpload' && <> • Novi upload: {newUploadMediaCount}</>}
+            {Object.keys(mediaImageErrors).length > 0 && <> • Greške učitavanja: {Object.keys(mediaImageErrors).length}</>}
+          </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-3">
-            {filteredMedia.map((m: any) => {
+            {filteredMedia.map((m: any, index: number) => {
               const links = mediaIndex.get(m.imageUrl) || [];
+              const imageError = Boolean(mediaImageErrors[m.id]);
               return <button key={m.id + m.imageUrl} onClick={() => setSelectedMedia(m)} className="text-left rounded-xl border border-[#e8e0d5] bg-white overflow-hidden hover:shadow-md">
-                <div className="aspect-square bg-gray-100"><img src={m.imageUrl} alt={m.title || m.id} className="w-full h-full object-cover" loading="lazy" /></div>
+                <div className="aspect-square bg-gray-100 relative">
+                  {imageError ? (
+                    <div className="w-full h-full flex items-center justify-center p-2 text-center text-[10px] text-red-700 font-semibold">GREŠKA UČITAVANJA<br/>{m.imageUrl}</div>
+                  ) : (
+                    <img
+                      src={m.imageUrl}
+                      alt={m.title || m.id}
+                      className="w-full h-full object-cover"
+                      loading={index < 30 ? 'eager' : 'lazy'}
+                      decoding="async"
+                      onError={() => setMediaImageErrors(prev => ({ ...prev, [m.id]: true }))}
+                    />
+                  )}
+                </div>
                 <div className="p-2"><div className="text-[10px] font-bold truncate">{m.id}</div><div className="text-[9px] text-gray-500 truncate">{m.title || 'Bez naslova'}</div><div className="mt-1 text-[9px]">{links.length ? links.map(x => x.slot).join(' • ') : 'NIJE DODELJENA'}</div></div>
               </button>;
             })}
