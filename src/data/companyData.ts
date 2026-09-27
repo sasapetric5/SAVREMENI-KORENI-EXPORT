@@ -1,6 +1,7 @@
 import { CompanyInfo, Product, GalleryPhoto } from '../types';
 import { permanentProductsData } from './permanentProductsData';
 import { permanentGalleryPhotosData } from './permanentGalleryPhotosData';
+import { adminPublishedState } from './adminPublishedState';
 
 const heroImg = '/images/savremeni_hero_banner_1789021835867.jpg';
 const subaraImg = '/images/srpska_subara_moderna_1789021862584.jpg';
@@ -366,7 +367,21 @@ function mergeProducts(factory: Product[], permanent: Product[]): Product[] {
   return Array.from(map.values());
 }
 
-export const productsData: Product[] = mergeProducts(defaultFactoryProducts, permanentProductsData);
+function applyAdminPublishedState(products: Product[]): Product[] {
+  const removed = new Set(adminPublishedState.removedProductIds || []);
+  const overrides = adminPublishedState.productOverrides || {};
+  return products
+    .filter((p) => !removed.has(p.id))
+    .map((p) => {
+      const override = overrides[p.id];
+      if (!override) return p;
+      return { ...p, ...override };
+    });
+}
+
+export const productsData: Product[] = applyAdminPublishedState(
+  mergeProducts(defaultFactoryProducts, permanentProductsData)
+);
 
 export const defaultFactoryGalleryPhotos: GalleryPhoto[] = [
   // --- TORBICE (Unikatne ručno rađene makrame i heklane torbe) ---
