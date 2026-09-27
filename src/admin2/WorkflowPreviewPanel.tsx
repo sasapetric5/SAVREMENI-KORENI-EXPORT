@@ -12,6 +12,9 @@ export type WorkflowPreviewChange = {
   newEn: string;
   source: string;
   valid: boolean;
+  kind?: 'ALT' | 'IMAGE' | 'PRODUCT' | 'MEDIA';
+  oldImage?: string;
+  newImage?: string;
 };
 
 export interface WorkflowPreviewPanelProps {
@@ -47,7 +50,7 @@ export default function WorkflowPreviewPanel({
           <div>
             <div style={{ fontSize: 12, fontWeight: 800 }}>ADMIN 2.0 · WORKFLOW PREVIEW</div>
             <h2 id="workflow-preview-title">Pregled predloženih promena</h2>
-            <p>Samo pregled. Ovaj ekran ne menja proizvode, slike niti fajlove.</p>
+            <p>Pregled DRAFT-a. Ništa se ne objavljuje dok ne potvrdite pregled i APPROVE.</p>
           </div>
           <button type="button" onClick={onClose}>Zatvori</button>
         </div>
@@ -80,20 +83,41 @@ export default function WorkflowPreviewPanel({
                 <div><strong>{change.productName}</strong><div>{change.productId} · {change.slot}</div></div>
                 <b>{change.valid ? 'VALIDNO' : 'BLOKIRANO'}</b>
               </div>
-              {change.path && <div style={{ fontSize: 12, marginTop: 8 }}>Slika: {change.path}</div>}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 12 }}>
-                <div style={{ background: '#f7f7f7', padding: 12, borderRadius: 10 }}>
-                  <b>STARA VREDNOST</b>
-                  <div><b>SR:</b> {change.oldSr || '—'}</div>
-                  <div><b>EN:</b> {change.oldEn || '—'}</div>
-                </div>
-                <div style={{ background: '#f1f8f3', padding: 12, borderRadius: 10 }}>
-                  <b>NOVA VREDNOST</b>
-                  <div><b>SR:</b> {change.newSr || '—'}</div>
-                  <div><b>EN:</b> {change.newEn || '—'}</div>
-                </div>
-              </div>
-              <div style={{ fontSize: 12, marginTop: 8 }}>AI izvor: {change.source || 'nije naveden'}</div>
+              <div style={{ fontSize: 11, marginTop: 8, fontWeight: 800 }}>{change.kind || 'ALT'} PROMENA</div>
+              {change.kind === 'IMAGE' ? (
+                <>
+                  <div style={{ fontSize: 12, marginTop: 6 }}>Slot: <b>{change.slot}</b></div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 12 }}>
+                    <div style={{ background: '#f7f7f7', padding: 12, borderRadius: 10 }}>
+                      <b>PRE PUBLISH</b>
+                      {change.oldImage ? <img src={change.oldImage} alt="stara slika" style={{ width: '100%', aspectRatio: '4/3', objectFit: 'contain', marginTop: 8, borderRadius: 8 }} /> : <div style={{ padding: 20 }}>—</div>}
+                      <div style={{ fontSize: 9, wordBreak: 'break-all', marginTop: 6 }}>{change.oldImage || '—'}</div>
+                    </div>
+                    <div style={{ background: '#f1f8f3', padding: 12, borderRadius: 10 }}>
+                      <b>NOVA DODELA</b>
+                      {change.newImage ? <img src={change.newImage} alt="nova slika" style={{ width: '100%', aspectRatio: '4/3', objectFit: 'contain', marginTop: 8, borderRadius: 8 }} /> : <div style={{ padding: 20 }}>—</div>}
+                      <div style={{ fontSize: 9, wordBreak: 'break-all', marginTop: 6 }}>{change.newImage || '—'}</div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {change.path && <div style={{ fontSize: 12, marginTop: 8 }}>Slika: {change.path}</div>}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 12 }}>
+                    <div style={{ background: '#f7f7f7', padding: 12, borderRadius: 10 }}>
+                      <b>STARA VREDNOST</b>
+                      <div><b>SR:</b> {change.oldSr || '—'}</div>
+                      <div><b>EN:</b> {change.oldEn || '—'}</div>
+                    </div>
+                    <div style={{ background: '#f1f8f3', padding: 12, borderRadius: 10 }}>
+                      <b>NOVA VREDNOST</b>
+                      <div><b>SR:</b> {change.newSr || '—'}</div>
+                      <div><b>EN:</b> {change.newEn || '—'}</div>
+                    </div>
+                  </div>
+                  <div style={{ fontSize: 12, marginTop: 8 }}>Izvor: {change.source || 'nije naveden'}</div>
+                </>
+              )
             </article>
           ))}
         </div>
