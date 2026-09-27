@@ -51,6 +51,15 @@ async function putFile(env: Env, path: string, content: string, message: string,
   return await r.json() as any;
 }
 
+
+async function putBinaryBase64File(env: Env, path: string, base64: string, message: string, sha?: string) {
+  const body: any = { message, content: base64, branch: BRANCH };
+  if (sha) body.sha = sha;
+  const r = await github(new Request('https://local'), env, path, { method: 'PUT', body: JSON.stringify(body) });
+  if (!r.ok) { const detail = await r.text(); throw new Error(`GitHub PUT ${path}: HTTP ${r.status} ${detail.slice(0, 500)}`); }
+  return await r.json() as any;
+}
+
 function safeName(name: string) {
   const base = String(name || 'upload.webp').split('/').pop()!.replace(/[^a-zA-Z0-9._-]+/g, '-');
   return base.toLowerCase().endsWith('.webp') ? base.toLowerCase() : `${base.toLowerCase().replace(/\\.[^.]+$/, '')}.webp`;
@@ -87,7 +96,7 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
       const filename = safeName(String(u.name || `${id}.webp`));
       const path = `public/custom_products/${filename}`;
       const existing = await getFile(env, path);
-      await putFile(env, path, decodeURIComponent(escape(atob(dataUrlToBytes(String(u.data))))), `Admin 2.0: upload media ${filename}`, existing?.sha);
+      await putBinaryBase64File(env, path, dataUrlToBytes(String(u.data)), `Admin 2.0: upload media ${filename}`, existing?.sha);
       uploadPathById[id] = `/custom_products/${filename}`;
     }
 
