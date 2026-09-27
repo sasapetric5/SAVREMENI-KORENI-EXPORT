@@ -91,7 +91,7 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
     const allowedProductIds = new Set(Object.keys(canonical));
     const allowedSlots = new Set(['MAIN','G0','G1','G2']);
     const safeAssignments: Record<string, any> = {};
-    for (const [productId, slots] of Object.entries(safeAssignments)) {
+    for (const [productId, slots] of Object.entries(assignments)) {
       if (!allowedProductIds.has(productId) || !slots || typeof slots !== 'object') continue;
       const clean: Record<string,string> = {};
       for (const [slot, value] of Object.entries(slots as any)) {
@@ -113,7 +113,7 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
     }
 
     const productOverrides: Record<string, any> = {};
-    for (const [productId, slots] of Object.entries(assignments)) {
+    for (const [productId, slots] of Object.entries(safeAssignments)) {
       const product = slots as any;
       const current = body?.canonical?.[productId] || {};
       const paths = Array.isArray(current.images) ? [...current.images] : [];
