@@ -117,7 +117,7 @@ export default function WorkflowPreviewPanel({
                   </div>
                   <div style={{ fontSize: 12, marginTop: 8 }}>Izvor: {change.source || 'nije naveden'}</div>
                 </>
-              )
+              )}
             </article>
           ))}
         </div>
