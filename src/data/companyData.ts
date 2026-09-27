@@ -374,13 +374,15 @@ function applyAdminPublishedState(products: Product[]): Product[] {
     .filter((p) => !removed.has(p.id))
     .map((p) => {
       const override = overrides[p.id];
-      if (!override) return p;
-      const merged = { ...p, ...override } as any;
+      const merged = override ? ({ ...p, ...override } as any) : { ...p };
       const alt = (adminPublishedState.altOverrides || {})[p.id];
       if (alt && Array.isArray(merged.imageAlts)) {
         const slotIndex: Record<string, number> = { MAIN:0, G0:1, G1:2, G2:3 };
         const nextAlts = merged.imageAlts.map((a: any) => ({ alt: a?.alt || '', altEn: a?.altEn || '' }));
-        Object.entries(alt).forEach(([slot, value]: any) => { nextAlts[slotIndex[slot]] = value; });
+        Object.entries(alt).forEach(([slot, value]: any) => {
+          const index = slotIndex[slot];
+          if (index !== undefined) nextAlts[index] = value;
+        });
         merged.imageAlts = nextAlts.slice(0, 4);
       }
       return merged;
