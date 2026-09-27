@@ -38,6 +38,9 @@ export function AdminV2Page() {
   const [publishKey, setPublishKey] = useState<string>(() => sessionStorage.getItem('admin2_publish_key') || '');
   const [publishBusy, setPublishBusy] = useState(false);
   const [draftVersion, setDraftVersion] = useState(0);
+  const [sitemapStatus, setSitemapStatus] = useState<'UNKNOWN' | 'PASS' | 'FAIL'>('UNKNOWN');
+  const [imageCheckStatus, setImageCheckStatus] = useState<'UNKNOWN' | 'PASS' | 'FAIL'>('UNKNOWN');
+  const [altGeneratingDraft, setAltGeneratingDraft] = useState(false);
 
   const validation = useMemo(() => {
     const products = permanentProductsData as any[];
@@ -101,9 +104,99 @@ export function AdminV2Page() {
   const draftChangeCount = Object.values(draftSnapshot.assignments).reduce((n, slots) => n + Object.keys(slots).length, 0) + draftSnapshot.removedProductIds.length + draftSnapshot.removedMediaPaths.length + draftSnapshot.uploads.length;
   const draftProductIds = [...new Set([...Object.keys(draftSnapshot.assignments), ...draftSnapshot.removedProductIds])];
 
+  const draftImageRows = useMemo(() => {
+    const uploads = draftSnapshot.uploads || [];
+    const resolve = (id: string) => {
+      if (id.startsWith('repo-')) return '/custom_products/' + id.slice(5);
+      return uploads.find((x: any) => x.id === id)?.data || id;
+    };
+    const rows: Array<{key:string;productId:string;productName:string;slot:Slot;imageId:string;image:string;oldImage:string;altSr:string;altEn:string}> = [];
+    for (const [productId, slotsMap] of Object.entries(draftSnapshot.assignments || {})) {
+      const product = (permanentProductsData as any[]).find(p => p.id === productId);
+      if (!product) continue;
+      const current = slotPaths(product);
+      for (const [slotName, imageId] of Object.entries(slotsMap as any)) {
+        const slot = slotName as Slot;
+        const image = resolve(String(imageId));
+        const index: Record<Slot, number> = { MAIN:0, G0:1, G1:2, G2:3 };
+        const canonicalAlt = Array.isArray(product.imageAlts) ? product.imageAlts[index[slot]] || {} : {};
+        const draftAlt = altDrafts[productId + ':' + slot];
+        rows.push({ key: productId + ':' + slot, productId, productName: product.name, slot, imageId:String(imageId), image, oldImage:current[slot] || '', altSr:String(draftAlt?.alt || canonicalAlt.alt || ''), altEn:String(draftAlt?.altEn || canonicalAlt.altEn || '') });
+      }
+    }
+    return rows;
+  }, [draftSnapshot, altDrafts]);
+
+  const prePublishChecks = useMemo(() => {
+    const changed = draftImageRows;
+    const altPass = changed.length === 0 || changed.every(x => x.altSr.trim() && x.altEn.trim());
+    const imagePass = changed.length === 0 || changed.every(x => Boolean(x.image));
+    const uploads = draftSnapshot.uploads || [];
+    const uploadPass = uploads.every((u:any) => u.source !== 'upload' || (u.data && u.data.startsWith('data:image/webp') && Number(u.width) <= 1600 && Number(u.height) <= 1600 && Number(u.size) > 0));
+    const schemaPass = draftProductIds.every(id => {
+      const p=(permanentProductsData as any[]).find(x=>x.id===id);
+      return !p || Boolean(p.name && p.category);
+    });
+    return [
+      {key:'images',label:'IZMENE SLIKA / SLOTOVA',pass:imagePass,detail:changed.length ? changed.length + ' izmenjenih slotova' : 'nema izmena slika'},
+      {key:'alt',label:'ALT SR + EN',pass:altPass,detail:changed.length ? changed.filter(x=>x.altSr.trim()&&x.altEn.trim()).length + '/' + changed.length + ' slotova' : 'nema izmena slika'},
+      {key:'compression',label:'KOMPRESIJA NOVIH UPLOAD-A',pass:uploadPass,detail:uploads.length ? uploads.length + ' upload-a provereno' : 'nema novih upload-a'},
+      {key:'imagecheck',label:'PROVERA JAVNIH SLIKA',pass:imageCheckStatus==='PASS',detail:imageCheckStatus==='PASS'?'PASS':'potrebno pokrenuti proveru'},
+      {key:'sitemap',label:'SITEMAP',pass:sitemapStatus==='PASS',detail:sitemapStatus==='PASS'?'sitemap.xml dostupan':'potrebno proveriti'},
+      {key:'schema',label:'PRODUCT SCHEMA PODACI',pass:schemaPass,detail:schemaPass?'osnovni Product podaci validni':'nedostaju obavezni podaci'}
+    ];
+  }, [draftImageRows,draftSnapshot,draftProductIds,imageCheckStatus,sitemapStatus]);
+
+  const allPrePublishPass = prePublishChecks.every(x => x.pass);
+
+  const generateAltForDraftImages = async () => {
+    if (!draftImageRows.length || altGeneratingDraft) return;
+    setAltGeneratingDraft(true);
+    try {
+      for (const row of draftImageRows) {
+        if (row.altSr.trim() && row.altEn.trim()) continue;
+        const product=(permanentProductsData as any[]).find(p=>p.id===row.productId);
+        const result=await generateProductImageAlt({
+          imageUrl: row.image,
+          productNameSr: product?.name || row.productName,
+          productNameEn: product?.nameEn || row.productName,
+          keywords:[product?.category,...(product?.materials||[]),...(product?.craftTechniques||[])].filter(Boolean),
+          imageRole: row.slot==='MAIN'?'main':row.slot==='G0'?'closeup':row.slot==='G1'?'interior':'model',
+          apiKey:localStorage.getItem('koreni_gemini_api_key')||''
+        });
+        setAltSuggestions(prev=>({...prev,[row.key]:result}));
+        setAltDrafts(prev=>({...prev,[row.key]:{alt:result.altSr,altEn:result.altEn}}));
+      }
+      setPublishResult('ALT SR + EN predlozi su pripremljeni za sve izmenjene slotove. Pregledajte ih pre APPROVE.');
+    } finally { setAltGeneratingDraft(false); }
+  };
+
+  const checkDraftImages = async () => {
+    const rows=draftImageRows;
+    if(!rows.length){setImageCheckStatus('PASS');return;}
+    let ok=true;
+    for(const row of rows){
+      await new Promise<void>(resolve=>{
+        if(row.image.startsWith('data:image/')){resolve();return;}
+        const img=new Image(); const timer=window.setTimeout(()=>{ok=false;resolve()},5000);
+        img.onload=()=>{clearTimeout(timer);resolve()}; img.onerror=()=>{clearTimeout(timer);ok=false;resolve()}; img.src=row.image;
+      });
+    }
+    setImageCheckStatus(ok?'PASS':'FAIL');
+  };
+
+  const checkSitemap = async () => {
+    try {
+      const r=await fetch('/sitemap.xml',{cache:'no-store'});
+      const text=await r.text();
+      setSitemapStatus(r.ok && text.includes('<urlset') ? 'PASS' : 'FAIL');
+    } catch { setSitemapStatus('FAIL'); }
+  };
+
   const publishApprovedDraft = async () => {
     if (workflowStage !== 'APPROVED') { setPublishResult('PUBLISH BLOKIRAN: prvo VALIDATE → PREVIEW → APPROVE.'); return; }
     if (!draftChangeCount) { setPublishResult('PUBLISH BLOKIRAN: nema novih Admin izmena za objavljivanje.'); return; }
+    if (!allPrePublishPass) { setPublishResult('PUBLISH BLOKIRAN: sve PRE-PUBLISH kontrole moraju biti PASS.'); return; }
     if (!publishKey.trim()) { setPublishResult('PUBLISH BLOKIRAN: unesite ADMIN PUBLISH KEY.'); return; }
     setPublishBusy(true);
     try {
@@ -114,7 +207,7 @@ export function AdminV2Page() {
       }
       const response = await fetch('/api/admin/publish', {
         method: 'POST', headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ publishKey: publishKey.trim(), assignments: draftSnapshot.assignments, canonical, removedProductIds: draftSnapshot.removedProductIds, removedMediaPaths: draftSnapshot.removedMediaPaths, uploads: draftSnapshot.uploads })
+        body: JSON.stringify({ publishKey: publishKey.trim(), assignments: draftSnapshot.assignments, canonical, removedProductIds: draftSnapshot.removedProductIds, removedMediaPaths: draftSnapshot.removedMediaPaths, uploads: draftSnapshot.uploads, altDrafts })
       });
       const result = await response.json().catch(() => ({}));
       if (!response.ok || !result?.ok) throw new Error(result?.error || ('HTTP ' + response.status));
@@ -439,11 +532,27 @@ export function AdminV2Page() {
               <div className="text-[10px] text-gray-500 mt-1">Izmene ostaju Draft dok ih ne odobrite i objavite.</div>
             </div>
           </div>
+          <div className="mb-4 p-4 rounded-xl bg-[#fbfaf8] border-2 border-[#d8cec1]">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div><b>PRE-PUBLISH CHECKLIST</b><div className="text-[10px] text-gray-500">Svaka kontrola mora biti PASS pre PUBLISH.</div></div>
+              <div className="flex flex-wrap gap-2">
+                <button onClick={generateAltForDraftImages} disabled={!draftImageRows.length || altGeneratingDraft} className="px-3 py-2 rounded-lg border text-[10px] font-bold disabled:opacity-40">{altGeneratingDraft?'ALT...':'GENERIŠI ALT SR + EN'}</button>
+                <button onClick={checkDraftImages} className="px-3 py-2 rounded-lg border text-[10px] font-bold">PROVERI SLIKE</button>
+                <button onClick={checkSitemap} className="px-3 py-2 rounded-lg border text-[10px] font-bold">PROVERI SITEMAP</button>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-3 gap-2 mt-3">
+              {prePublishChecks.map(c=><div key={c.key} className={c.pass?'p-3 rounded-lg border border-green-300 bg-green-50':'p-3 rounded-lg border border-amber-300 bg-amber-50'}>
+                <div className={c.pass?'text-green-800 font-bold text-[10px]':'text-amber-900 font-bold text-[10px]'}>{c.pass?'✓ PASS':'○ ČEKA'} {c.label}</div>
+                <div className="text-[10px] mt-1">{c.detail}</div>
+              </div>)}
+            </div>
+          </div>
           <div className="flex flex-wrap gap-2 items-center">
             <button onClick={() => { setDraftVersion(v => v + 1); setWorkflowStage('VALIDATE'); setPublishResult(draftChangeCount ? 'VALIDATE PASS: osnovni integritet je dobar. Admin nacrt sadrži ' + draftChangeCount + ' izmena.' : 'VALIDATE PASS: osnovni integritet je potvrđen, ali nema Admin izmena.'); }} className="px-4 py-2 rounded-xl border border-[#cdbfb0] text-xs font-bold">1. VALIDATE</button>
             <button disabled={workflowStage !== 'VALIDATE' || !workflowValidationOk || draftChangeCount === 0} onClick={() => { setWorkflowStage('PREVIEW'); setPreviewReviewed(false); setWorkflowPreviewOpen(true); setPublishResult('PREVIEW: proverite izabrane izmene pre APPROVE.'); }} className="px-4 py-2 rounded-xl border border-[#cdbfb0] text-xs font-bold disabled:opacity-40">2. PREVIEW</button>
             <button disabled={workflowStage !== 'PREVIEW' || !previewReviewed} onClick={() => { setWorkflowStage('APPROVED'); setWorkflowPreviewOpen(false); setPublishResult('APPROVE potvrđen: publish je dozvoljen.'); }} className="px-4 py-2 rounded-xl bg-[#241d19] text-white text-xs font-bold disabled:opacity-40">3. APPROVE</button>
-            <button disabled={workflowStage !== 'APPROVED' || draftChangeCount === 0 || publishBusy} onClick={publishApprovedDraft} className="px-4 py-2 rounded-xl bg-green-700 text-white text-xs font-bold disabled:opacity-40">{publishBusy ? 'PUBLISH...' : '4. PUBLISH NA SAJT'}</button>
+            <button disabled={workflowStage !== 'APPROVED' || draftChangeCount === 0 || !allPrePublishPass || publishBusy} onClick={publishApprovedDraft} className="px-4 py-2 rounded-xl bg-green-700 text-white text-xs font-bold disabled:opacity-40">{publishBusy ? 'PUBLISH...' : '4. PUBLISH NA SAJT'}</button>
             <input type="password" value={publishKey} onChange={e => setPublishKey(e.target.value)} placeholder="ADMIN PUBLISH KEY" className="border rounded-xl px-3 py-2 text-xs w-48" />
           </div>
           {publishResult && <div className="mt-4 p-3 rounded-xl bg-[#f7f3ed] border border-[#d8cec1] text-xs font-semibold">{publishResult}</div>}
