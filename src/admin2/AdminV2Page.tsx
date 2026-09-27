@@ -3,6 +3,8 @@ import { generateProductImageAlt, AiImageAltResult } from '../utils/imageSeo';
 import { permanentProductsData } from '../data/permanentProductsData';
 import { permanentGalleryPhotosData } from '../data/permanentGalleryPhotosData';
 import WorkflowPreviewPanel, { WorkflowPreviewChange } from './WorkflowPreviewPanel';
+import { AdminMediaLibraryPage } from './AdminMediaLibraryPage';
+import { AdminProductImageManagerPage } from './AdminProductImageManagerPage';
 
 type Slot = 'MAIN' | 'G0' | 'G1' | 'G2';
 const slotPaths = (p: any): Record<Slot, string> => ({
@@ -13,6 +15,8 @@ const slotPaths = (p: any): Record<Slot, string> => ({
 });
 
 export function AdminV2Page() {
+  if (window.location.pathname === '/admin-v2/media') return <AdminMediaLibraryPage />;
+  if (window.location.pathname === '/admin-v2/products/images') return <AdminProductImageManagerPage />;
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<string | null>(null);
   const [mediaQuery, setMediaQuery] = useState('');
