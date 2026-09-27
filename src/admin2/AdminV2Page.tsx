@@ -272,7 +272,7 @@ export function AdminV2Page() {
       });
     }
     setImageCheckStatus(ok?'PASS':'FAIL');
-    setVisualReviewStatus('UNKNOWN');
+    setVisualReviewStatus(ok && draftImageRows.length === 0 ? 'PASS' : 'UNKNOWN');
   };
 
   const checkPublicMedia = async () => {
@@ -310,7 +310,7 @@ export function AdminV2Page() {
 
   const confirmVisualReview = () => {
     setVisualReviewStatus('PASS');
-    setPublishResult(draftImageRows.length ? 'Vizuelna provera novih fotografija je ručno potvrđena.' : 'Nema novih fotografija za vizuelnu proveru.');
+    setPublishResult(draftImageRows.length ? 'Vizuelna provera novih fotografija je ručno potvrđena.' : 'Nema novih fotografija — kontrola je automatski PASS.');
   };
   const confirmSeoImpact = async () => {
     try {
