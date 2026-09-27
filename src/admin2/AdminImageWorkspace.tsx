@@ -81,3 +81,6 @@ export function AdminImageWorkspace(){
   {preview&&<div className="fixed inset-0 z-[80] bg-black/80 p-4 flex items-center justify-center" onClick={()=>setPreview(null)}><div className="bg-white rounded-2xl max-w-5xl w-full p-4" onClick={e=>e.stopPropagation()}><div className="flex justify-between mb-3"><b>{preview.name}</b><button onClick={()=>setPreview(null)}>Zatvori</button></div>{preview.data?<img src={preview.data} className="w-full max-h-[75vh] object-contain"/>:<img src={preview.path} className="w-full max-h-[75vh] object-contain"/>}<div className="text-xs break-all mt-2">{preview.path}</div><div className="text-xs mt-2">Veze: {(usage[preview.id]||[]).map(x=>x.productName+' — '+x.slot).join(' • ')||'nema'}</div></div></div>}
  </section>
 }
+
+
+export default AdminImageWorkspace;
