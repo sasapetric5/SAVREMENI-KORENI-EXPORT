@@ -3,6 +3,7 @@ import { generateProductImageAlt, AiImageAltResult } from '../utils/imageSeo';
 import { permanentProductsData } from '../data/permanentProductsData';
 import { permanentGalleryPhotosData } from '../data/permanentGalleryPhotosData';
 import WorkflowPreviewPanel, { WorkflowPreviewChange } from './WorkflowPreviewPanel';
+import { AdminImageWorkspace } from './AdminImageWorkspace';
 
 type Slot = 'MAIN' | 'G0' | 'G1' | 'G2';
 const slotPaths = (p: any): Record<Slot, string> => ({
@@ -296,6 +297,8 @@ export function AdminV2Page() {
           <div><div className="text-xs font-bold tracking-[0.2em] text-[#9e3e26]">SAVREMENI KORENI</div><h1 className="text-3xl md:text-4xl font-bold mt-1">Admin 2.0</h1><p className="text-sm text-gray-600 mt-1">FAZA 2 — READ ONLY / VALIDACIJA</p></div>
           <div className="px-4 py-2 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-sm font-semibold">NEMA UPISA • NEMA BRISANJA • NEMA IndexedDB</div>
         </div>
+
+        <AdminImageWorkspace />
 
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
           <Card label="PROIZVODI" value={validation.productCount} target="47" ok={validation.productCount === 47} />
