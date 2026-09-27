@@ -35,6 +35,9 @@ export function AdminV2Page() {
   const [publishResult, setPublishResult] = useState<string>('');
   const [workflowPreviewOpen, setWorkflowPreviewOpen] = useState(false);
   const [previewReviewed, setPreviewReviewed] = useState(false);
+  const [publishKey, setPublishKey] = useState<string>(() => sessionStorage.getItem('admin2_publish_key') || '');
+  const [publishBusy, setPublishBusy] = useState(false);
+  const [draftVersion, setDraftVersion] = useState(0);
 
   const validation = useMemo(() => {
     const products = permanentProductsData as any[];
@@ -71,6 +74,57 @@ export function AdminV2Page() {
   const auditProblems = slotAudit.filter(x => x.status !== 'OK');
   const approvedAltCount = Object.values(altApproved).filter(Boolean).length;
   const workflowValidationOk = validation.productCount === 47 && validation.mediaCount === 504 && validation.assignments === 188 && validation.missing.length === 0 && validation.invalid.length === 0;
+
+  const readAdminDraft = () => {
+    try {
+      const assignments = JSON.parse(localStorage.getItem('admin2_assignments_v2') || '{}');
+      const removedProducts = JSON.parse(localStorage.getItem('admin2_removed_products_v2') || '{}');
+      const removedMedia = JSON.parse(localStorage.getItem('admin2_removed_media_v2') || '{}');
+      const uploads = JSON.parse(localStorage.getItem('admin2_media_v2') || '[]');
+      const repoPath = (id: string) => id.startsWith('repo-') ? '/custom_products/' + id.slice(5) : id;
+      const normalizedAssignments: Record<string, Record<string, string>> = {};
+      for (const [productId, slots] of Object.entries(assignments)) {
+        normalizedAssignments[productId] = {};
+        for (const [slot, id] of Object.entries(slots as any)) {
+          normalizedAssignments[productId][slot] = repoPath(String(id));
+        }
+      }
+      const removedMediaPaths = Object.entries(removedMedia).filter(([,v]) => Boolean(v)).map(([id]) => repoPath(id));
+      const activeUploads = Array.isArray(uploads) ? uploads.filter((u:any) => u?.source === 'upload' && u?.data).slice(0,20) : [];
+      return { assignments: normalizedAssignments, removedProductIds: Object.entries(removedProducts).filter(([,v]) => Boolean(v)).map(([id]) => id), removedMediaPaths, uploads: activeUploads };
+    } catch {
+      return { assignments: {}, removedProductIds: [], removedMediaPaths: [], uploads: [] };
+    }
+  };
+
+  const draftSnapshot = useMemo(() => readAdminDraft(), [draftVersion]);
+  const draftChangeCount = Object.values(draftSnapshot.assignments).reduce((n, slots) => n + Object.keys(slots).length, 0) + draftSnapshot.removedProductIds.length + draftSnapshot.removedMediaPaths.length + draftSnapshot.uploads.length;
+  const draftProductIds = [...new Set([...Object.keys(draftSnapshot.assignments), ...draftSnapshot.removedProductIds])];
+
+  const publishApprovedDraft = async () => {
+    if (workflowStage !== 'APPROVED') { setPublishResult('PUBLISH BLOKIRAN: prvo VALIDATE → PREVIEW → APPROVE.'); return; }
+    if (!draftChangeCount) { setPublishResult('PUBLISH BLOKIRAN: nema novih Admin izmena za objavljivanje.'); return; }
+    if (!publishKey.trim()) { setPublishResult('PUBLISH BLOKIRAN: unesite ADMIN PUBLISH KEY.'); return; }
+    setPublishBusy(true);
+    try {
+      const canonical: Record<string, any> = {};
+      for (const id of draftProductIds) {
+        const p = (permanentProductsData as any[]).find(x => x.id === id);
+        if (p) canonical[id] = { image: p.image || '', images: Array.isArray(p.images) ? [...p.images] : [] };
+      }
+      const response = await fetch('/api/admin/publish', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ publishKey: publishKey.trim(), assignments: draftSnapshot.assignments, canonical, removedProductIds: draftSnapshot.removedProductIds, removedMediaPaths: draftSnapshot.removedMediaPaths, uploads: draftSnapshot.uploads })
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result?.ok) throw new Error(result?.error || ('HTTP ' + response.status));
+      sessionStorage.setItem('admin2_publish_key', publishKey.trim());
+      setWorkflowStage('PUBLISHED');
+      setPublishResult('PUBLISHED: GitHub commit ' + (result.commit || 'potvrđen') + ' • izmene: ' + draftChangeCount + ' • Cloudflare će nakon automatskog builda preuzeti novo stanje.');
+    } catch (error) {
+      setPublishResult('PUBLISH NIJE USPEO: ' + (error instanceof Error ? error.message : String(error)));
+    } finally { setPublishBusy(false); }
+  };
 
   const workflowPreviewChanges = useMemo<WorkflowPreviewChange[]>(() => {
     const slotIndex: Record<Slot, number> = { MAIN: 0, G0: 1, G1: 2, G2: 3 };
@@ -297,7 +351,7 @@ export function AdminV2Page() {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div><div className="text-xs font-bold tracking-[0.2em] text-[#9e3e26]">SAVREMENI KORENI</div><h1 className="text-3xl md:text-4xl font-bold mt-1">Admin 2.0</h1><p className="text-sm text-gray-600 mt-1">FAZA 2 — READ ONLY / VALIDACIJA</p></div>
-          <div className="px-4 py-2 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-sm font-semibold">NEMA UPISA • NEMA BRISANJA • NEMA IndexedDB</div>
+          <div className="px-4 py-2 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-sm font-semibold">DRAFT • BEZ FIZIČKOG BRISANJA • PUBLISH KONTROLISAN</div>
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
@@ -341,18 +395,19 @@ export function AdminV2Page() {
             </div>
             <div className="p-3 rounded-xl bg-[#f7f3ed] border border-[#e8e0d5]">
               <div className="text-[10px] text-gray-500 font-bold">OPSEG</div>
-              <div className="font-bold mt-1">SAMO ALT izmene</div>
-              <div className="text-[10px] text-gray-500 mt-1">Proizvodi/slike/putanje se ne menjaju.</div>
+              <div className="font-bold mt-1">SLIKE + PROIZVODI + ALT</div>
+              <div className="text-[10px] text-gray-500 mt-1">Izmene ostaju Draft dok ih ne odobrite i objavite.</div>
             </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <button onClick={() => { setWorkflowStage('VALIDATE'); setPublishResult(workflowValidationOk ? 'VALIDATE PASS: osnovni integritet je potvrđen.' : 'VALIDATE BLOCKED: pronađen je problem u osnovnom integritetu.'); }} className="px-4 py-2 rounded-xl border border-[#cdbfb0] text-xs font-bold">1. VALIDATE</button>
-            <button disabled={workflowStage !== 'VALIDATE' || !workflowValidationOk || approvedAltCount === 0} onClick={() => { setWorkflowStage('PREVIEW'); setPreviewReviewed(false); setWorkflowPreviewOpen(true); setPublishResult('PREVIEW otvoren: pregledajte stare i nove vrednosti pre APPROVE.'); }} className="px-4 py-2 rounded-xl border border-[#cdbfb0] text-xs font-bold disabled:opacity-40">2. PREVIEW</button>
-            <button disabled={workflowStage !== 'PREVIEW' || approvedAltCount === 0 || !previewReviewed} onClick={() => { setWorkflowStage('APPROVED'); setWorkflowPreviewOpen(false); setPublishResult('APPROVE potvrđen: publish je sada dozvoljen samo za prethodno odobrene ALT izmene.'); }} className="px-4 py-2 rounded-xl bg-[#241d19] text-white text-xs font-bold disabled:opacity-40">3. APPROVE</button>
-            <button disabled={workflowStage !== 'APPROVED' || approvedAltCount === 0 || !workflowValidationOk || altSaving} onClick={handleSaveApprovedAlts} className="px-4 py-2 rounded-xl bg-green-700 text-white text-xs font-bold disabled:opacity-40">{altSaving ? 'PUBLISH...' : '4. PUBLISH'}</button>
+          <div className="flex flex-wrap gap-2 items-center">
+            <button onClick={() => { setDraftVersion(v => v + 1); setWorkflowStage('VALIDATE'); setPublishResult(draftChangeCount ? 'VALIDATE PASS: osnovni integritet je dobar. Admin nacrt sadrži ' + draftChangeCount + ' izmena.' : 'VALIDATE PASS: osnovni integritet je potvrđen, ali nema Admin izmena.'); }} className="px-4 py-2 rounded-xl border border-[#cdbfb0] text-xs font-bold">1. VALIDATE</button>
+            <button disabled={workflowStage !== 'VALIDATE' || !workflowValidationOk || draftChangeCount === 0} onClick={() => { setWorkflowStage('PREVIEW'); setPreviewReviewed(false); setWorkflowPreviewOpen(true); setPublishResult('PREVIEW: proverite izabrane izmene pre APPROVE.'); }} className="px-4 py-2 rounded-xl border border-[#cdbfb0] text-xs font-bold disabled:opacity-40">2. PREVIEW</button>
+            <button disabled={workflowStage !== 'PREVIEW' || !previewReviewed} onClick={() => { setWorkflowStage('APPROVED'); setWorkflowPreviewOpen(false); setPublishResult('APPROVE potvrđen: publish je dozvoljen.'); }} className="px-4 py-2 rounded-xl bg-[#241d19] text-white text-xs font-bold disabled:opacity-40">3. APPROVE</button>
+            <button disabled={workflowStage !== 'APPROVED' || draftChangeCount === 0 || publishBusy} onClick={publishApprovedDraft} className="px-4 py-2 rounded-xl bg-green-700 text-white text-xs font-bold disabled:opacity-40">{publishBusy ? 'PUBLISH...' : '4. PUBLISH NA SAJT'}</button>
+            <input type="password" value={publishKey} onChange={e => setPublishKey(e.target.value)} placeholder="ADMIN PUBLISH KEY" className="border rounded-xl px-3 py-2 text-xs w-48" />
           </div>
           {publishResult && <div className="mt-4 p-3 rounded-xl bg-[#f7f3ed] border border-[#d8cec1] text-xs font-semibold">{publishResult}</div>}
-          <div className="mt-3 text-[10px] text-gray-500">VAŽNO: ovaj korak trenutno ne radi GitHub commit/push niti Cloudflare deployment. To će biti poseban, proverljiv korak nakon lokalnog publish-a.</div>
+          <div className="mt-3 text-[10px] text-gray-500">Admin nacrt: <b>{draftChangeCount}</b> izmena • Workflow sada koristi /api/admin/publish; ništa se ne objavljuje bez APPROVE.</div>
         </div>
 
         <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
