@@ -3,6 +3,7 @@ import { generateProductImageAlt, AiImageAltResult } from '../utils/imageSeo';
 import { permanentProductsData } from '../data/permanentProductsData';
 import { permanentGalleryPhotosData } from '../data/permanentGalleryPhotosData';
 import WorkflowPreviewPanel, { WorkflowPreviewChange } from './WorkflowPreviewPanel';
+import AdminImageWorkspace from './AdminImageWorkspace';
 
 type Slot = 'MAIN' | 'G0' | 'G1' | 'G2';
 const slotPaths = (p: any): Record<Slot, string> => ({
