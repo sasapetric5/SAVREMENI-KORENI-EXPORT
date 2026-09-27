@@ -62,7 +62,7 @@ async function putBinaryBase64File(env: Env, path: string, base64: string, messa
 
 function safeName(name: string) {
   const base = String(name || 'upload.webp').split('/').pop()!.replace(/[^a-zA-Z0-9._-]+/g, '-');
-  return base.toLowerCase().endsWith('.webp') ? base.toLowerCase() : `${base.toLowerCase().replace(/\\.[^.]+$/, '')}.webp`;
+  return base.toLowerCase().endsWith('.webp') ? base.toLowerCase() : `${base.toLowerCase().replace(/\.[^.]+$/, '')}.webp`;
 }
 
 function dataUrlToBytes(data: string) {
@@ -78,7 +78,7 @@ function binaryToUtf8(binary: string) {
 
 function extractManifestPaths(content: string) {
   const text = binaryToUtf8(content);
-  const names = [...text.matchAll(/['"]([^'"]+\\.(?:jpe?g|png|webp|avif))['"]/gi)].map(m => m[1]);
+  const names = [...text.matchAll(/['"]([^'"]+\.(?:jpe?g|png|webp|avif))['"]/gi)].map(m => m[1]);
   return new Set(names.map(name => '/custom_products/' + name.replace(/^\\/+/, '')));
 }
 
@@ -89,7 +89,7 @@ async function getCanonicalMediaPaths(env: Env) {
 }
 
 function validateRepoMediaPath(path: string, manifestPaths: Set<string>) {
-  return /^\\/custom_products\\/[^\\s?#]+$/i.test(path) && manifestPaths.has(path);
+  return /^\/custom_products\/[^\s?#]+$/i.test(path) && manifestPaths.has(path);
 }
 
 export const onRequestGet = async ({ env }: { env: Env }) => {
