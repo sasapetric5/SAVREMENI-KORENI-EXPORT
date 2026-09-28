@@ -482,7 +482,7 @@ function AdminV2PageContent() {
 
 
 
-  const buildProductSchema = (product: any) => ({
+  function buildProductSchema(product: any) { return {
     '@context': 'https://schema.org',
     '@type': 'Product',
     '@id': `https://savremenikoreni.com/#product-${product.id}`,
@@ -499,7 +499,7 @@ function AdminV2PageContent() {
       url: `https://savremenikoreni.com/#product-${product.id}`
     },
     brand: { '@type': 'Brand', name: 'Savremeni Koreni' }
-  });
+  }; }
 
   const handleSchemaPreview = (product: any) => {
     setSchemaPreview(JSON.stringify(buildProductSchema(product), null, 2));
