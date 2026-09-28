@@ -688,6 +688,39 @@ function AdminV2PageContent() {
           </div>
           {publishResult && <div className="mt-4 p-3 rounded-xl bg-[#f7f3ed] border border-[#d8cec1] text-xs font-semibold">{publishResult}</div>}
           <div className="mt-3 text-[10px] text-gray-500">Admin nacrt: <b>{draftChangeCount}</b> izmena • Workflow sada koristi /api/admin/publish; ništa se ne objavljuje bez APPROVE.</div>
+          {draftChangeCount > 0 && (
+            <div className="mt-4 p-4 rounded-xl bg-amber-50 border border-amber-300">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <b>READ-ONLY INSPEKCIJA DRAFT-a</b>
+                  <div className="text-[10px] text-amber-900 mt-1">Samo prikaz podataka iz ovog browsera. Nema brisanja, izmene ili publish-a.</div>
+                </div>
+                <button onClick={() => setDraftVersion(v => v + 1)} className="px-3 py-2 rounded-lg border border-amber-400 bg-white text-[10px] font-bold">OSVEŽI DRAFT</button>
+              </div>
+              {draftImageRows.length > 0 && (
+                <div className="mt-3 overflow-x-auto border border-amber-200 rounded-lg bg-white">
+                  <table className="w-full text-xs">
+                    <thead className="bg-amber-100">
+                      <tr><th className="p-2 text-left">Proizvod</th><th className="p-2">Slot</th><th className="p-2 text-left">STARA PUTANJA</th><th className="p-2 text-left">DRAFT PUTANJA</th></tr>
+                    </thead>
+                    <tbody>
+                      {draftImageRows.map(row => (
+                        <tr key={row.key} className="border-t border-amber-100">
+                          <td className="p-2 font-semibold">{row.productName}<div className="text-[9px] text-gray-500">{row.productId}</div></td>
+                          <td className="p-2 font-bold">{row.slot}</td>
+                          <td className="p-2 break-all">{row.oldImage || '—'}</td>
+                          <td className="p-2 break-all">{row.image || '—'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+              {draftSnapshot.removedProductIds.length > 0 && <div className="mt-3 text-xs"><b>Soft-remove proizvodi:</b> {draftSnapshot.removedProductIds.join(', ')}</div>}
+              {draftSnapshot.removedMediaPaths.length > 0 && <div className="mt-2 text-xs break-all"><b>Soft-remove media:</b> {draftSnapshot.removedMediaPaths.join(', ')}</div>}
+              {draftSnapshot.uploads.length > 0 && <div className="mt-2 text-xs"><b>Novi upload-i:</b> {draftSnapshot.uploads.length}</div>}
+            </div>
+          )}
         </div>
 
         <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
@@ -745,7 +778,7 @@ function AdminV2PageContent() {
         <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
           <div className="flex flex-wrap justify-between items-end gap-3 mb-4">
             <div><h2 className="font-bold text-lg">Faza 2C — kontrola 188 slotova</h2><p className="text-xs text-gray-500 mt-1">Samo kontrola. Nema automatske izmene.</p></div>
-            <div className="text-sm font-semibold">OK: {slotAudit.filter(x => x.status === 'OK').length} / 188 • Problemi: {auditProblems.length}</div>
+            <div className="text-sm font-semibold">OK: {slotAudit.filter(x => x.status === 'OK').length} / 188 • UPOZORENJA: {auditDuplicateWarnings.length} • NEDOSTAJE: {auditProblems.length}</div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
             {(['MAIN','G0','G1','G2'] as Slot[]).map(slot => {
