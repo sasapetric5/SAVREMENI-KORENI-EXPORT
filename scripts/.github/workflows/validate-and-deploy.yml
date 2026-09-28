@@ -1,0 +1,29 @@
+name: Admin 2.0 Publish Pipeline
+
+# Pokreće se automatski svaki put kada se sačuva promena u 'main' granu
+# ili ručno klikom na dugme u GitHub Actions tabu
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Preuzimanje koda iz repozitorijuma
+        uses: actions/checkout@v4
+
+      - name: 2. Priprema Node.js okruženja
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 3. PROVERA INTEGRITETA PODATAKA (Pravilo #65 i #69)
+        run: node scripts/validate-data.js
+        # AKO OVA SKRIPTA VRATI GREŠKU, CELO OVO POKRETANJE OVDE STAJE!
+        # To znači: NO PUBLIC DATA WAS CHANGED.
+
+      - name: 4. Potvrda uspeha
+        run: echo "✅ VALIDACIJA PROŠLA. Sistem je spreman za sledeće korake deploy-a."
