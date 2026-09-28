@@ -1,0 +1,44 @@
+[
+  {
+    "id": "custom-prod-1789203411768",
+    "name_sr": "OREO",
+    "name_en": "OREO Handcrafted Bag",
+    "category": "torbice",
+    "price_rsd": 6500,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789203411768.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789203411768_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789203411768_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789203411768_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789204073718",
+    "name_sr": "CANDY",
+    "name_en": "CANDY Handcrafted Bag",
+    "category": "torbice",
+    "price_rsd": 4500,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789204073718.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789204073718_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789204073718_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789204073718_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789290912081",
+    "name_sr": "VLAŠKA BELA ŠUBARA",
+    "name_en": "VLACH WHITE FUR HAT",
+    "category": "subare",
+    "price_rsd": 12000,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/vlaska_bela_subara_1789032431671.jpg",
+      "G0": "/custom_products/vlach_fashion_editorial.jpg",
+      "G1": "/custom_products/cream_wool_hat_interior.jpg",
+      "G2": "/custom_products/cream_wool_macro.jpg"
+    }
+  }
+]
