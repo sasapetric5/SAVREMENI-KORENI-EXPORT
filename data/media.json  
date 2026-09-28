@@ -1,0 +1,82 @@
+[
+  {
+    "id": "media-oreo-main",
+    "filename": "prod_custom-prod-1789203411768.jpg",
+    "path": "/custom_products/prod_custom-prod-1789203411768.jpg",
+    "category": "product",
+    "status": "published",
+    "alt_sr": "OREO ručno heklana torba sa drvenim ručkama",
+    "alt_en": "OREO handcrafted crochet bag with wooden handles",
+    "hash": "abc123-placeholder"
+  },
+  {
+    "id": "media-oreo-g0",
+    "filename": "prod_custom-prod-1789203411768_g0.jpg",
+    "path": "/custom_products/prod_custom-prod-1789203411768_g0.jpg",
+    "category": "product",
+    "status": "published",
+    "alt_sr": "OREO torba - detalj kopče",
+    "alt_en": "OREO bag - clasp detail",
+    "hash": "def456-placeholder"
+  },
+  {
+    "id": "media-oreo-g1",
+    "filename": "prod_custom-prod-1789203411768_g1.jpg",
+    "path": "/custom_products/prod_custom-prod-1789203411768_g1.jpg",
+    "category": "product",
+    "status": "published",
+    "alt_sr": "OREO torba - unutrašnjost",
+    "alt_en": "OREO bag - interior view",
+    "hash": "ghi789-placeholder"
+  },
+  {
+    "id": "media-oreo-g2",
+    "filename": "prod_custom-prod-1789203411768_g2.jpg",
+    "path": "/custom_products/prod_custom-prod-1789203411768_g2.jpg",
+    "category": "product",
+    "status": "published",
+    "alt_sr": "OREO torba - model sa torbom",
+    "alt_en": "OREO bag - model wearing the bag",
+    "hash": "jkl012-placeholder"
+  },
+  {
+    "id": "media-candy-main",
+    "filename": "prod_custom-prod-1789204073718.jpg",
+    "path": "/custom_products/prod_custom-prod-1789204073718.jpg",
+    "category": "product",
+    "status": "published",
+    "alt_sr": "CANDY ručno heklana torba sa crvenom mašnom",
+    "alt_en": "CANDY handcrafted crochet bag with red bow",
+    "hash": "mno345-placeholder"
+  },
+  {
+    "id": "media-subara-main",
+    "filename": "vlaska_bela_subara_1789032431671.jpg",
+    "path": "/custom_products/vlaska_bela_subara_1789032431671.jpg",
+    "category": "product",
+    "status": "published",
+    "alt_sr": "Vlaška bela šubara od prirodne ovčije kože",
+    "alt_en": "Vlach white fur hat made from natural sheepskin",
+    "hash": "pqr678-placeholder"
+  },
+  {
+    "id": "media-workshop-001",
+    "filename": "custom-1789844914031-17-5ea1yw.jpg",
+    "path": "/gallery/workshop/custom-1789844914031-17-5ea1yw.jpg",
+    "category": "workshop",
+    "status": "published",
+    "alt_sr": "Unikatni rad radionice",
+    "alt_en": "Unique workshop creation",
+    "hash": "stu901-placeholder"
+  },
+  {
+    "id": "media-workshop-002",
+    "filename": "custom-1789844033446-19-ze4sd9.jpg",
+    "path": "/gallery/workshop/custom-1789844033446-19-ze4sd9.jpg",
+    "category": "workshop",
+    "status": "published",
+    "alt_sr": "Unikatni rad radionice",
+    "alt_en": "Unique workshop creation",
+    "hash": "vwx234-placeholder"
+  }
+]
