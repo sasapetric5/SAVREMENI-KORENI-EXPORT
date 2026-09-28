@@ -44,6 +44,7 @@ class AdminV2RuntimeBoundary extends React.Component<{children: React.ReactNode}
 function AdminV2PageContent() {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<string | null>(null);
+  const [visualProductQuery, setVisualProductQuery] = useState('');
   const [mediaQuery, setMediaQuery] = useState('');
   const [mediaFilter, setMediaFilter] = useState<'all' | 'assigned' | 'unassigned' | 'removed' | 'newUpload'>('all');
   const [mediaImageErrors, setMediaImageErrors] = useState<Record<string, boolean>>({});
@@ -721,6 +722,51 @@ function AdminV2PageContent() {
               {draftSnapshot.uploads.length > 0 && <div className="mt-2 text-xs"><b>Novi upload-i:</b> {draftSnapshot.uploads.length}</div>}
             </div>
           )}
+        </div>
+
+        <div className="rounded-2xl bg-white border-2 border-[#9e3e26] shadow-sm p-5 mb-6">
+          <div className="flex flex-wrap items-end justify-between gap-3 mb-4">
+            <div>
+              <div className="text-[10px] tracking-[0.18em] font-bold text-[#9e3e26]">READ-ONLY VIZUELNA KONTROLA</div>
+              <h2 className="font-bold text-lg mt-1">VISUELNA KONTROLA 47 × 4 SLOTOVA</h2>
+              <p className="text-xs text-gray-500 mt-1">Samo pregled canonical fotografija. Nema izmene, zamene, brisanja ili publish-a.</p>
+            </div>
+            <div className="px-3 py-2 rounded-lg bg-amber-50 border border-amber-300 text-[10px] font-bold text-amber-900">188 SLOTOVA • READ ONLY</div>
+          </div>
+          <div className="mb-4">
+            <input value={visualProductQuery} onChange={e => setVisualProductQuery(e.target.value)}
+              placeholder="Pretraži proizvod ili ID za vizuelnu proveru..."
+              className="w-full px-4 py-3 rounded-xl border border-[#d8cec1] bg-white text-sm outline-none focus:ring-2 focus:ring-[#9e3e26]" />
+          </div>
+          <div className="space-y-4 max-h-[1100px] overflow-auto pr-1">
+            {(permanentProductsData as any[]).filter(p => {
+              const q=visualProductQuery.trim().toLowerCase();
+              return !q || String(p.name+' '+p.nameEn+' '+p.id).toLowerCase().includes(q);
+            }).map(p => {
+              const slots=slotPaths(p);
+              return <div key={p.id} className="rounded-xl border border-[#e8e0d5] p-3 bg-[#fbfaf8]">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                  <div><b className="text-sm">{p.name}</b><div className="text-[9px] text-gray-500">{p.id}</div></div>
+                  <div className="text-[10px] text-gray-500">{p.category || 'Bez kategorije'}</div>
+                </div>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                  {(['MAIN','G0','G1','G2'] as Slot[]).map(slot => {
+                    const path=slots[slot];
+                    return <div key={slot} className="rounded-lg border border-[#ddd2c5] bg-white overflow-hidden">
+                      <div className="px-2 py-1.5 bg-[#f1ebe3] flex items-center justify-between">
+                        <b className="text-[10px]">{slot}</b>
+                        <span className="text-[9px] text-gray-500">{path ? 'CANONICAL' : 'NEMA PUTANJE'}</span>
+                      </div>
+                      <div className="aspect-[4/3] bg-[#f7f3ed] flex items-center justify-center overflow-hidden">
+                        {path ? <img src={path} alt="" loading="lazy" className="w-full h-full object-contain" /> : <span className="text-[10px] text-red-700 font-bold">MISSING</span>}
+                      </div>
+                      <div className="p-2 text-[8px] text-gray-500 break-all">{path || '—'}</div>
+                    </div>;
+                  })}
+                </div>
+              </div>;
+            })}
+          </div>
         </div>
 
         <div className="rounded-2xl bg-white border border-[#e8e0d5] shadow-sm p-5 mb-6">
