@@ -13,7 +13,12 @@ const ASSET_KEY='admin2_media_v2',DRAFT_KEY='admin2_product_drafts_v2',ASSIGN_KE
 const slots:Slot[]=['MAIN','G0','G1','G2'];
 const role=(s:Slot)=>({MAIN:'glavna fotografija proizvoda',G0:'krupan plan detalja',G1:'otvorena unutrašnjost proizvoda',G2:'proizvod na modelu'}[s]);
 const slug=(v:string)=>String(v||'').toLocaleLowerCase('sr-Latn').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60);
-const readJson=<T,>(k:string,f:T):T=>{try{return JSON.parse(localStorage.getItem(k)||'null')??f}catch{return f}};
+const readArrayJson=<T,>(k:string,f:T[]=[]):T[]=>{try{const raw=localStorage.getItem(k);if(!raw)return f;const parsed=JSON.parse(raw);return Array.isArray(parsed)?parsed:f}catch{return f}};
+const readRecordJson=<T extends Record<string,any>>(k:string,f:T):T=>{try{const raw=localStorage.getItem(k);if(!raw)return f;const parsed=JSON.parse(raw);return parsed&&typeof parsed==='object'&&!Array.isArray(parsed)?parsed as T:f}catch{return f}};
+const readAssignments=()=>{const raw=readRecordJson<Record<string,unknown>>(ASSIGN_KEY,{});return Object.fromEntries(Object.entries(raw).filter(([,value])=>value&&typeof value==='object'&&!Array.isArray(value))) as Record<string,Partial<Record<Slot,string>>>};
+const readAssets=()=>readArrayJson<Asset>(ASSET_KEY,[]).filter(a=>a&&typeof a==='object'&&typeof a.id==='string');
+const readDrafts=()=>readArrayJson<Draft>(DRAFT_KEY,[]).filter(d=>d&&typeof d==='object'&&typeof d.id==='string');
+const readHistory=()=>readArrayJson<any>(HISTORY_KEY,[]);
 const writeJson=(k:string,v:any)=>localStorage.setItem(k,JSON.stringify(v));
 const slotPath=(p:any,s:Slot)=>s==='MAIN'?p.image||'':p.images?.[s==='G2'?0:s==='G1'?1:2]||'';
 const normalize=(v:string)=>String(v||'').replace(/^\/+/, '/');
@@ -22,12 +27,12 @@ const classifyRepoAsset=(path:string,productPaths:Set<string>,galleryPaths:Set<s
 async function optimise(file:File){const b=await createImageBitmap(file),scale=Math.min(1,1600/Math.max(b.width,b.height)),w=Math.max(1,Math.round(b.width*scale)),h=Math.max(1,Math.round(b.height*scale)),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d')!.drawImage(b,0,0,w,h);b.close();const blob=await new Promise<Blob>((res,rej)=>c.toBlob(x=>x?res(x):rej(Error('compression')),'image/webp',.82));return await new Promise<{data:string;w:number;h:number;size:number}>((res,rej)=>{const r=new FileReader();r.onload=()=>res({data:String(r.result),w,h,size:blob.size});r.onerror=()=>rej(r.error);r.readAsDataURL(blob)})}
 
 export function AdminImageWorkspace(){
- const [uploads,setUploads]=useState<Asset[]>(()=>readJson<Asset[]>(ASSET_KEY,[]));
- const [drafts,setDrafts]=useState<Draft[]>(()=>readJson<Draft[]>(DRAFT_KEY,[]));
- const [assignments,setAssignments]=useState<Record<string,Partial<Record<Slot,string>>>>(()=>readJson(ASSIGN_KEY,{}));
- const [removed,setRemoved]=useState<Record<string,boolean>>(()=>readJson('admin2_removed_media_v2',{}));
- const [productRemoved,setProductRemoved]=useState<Record<string,boolean>>(()=>readJson('admin2_removed_products_v2',{}));
- const [history,setHistory]=useState<any[]>(()=>readJson(HISTORY_KEY,[]));
+ const [uploads,setUploads]=useState<Asset[]>(readAssets);
+ const [drafts,setDrafts]=useState<Draft[]>(readDrafts);
+ const [assignments,setAssignments]=useState<Record<string,Partial<Record<Slot,string>>>>(readAssignments);
+ const [removed,setRemoved]=useState<Record<string,boolean>>(()=>readRecordJson('admin2_removed_media_v2',{}));
+ const [productRemoved,setProductRemoved]=useState<Record<string,boolean>>(()=>readRecordJson('admin2_removed_products_v2',{}));
+ const [history,setHistory]=useState<any[]>(readHistory);
  const [filter,setFilter]=useState<Filter>('all'),[category,setCategory]=useState<LibraryCategory|'Sve'>('Sve'),[q,setQ]=useState(''),[selected,setSelected]=useState<string>(''),[productId,setProductId]=useState(String((permanentProductsData as any[])[0]?.id||'')),[slot,setSlot]=useState<Slot>('MAIN');
  const [showNew,setShowNew]=useState(false),[newName,setNewName]=useState(''),[newNameEn,setNewNameEn]=useState(''),[newCat,setNewCat]=useState('');
  const [msg,setMsg]=useState(''),[scan,setScan]=useState<Record<string,'OK'|'ERROR'>>({}),[scanning,setScanning]=useState(false),[preview,setPreview]=useState<Asset|null>(null),[altBusy,setAltBusy]=useState(false);
