@@ -7,6 +7,22 @@ import AdminImageWorkspace from './AdminImageWorkspace';
 import { publicCustomProductsManifest } from '../data/publicCustomProductsManifest';
 
 type Slot = 'MAIN' | 'G0' | 'G1' | 'G2';
+const safeReadRecord = (key: string): Record<string, any> => {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return {};
+    const value = JSON.parse(raw);
+    return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+  } catch { return {}; }
+};
+const safeReadArray = (key: string): any[] => {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return [];
+    const value = JSON.parse(raw);
+    return Array.isArray(value) ? value : [];
+  } catch { return []; }
+};
 const slotPaths = (p: any): Record<Slot, string> => ({
   MAIN: p.image || '',
   G0: p.images?.[2] || '',
@@ -24,7 +40,7 @@ export function AdminV2Page() {
   const [altSuggestions, setAltSuggestions] = useState<Record<string, AiImageAltResult>>({});
   const [altGenerating, setAltGenerating] = useState<string | null>(null);
   const [altDrafts, setAltDrafts] = useState<Record<string, { alt: string; altEn: string }>>({});
-  const [altApproved, setAltApproved] = useState<Record<string, boolean>>(() => { try { return JSON.parse(localStorage.getItem('admin2_alt_approved_v2') || '{}'); } catch { return {}; } });
+  const [altApproved, setAltApproved] = useState<Record<string, boolean>>(() => safeReadRecord('admin2_alt_approved_v2'));
   const [altSaving, setAltSaving] = useState(false);
   const [schemaPreview, setSchemaPreview] = useState<string | null>(null);
   const [schemaType, setSchemaType] = useState<'Organization' | 'Article' | 'BreadcrumbList'>('Organization');
@@ -35,7 +51,7 @@ export function AdminV2Page() {
   const [publishResult, setPublishResult] = useState<string>('');
   const [workflowPreviewOpen, setWorkflowPreviewOpen] = useState(false);
   const [previewReviewed, setPreviewReviewed] = useState(false);
-  const [publishKey, setPublishKey] = useState<string>(() => sessionStorage.getItem('admin2_publish_key') || '');
+  const [publishKey, setPublishKey] = useState<string>(() => { try { return sessionStorage.getItem('admin2_publish_key') || ''; } catch { return ''; } });
   const [publishBusy, setPublishBusy] = useState(false);
   const [draftVersion, setDraftVersion] = useState(0);
   const [sitemapStatus, setSitemapStatus] = useState<'UNKNOWN' | 'PASS' | 'FAIL'>('UNKNOWN');
@@ -108,25 +124,25 @@ export function AdminV2Page() {
   const workflowValidationOk = validation.productCount === 47 && validation.mediaCount === 504 && validation.assignments === 188 && validation.missing.length === 0 && validation.invalid.length === 0;
 
   const readAdminDraft = () => {
-    try {
-      const assignments = JSON.parse(localStorage.getItem('admin2_assignments_v2') || '{}');
-      const removedProducts = JSON.parse(localStorage.getItem('admin2_removed_products_v2') || '{}');
-      const removedMedia = JSON.parse(localStorage.getItem('admin2_removed_media_v2') || '{}');
-      const uploads = JSON.parse(localStorage.getItem('admin2_media_v2') || '[]');
-      const repoPath = (id: string) => id.startsWith('repo-') ? '/custom_products/' + id.slice(5) : id;
-      const normalizedAssignments: Record<string, Record<string, string>> = {};
-      for (const [productId, slots] of Object.entries(assignments)) {
-        normalizedAssignments[productId] = {};
-        for (const [slot, id] of Object.entries(slots as any)) {
-          normalizedAssignments[productId][slot] = repoPath(String(id));
-        }
+    const assignmentsRaw = safeReadRecord('admin2_assignments_v2');
+    const removedProducts = safeReadRecord('admin2_removed_products_v2');
+    const removedMedia = safeReadRecord('admin2_removed_media_v2');
+    const uploads = safeReadArray('admin2_media_v2');
+    const repoPath = (id: string) => id.startsWith('repo-') ? '/custom_products/' + id.slice(5) : id;
+    const normalizedAssignments: Record<string, Record<string, string>> = {};
+    for (const [productId, slots] of Object.entries(assignmentsRaw)) {
+      if (!slots || typeof slots !== 'object' || Array.isArray(slots)) continue;
+      const cleanSlots: Record<string, string> = {};
+      for (const [slot, id] of Object.entries(slots as Record<string, unknown>)) {
+        if (typeof id !== 'string' || !id) continue;
+        cleanSlots[slot] = repoPath(id);
       }
-      const removedMediaPaths = Object.entries(removedMedia).filter(([,v]) => Boolean(v)).map(([id]) => repoPath(id));
-      const activeUploads = Array.isArray(uploads) ? uploads.filter((u:any) => u?.source === 'upload' && u?.data).slice(0,20) : [];
-      return { assignments: normalizedAssignments, removedProductIds: Object.entries(removedProducts).filter(([,v]) => Boolean(v)).map(([id]) => id), removedMediaPaths, uploads: activeUploads };
-    } catch {
-      return { assignments: {}, removedProductIds: [], removedMediaPaths: [], uploads: [] };
+      if (Object.keys(cleanSlots).length) normalizedAssignments[productId] = cleanSlots;
     }
+    const removedMediaPaths = Object.entries(removedMedia).filter(([,v]) => Boolean(v)).map(([id]) => repoPath(id));
+    const activeUploads = uploads.filter((u:any) => u && typeof u === 'object' && u.source === 'upload' && typeof u.data === 'string' && u.data).slice(0,20);
+    const removedProductIds = Object.entries(removedProducts).filter(([,v]) => Boolean(v)).map(([id]) => id);
+    return { assignments: normalizedAssignments, removedProductIds, removedMediaPaths, uploads: activeUploads };
   };
 
   const draftSnapshot = useMemo(() => readAdminDraft(), [draftVersion]);
@@ -365,8 +381,7 @@ export function AdminV2Page() {
     const slotIndex: Record<Slot, number> = { MAIN: 0, G0: 1, G1: 2, G2: 3 };
     const imageChanges: WorkflowPreviewChange[] = [];
     const draft = draftSnapshot.assignments || {};
-    let uploads: any[] = [];
-    try { uploads = JSON.parse(localStorage.getItem('admin2_media_v2') || '[]'); } catch {}
+    const uploads: any[] = safeReadArray('admin2_media_v2');
     const resolveDraftImage = (id: string) => {
       if (!id) return '';
       if (id.startsWith('repo-')) return '/custom_products/' + id.slice(5);
