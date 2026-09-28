@@ -30,7 +30,18 @@ const slotPaths = (p: any): Record<Slot, string> => ({
   G2: p.images?.[0] || '',
 });
 
-export function AdminV2Page() {
+class AdminV2RuntimeBoundary extends React.Component<{children: React.ReactNode},{error: Error|null}> {
+  state={error:null as Error|null};
+  static getDerivedStateFromError(error: Error){ return {error}; }
+  render(){
+    if(this.state.error){
+      return <div className="min-h-screen bg-[#f7f3ed] text-[#241d19] p-6"><div className="max-w-3xl mx-auto bg-white border border-red-300 rounded-2xl p-5"><h1 className="text-xl font-bold text-red-800">Admin 2.0 — runtime dijagnostika</h1><p className="mt-3 font-semibold">Greška je uhvaćena pre glavnog ErrorBoundary-a.</p><pre className="mt-3 p-3 bg-red-50 rounded-lg text-xs whitespace-pre-wrap break-words">{this.state.error?.message || String(this.state.error)}</pre><p className="mt-3 text-xs text-gray-600">Ovaj ekran ne menja proizvode, fotografije niti canonical podatke.</p></div></div>;
+    }
+    return this.props.children;
+  }
+}
+
+function AdminV2PageContent() {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<string | null>(null);
   const [mediaQuery, setMediaQuery] = useState('');
@@ -897,3 +908,6 @@ function Card({label,value,target,ok}:{label:string;value:number;target:string;o
   return <div className="bg-white border border-[#e8e0d5] rounded-2xl p-4 shadow-sm"><div className="text-[10px] tracking-wider text-gray-500">{label}</div><div className="text-2xl font-bold mt-1">{value}</div><div className={ok ? 'text-xs text-green-700 font-semibold' : 'text-xs text-red-700 font-semibold'}>{ok ? 'DA' : 'NE'} • cilj {target}</div></div>;
 }
 function Status({ok,text}:{ok:boolean;text:string}) { return <div className="flex items-center gap-2"><span className={ok ? 'text-green-700 font-bold' : 'text-red-700 font-bold'}>{ok ? '✓' : '✕'}</span><span>{text}</span></div>; }
+
+
+export function AdminV2Page(){ return <AdminV2RuntimeBoundary><AdminV2PageContent /></AdminV2RuntimeBoundary>; }
