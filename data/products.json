@@ -2,7 +2,7 @@
   {
     "id": "custom-prod-1789203411768",
     "name_sr": "OREO",
-    "name_en": "OREO Handcrafted Bag",
+    "name_en": "OREO",
     "category": "torbice",
     "price_rsd": 6500,
     "status": "active",
@@ -16,10 +16,10 @@
   {
     "id": "custom-prod-1789204073718",
     "name_sr": "CANDY",
-    "name_en": "CANDY Handcrafted Bag",
+    "name_en": "CANDY",
     "category": "torbice",
     "price_rsd": 4500,
-    "status": "active",
+    "status": "inactive",
     "images": {
       "MAIN": "/custom_products/prod_custom-prod-1789204073718.jpg",
       "G0": "/custom_products/prod_custom-prod-1789204073718_g0.jpg",
@@ -28,17 +28,633 @@
     }
   },
   {
+    "id": "custom-prod-1789204258030",
+    "name_sr": "PINK BLOSSOM",
+    "name_en": "PINK BLOSSOM",
+    "category": "torbice",
+    "price_rsd": 4500,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789204258030.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789204258030_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789204258030_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789204258030_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789205898869",
+    "name_sr": "AZZURO",
+    "name_en": "AZZURO",
+    "category": "torbice",
+    "price_rsd": 4500,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789205898869.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789205898869_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789205898869_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789205898869_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789206703824",
+    "name_sr": "LAVANDA DREAM",
+    "name_en": "LAVANDA DREAM",
+    "category": "torbice",
+    "price_rsd": 4800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789206703824.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789206703824_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789206703824_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789206703824_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789207252514",
+    "name_sr": "NOIR GOLD",
+    "name_en": "NOIR GOLD",
+    "category": "torbice",
+    "price_rsd": 4500,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789207252514.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789207252514_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789207252514_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789207252514_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789207820042",
+    "name_sr": "URBAN SAND",
+    "name_en": "URBAN SAND",
+    "category": "torbice",
+    "price_rsd": 4800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789207820042_g0.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789207820042.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789207820042_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789207820042_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789208559853",
+    "name_sr": "BOHO ETNO",
+    "name_en": "BOHO ETNO",
+    "category": "torbice",
+    "price_rsd": 7800,
+    "status": "inactive",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789208559853.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789208559853_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789208559853_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789208559853_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789209800143",
+    "name_sr": "MIDNIGHT GLAM",
+    "name_en": "MIDNIGHT GLAM",
+    "category": "torbice",
+    "price_rsd": 3800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789209800143.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789209800143_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789209800143_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789209800143_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789210279779",
+    "name_sr": "LILA ROSE",
+    "name_en": "LILA ROSE",
+    "category": "torbice",
+    "price_rsd": 3200,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789210279779.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789210279779_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789210279779_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789210279779_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789210578864",
+    "name_sr": "NOIR CHIC",
+    "name_en": "NOIR CHIC",
+    "category": "torbice",
+    "price_rsd": 3800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789210578864.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789210578864_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789210578864_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789210578864_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789211182859",
+    "name_sr": "BURGUNDY ROSE",
+    "name_en": "BURGUNDY ROSE",
+    "category": "torbice",
+    "price_rsd": 4800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/crochet_rose_bag.jpg",
+      "G0": "/custom_products/crochet_rose_macro_1.jpg",
+      "G1": "/custom_products/crochet_rose_bag_open.jpg",
+      "G2": "/custom_products/paris_rose_bag_editorial_1.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789211608744",
+    "name_sr": "IVORY GLAM",
+    "name_en": "IVORY GLAM",
+    "category": "torbice",
+    "price_rsd": 3800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/luxury_woven_clutch.jpg",
+      "G0": "/custom_products/gold_clasp_macro_2.jpg",
+      "G1": "/custom_products/woven_clutch_interior.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789211608744_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789211834535",
+    "name_sr": "RUBY PEARL",
+    "name_en": "RUBY PEARL",
+    "category": "torbice",
+    "price_rsd": 4800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/red_crochet_bag_studio.jpg",
+      "G0": "/custom_products/red_crochet_pearl_macro.jpg",
+      "G1": "/custom_products/red_crochet_bag_interior.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789211834535_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789212070909",
+    "name_sr": "NOIR BOHO",
+    "name_en": "NOIR BOHO",
+    "category": "torbice",
+    "price_rsd": 3800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/luxury_crochet_bag_editorial.jpg",
+      "G0": "/custom_products/macro_bead_crochet.jpg",
+      "G1": "/custom_products/black_crochet_bag_interior.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789212070909_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789212465315",
+    "name_sr": "CREMA MOKA",
+    "name_en": "CREMA MOKA",
+    "category": "torbice",
+    "price_rsd": 4000,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/brown_crochet_bag_luxury_studio.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789212465315.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789212465315_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789212465315_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789212797315",
+    "name_sr": "ETNO SOUL",
+    "name_en": "ETNO SOUL",
+    "category": "torbice",
+    "price_rsd": 7800,
+    "status": "inactive",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789212797315.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789212797315_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789212797315_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789212797315_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789213210387",
+    "name_sr": "NOIR BUBBLE",
+    "name_en": "NOIR BUBBLE",
+    "category": "torbice",
+    "price_rsd": 3200,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/final_black_crochet_handbag.jpg",
+      "G0": "/custom_products/macro_crochet_clasp.jpg",
+      "G1": "/custom_products/final_black_crochet_bubble_handbag_open_interior_top_d.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789213210387_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789213437909",
+    "name_sr": "MOCHA TWIST",
+    "name_en": "MOCHA TWIST",
+    "category": "torbice",
+    "price_rsd": 4500,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789213437909.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789213437909_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789213437909_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789213437909_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789215182204",
+    "name_sr": "BLOOM QUEEN",
+    "name_en": "BLOOM QUEEN",
+    "category": "torbice",
+    "price_rsd": 8000,
+    "status": "inactive",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789215182204.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789215182204_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789215182204_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789215182204_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789215608263",
+    "name_sr": "MONO SHELL",
+    "name_en": "MONO SHELL",
+    "category": "torbice",
+    "price_rsd": 4800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/luxury_crochet_handbag_studio.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789215608263_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789215608263_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789215608263_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789218686318",
+    "name_sr": "MOCCA BRAID",
+    "name_en": "MOCCA BRAID",
+    "category": "torbice",
+    "price_rsd": 4800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/single_handle_crochet_bag.jpg",
+      "G0": "/custom_products/gold_clasp_macro_3.jpg",
+      "G1": "/custom_products/woven_bag_open_interior.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789218686318_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789235265047",
+    "name_sr": "GRAY STARLET",
+    "name_en": "GRAY STARLET",
+    "category": "torbice",
+    "price_rsd": 3200,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789235265047.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789235265047_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789235265047_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789235265047_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789280827861",
+    "name_sr": "NOIR BLOOM",
+    "name_en": "NOIR BLOOM",
+    "category": "torbice",
+    "price_rsd": 3500,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/black_crochet_handbag_luxury_studio.jpg",
+      "G0": "/custom_products/final_black_crochet_handbag_macro.jpg",
+      "G1": "/custom_products/black_crochet_bag_open.jpg",
+      "G2": "/custom_products/1x1_NOIR_BLOOM_model_final.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789282255011",
+    "name_sr": "AZURE KNOT",
+    "name_en": "AZURE KNOT",
+    "category": "torbice",
+    "price_rsd": 5400,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/FULLBLEED_1_main.jpg",
+      "G0": "/custom_products/FULLBLEED_2_macro.jpg",
+      "G1": "/custom_products/FULLBLEED_3_interior.jpg",
+      "G2": "/custom_products/FULLBLEED_4_model.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789282453042",
+    "name_sr": "CANDY HEART",
+    "name_en": "CANDY HEART",
+    "category": "torbice",
+    "price_rsd": 4800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/final_fuchsia_main2.jpg",
+      "G0": "/custom_products/final_fuchsia_macro2.jpg",
+      "G1": "/custom_products/final_fuchsia_interior2.jpg",
+      "G2": "/custom_products/final_fuchsia_model_2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789285964143",
+    "name_sr": "LULU POP",
+    "name_en": "LULU POP",
+    "category": "torbice",
+    "price_rsd": 3500,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789285964143_g0.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789285964143.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789285964143_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789285964143_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789286171903",
+    "name_sr": "IVORY BLOOM",
+    "name_en": "IVORY BLOOM",
+    "category": "torbice",
+    "price_rsd": 3500,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/final_fuchsia_main.jpg",
+      "G0": "/custom_products/final_fuchsia_macro.jpg",
+      "G1": "/custom_products/final_fuchsia_interior.jpg",
+      "G2": "/custom_products/final_fuchsia_model_1.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789286570316",
+    "name_sr": "LITTLE FAIRY",
+    "name_en": "LITTLE FAIRY",
+    "category": "torbice",
+    "price_rsd": 3500,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/mint_crochet_bag_product.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789286570316_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789286570316_g1.jpg",
+      "G2": "/custom_products/girl_crochet_bag.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789286897279",
+    "name_sr": "BOW CHIC",
+    "name_en": "BOW CHIC",
+    "category": "torbice",
+    "price_rsd": 4200,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/crochet_bow_handbag_studio.jpg",
+      "G0": "/custom_products/crochet_bow_macro.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789286897279_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789286897279_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789287135814",
+    "name_sr": "PINK BOW",
+    "name_en": "PINK BOW",
+    "category": "torbice",
+    "price_rsd": 4200,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/hot_pink_knit_clutch.jpg",
+      "G0": "/custom_products/hot_pink_crochet_bow_macro.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789287135814_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789287135814_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789287464927",
+    "name_sr": "LAVANDA ROSE",
+    "name_en": "LAVANDA ROSE",
+    "category": "torbice",
+    "price_rsd": 4500,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/crochet_handbag_studio_6.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789287464927_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789287464927_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789287464927_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789287726315",
+    "name_sr": "BLOOM POUCH",
+    "name_en": "BLOOM POUCH",
+    "category": "torbice",
+    "price_rsd": 3500,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/crochet_bag_studio_1.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789287726315_g0.jpg",
+      "G1": "/custom_products/crochet_bucket_bag_interior.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789287726315.jpg"
+    }
+  },
+  {
     "id": "custom-prod-1789290912081",
     "name_sr": "VLAŠKA BELA ŠUBARA",
-    "name_en": "VLACH WHITE FUR HAT",
+    "name_en": "The VLASKA BELA šubara",
     "category": "subare",
-    "price_rsd": 12000,
+    "price_rsd": 6000,
     "status": "active",
     "images": {
       "MAIN": "/custom_products/vlaska_bela_subara_1789032431671.jpg",
-      "G0": "/custom_products/vlach_fashion_editorial.jpg",
+      "G0": "/custom_products/cream_wool_macro.jpg",
       "G1": "/custom_products/cream_wool_hat_interior.jpg",
-      "G2": "/custom_products/cream_wool_macro.jpg"
+      "G2": "/custom_products/vlach_fashion_editorial.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789291435587",
+    "name_sr": "SRPSKA CRNA ŠUBARA",
+    "name_en": "The SERBIAN BLCK šubara",
+    "category": "subare",
+    "price_rsd": 6000,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/black_subara_hat.jpg",
+      "G0": "/custom_products/black_fur_macro.jpg",
+      "G1": "/custom_products/black_fur_hat_interior.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789291435587_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789291724457",
+    "name_sr": "DEČIJA ŠARENA ŠUBARA",
+    "name_en": "The KIDS ŠARENA ŠUBARA",
+    "category": "subare",
+    "price_rsd": 5800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/child_subara_hat.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789291724457.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789291724457_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789291724457_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789300552461",
+    "name_sr": "MUŠKE ČARAPE  FOLKLOR",
+    "name_en": "MEN'S FOLKLORE SOCKS",
+    "category": "carape",
+    "price_rsd": 3800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/black_woolen_socks_pair.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789300552461.jpg",
+      "G1": "/custom_products/wool_socks_interior_exterior.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789300552461_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789301322219",
+    "name_sr": "ČARAPE FOLKLOR DEČACI",
+    "name_en": "FOLKLORE SOCKS FOR BOYS",
+    "category": "carape",
+    "price_rsd": 3500,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/children_socks_linen.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789301322219.jpg",
+      "G1": "/custom_products/wool_socks_interior_exterior.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789301322219_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789301789294",
+    "name_sr": "MUŠKE  ČARAPE FOLKLOR",
+    "name_en": "MEN'S FOLKLORE SOCKS",
+    "category": "carape",
+    "price_rsd": 3800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/luxury_embroidered_socks.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789301789294.jpg",
+      "G1": "/custom_products/wool_socks_interior_exterior.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789301789294_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789306811877",
+    "name_sr": "RUČNO HEKLANE NARUKVICE",
+    "name_en": "HAND CROCHETED BRACELETS",
+    "category": "nakit",
+    "price_rsd": 800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789306811877_g2.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789306811877_g0.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789306811877_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789306811877.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789306914973",
+    "name_sr": "RUČNO HEKLANE NARUKVICE",
+    "name_en": "HAND CROCHETED BRACELETS",
+    "category": "nakit",
+    "price_rsd": 800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/mint_crochet_bangle.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789306914973.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789306914973_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789306914973_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789307017430",
+    "name_sr": "RUČNO HEKLANE NARUKVICE",
+    "name_en": "HAND CROCHETED BRACELETS",
+    "category": "nakit",
+    "price_rsd": 800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/red_crochet_bangle.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789307017430.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789307017430_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789307017430_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789307088691",
+    "name_sr": "RUČNO HEKLANE NARUKVICE",
+    "name_en": "HAND CROCHETED BRACELETS",
+    "category": "nakit",
+    "price_rsd": 800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/pink_crochet_bangle.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789307088691.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789307088691_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789307088691_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789307337462",
+    "name_sr": "RUČNO HEKLANE SPIRALNE MINĐUŠE",
+    "name_en": "HAND CROCHETED SPIRAL EARRINGS",
+    "category": "nakit",
+    "price_rsd": 800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/black_cream_crochet_earrings.jpg",
+      "G0": "/custom_products/prod_custom-prod-1789307337462.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789307337462_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789307337462_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789307502983",
+    "name_sr": "RUČNO HEKLANE SPIRALNE MINĐUŠE",
+    "name_en": "HAND CROCHETED SPIRAL EARRINGS",
+    "category": "nakit",
+    "price_rsd": 800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789307502983_g0.jpg",
+      "G0": "/custom_products/crochet_earrings_macro_4.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789307502983_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789307502983_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789307585814",
+    "name_sr": "RUČNO HEKLANE SPIRALNE MINĐUŠE",
+    "name_en": "HAND CROCHETED SPIRAL EARRINGS",
+    "category": "nakit",
+    "price_rsd": 800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789307585814_g0.jpg",
+      "G0": "/custom_products/crochet_earrings_macro_2.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789307585814_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789307585814_g2.jpg"
+    }
+  },
+  {
+    "id": "custom-prod-1789307658216",
+    "name_sr": "RUČNO HEKLANE SPIRALNE MINĐUŠE",
+    "name_en": "HAND CROCHETED SPIRAL EARRINGS",
+    "category": "nakit",
+    "price_rsd": 800,
+    "status": "active",
+    "images": {
+      "MAIN": "/custom_products/prod_custom-prod-1789307658216_g0.jpg",
+      "G0": "/custom_products/dusty_rose_crochet_earrings.jpg",
+      "G1": "/custom_products/prod_custom-prod-1789307658216_g1.jpg",
+      "G2": "/custom_products/prod_custom-prod-1789307658216_g2.jpg"
     }
   }
 ]
